@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avança Escolar</title>
+    <title>Avança Escolar - Seleta Educação</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --purple-bg: #130924;
-            --purple-card: #21123e;
+            --bg-main: #130924;
+            --bg-card: #21123e;
             --purple-light: #8a4fff;
             --blue-electric: #0073ff;
             --blue-cyan: #00dfa2;
@@ -20,7 +20,22 @@
             --honra: #4da6ff;
             --text-main: #ffffff;
             --text-muted: #b3a4cd;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --shadow: rgba(0, 0, 0, 0.5);
             --danger: #ff4a4a;
+        }
+
+        .light-mode {
+            --bg-main: #f4f2f7;
+            --bg-card: #ffffff;
+            --purple-light: #7033ff;
+            --blue-electric: #0056cc;
+            --blue-cyan: #00b380;
+            --green-success: #00996d;
+            --text-main: #1c1230;
+            --text-muted: #625875;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -28,18 +43,17 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         body {
-            background-color: var(--purple-bg);
+            background-color: var(--bg-main);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
         }
 
-        /* REQUISITO CRÍTICO DA LOGO: Corte circular perfeito */
         .circular-logo {
             width: 110px;
             height: 110px;
@@ -61,7 +75,7 @@
 
         .app-view {
             display: none;
-            padding: 1rem;
+            padding: 1.5rem;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
@@ -76,19 +90,20 @@
             max-width: 450px;
             margin: 4rem auto;
             padding: 2rem;
-            background-color: var(--purple-card);
+            background-color: var(--bg-card);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px var(--shadow);
         }
 
         .card {
-            background-color: var(--purple-card);
+            background-color: var(--bg-card);
             border-radius: 18px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px var(--shadow);
         }
 
         .form-group {
@@ -107,17 +122,16 @@
         .form-control {
             width: 100%;
             padding: 0.8rem 1rem;
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             color: var(--text-main);
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s;
         }
-
-        .form-control:focus {
-            border-color: var(--purple-light);
+        
+        .light-mode .form-control {
+            background-color: #fff;
         }
 
         .btn {
@@ -128,16 +142,14 @@
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .btn:active { transform: scale(0.98); }
         .btn-primary { background: linear-gradient(90deg, var(--purple-light), #6c2eff); color: white; }
-        .btn-secondary { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-secondary { background: rgba(128,128,128,0.15); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-success { background: linear-gradient(90deg, #00b884, var(--green-success)); color: #130924; }
 
         .tab-bar {
@@ -150,20 +162,33 @@
 
         .tab-btn {
             padding: 0.6rem 1.2rem;
-            background-color: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: rgba(128, 128, 128, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: 30px;
             color: var(--text-muted);
             white-space: nowrap;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 500;
+            position: relative;
         }
 
         .tab-btn.active {
             background-color: var(--purple-light);
             color: white;
             border-color: var(--purple-light);
+        }
+
+        .notification-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--danger);
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            display: none;
+            box-shadow: 0 0 8px var(--danger);
         }
 
         .tab-content {
@@ -175,43 +200,18 @@
         }
 
         header {
-            background-color: var(--purple-card);
+            background-color: var(--bg-card);
             padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-        }
-
-        .thermometer-container {
-            margin-top: 1rem;
-        }
-        .thermometer-row {
-            margin-bottom: 0.8rem;
-        }
-        .thermometer-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-bottom: 0.2rem;
-        }
-        .thermometer-bar-bg {
-            background: rgba(0,0,0,0.3);
-            height: 10px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .thermometer-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--blue-electric), var(--blue-cyan));
-            width: 0%;
-            transition: width 0.5s ease;
         }
 
         .scroll-list {
@@ -221,7 +221,7 @@
         }
 
         .list-item {
-            background: rgba(0,0,0,0.15);
+            background: rgba(128,128,128,0.08);
             padding: 0.8rem 1rem;
             border-radius: 12px;
             margin-bottom: 0.6rem;
@@ -229,152 +229,123 @@
             justify-content: space-between;
             align-items: center;
             font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
         }
-
-        .badge-status {
-            padding: 0.25rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .badge-green { background-color: rgba(0, 223, 162, 0.15); color: var(--green-success); border: 1px solid var(--green-success); }
-        .badge-orange { background-color: rgba(255, 184, 0, 0.15); color: var(--gold-star); border: 1px solid var(--gold-star); }
 
         .chat-layout {
             display: grid;
             grid-template-columns: 1fr;
             height: 450px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.05);
             border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
         }
-        @media (min-width: 768px) {
-            .chat-layout { grid-template-columns: 250px 1fr; }
-        }
+        @media (min-width: 768px) { .chat-layout { grid-template-columns: 250px 1fr; } }
+
         .chat-channels-list {
-            background: rgba(0,0,0,0.15);
-            border-right: 1px solid rgba(255,255,255,0.05);
+            background: rgba(128,128,128,0.05);
+            border-right: 1px solid var(--border-color);
             overflow-y: auto;
             padding: 0.5rem;
         }
+
         .channel-tab {
             padding: 0.7rem 1rem;
             border-radius: 10px;
             margin-bottom: 0.4rem;
             cursor: pointer;
             font-size: 0.85rem;
-            background: rgba(255,255,255,0.02);
-            transition: background 0.2s;
+            background: rgba(128,128,128,0.05);
         }
-        .channel-tab:hover, .channel-tab.active {
-            background: rgba(138, 79, 255, 0.2);
-            border-left: 3px solid var(--purple-light);
-        }
-        .chat-main-window {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .chat-messages-box {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-        }
-        .chat-bubble {
-            max-width: 75%;
-            padding: 0.6rem 0.9rem;
-            border-radius: 14px;
-            font-size: 0.88rem;
-            line-height: 1.35;
-            word-break: break-word;
-        }
-        .chat-bubble.sent {
-            background-color: var(--purple-light);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .chat-bubble.received {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .chat-bubble .msg-meta {
-            display: block;
-            font-size: 0.65rem;
-            color: rgba(255,255,255,0.5);
-            margin-top: 0.2rem;
-            text-align: right;
-        }
-        .chat-input-bar {
-            padding: 0.8rem;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            gap: 8px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        .channel-tab.active { background: rgba(138, 79, 255, 0.2); border-left: 3px solid var(--purple-light); }
 
-        #admin-custom-banner {
-            background: linear-gradient(90deg, #ff0077, var(--purple-light));
-            color: white;
-            padding: 0.6rem 1rem;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: none;
+        .chat-main-window { display: flex; flex-direction: column; height: 100%; }
+        .chat-messages-box { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; }
+        
+        .chat-bubble { max-width: 75%; padding: 0.6rem 0.9rem; border-radius: 14px; font-size: 0.88rem; }
+        .chat-bubble.sent { background-color: var(--purple-light); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-bubble.received { background-color: rgba(128,128,128,0.2); align-self: flex-start; border-bottom-left-radius: 2px; }
+
+        .chat-input-bar { padding: 0.8rem; background: rgba(0,0,0,0.1); display: flex; gap: 8px; border-top: 1px solid var(--border-color); }
+
+        .profile-avatar-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem auto;
+            position: relative;
         }
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .avatar-frame-gold { border: 4px dashed var(--gold-star); padding: 2px; }
+        .avatar-frame-neon { border: 4px solid var(--blue-cyan); box-shadow: 0 0 10px var(--blue-cyan); }
 
         .medal-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             padding: 0.4rem 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(128, 128, 128, 0.1);
             border-radius: 12px;
             font-size: 0.8rem;
             font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
         }
-        .m-ouro { border-color: var(--gold-star); color: var(--gold-star); background: rgba(255, 184, 0, 0.1); }
-        .m-prata { border-color: var(--silver); color: var(--silver); background: rgba(209, 209, 209, 0.1); }
-        .m-bronze { border-color: var(--bronze); color: var(--bronze); background: rgba(205, 127, 50, 0.1); }
-        .m-honra { border-color: var(--honra); color: var(--honra); background: rgba(77, 166, 255, 0.1); }
+        .m-ouro { border-color: var(--gold-star); color: var(--gold-star); }
+        .m-prata { border-color: var(--silver); color: var(--silver); }
+        .m-bronze { border-color: var(--bronze); color: var(--bronze); }
+        .m-honra { border-color: var(--honra); color: var(--honra); }
+
+        .utility-card {
+            background: rgba(128,128,128,0.05);
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .utility-card a {
+            color: var(--purple-light);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
-    <div id="admin-custom-banner"></div>
-
     <header id="app-header" style="display: none;">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="Logo.png" alt="Logo Escolar" class="mini-logo">
+            <img src="Logo.png" alt="Logo" class="mini-logo">
             <div>
                 <h4 style="font-size: 0.95rem; line-height: 1.1;">Avança Escolar</h4>
                 <span id="user-display-label" style="font-size: 0.75rem; color: var(--blue-cyan);"></span>
             </div>
         </div>
-        <button class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="logoutApp()">Sair 🚪</button>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="toggleTheme()">🌗 Modo Visual</button>
+            <button class="btn id-logout btn-secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="logoutApp()">Sair 🚪</button>
+        </div>
     </header>
 
     <section id="view-login" class="app-view active">
         <div class="auth-container">
             <img src="Logo.png" alt="Logo Avança Escolar" class="circular-logo">
             <h2 style="margin-top: 1rem; font-size: 1.6rem;">Avança Escolar</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Inovação e Crescimento 🚀</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Seleta Educação - 2º Fase</p>
             
             <div class="form-group">
-                <label>Selecione seu Perfil de Acesso:</label>
+                <label>Selecione seu Perfil:</label>
                 <select id="login-profile" class="form-control" onchange="toggleLoginFields()">
                     <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
-                    <option value="gestor">Direção, Coordenação ou Professor 🏢</option>
-                    <option value="admin">Administradora Geral (Eduarda) 👑</option>
+                    <option value="professor">Professor por Matéria 👨‍🏫</option>
+                    <option value="admin">Administradora Suprema (Eduarda) 👑</option>
                 </select>
             </div>
 
@@ -384,199 +355,288 @@
                     <input type="text" id="login-student-name" class="form-control" placeholder="Ex: João Silva">
                 </div>
                 <div class="form-group">
-                    <label>Sua Turma (Ensino Médio):</label>
+                    <label>Sua Turma:</label>
                     <select id="login-student-class" class="form-control">
-                        <option value="1º A">1º Ano A</option> <option value="1º B">1º Ano B</option> <option value="1º C">1º Ano C</option>
-                        <option value="2º A">2º Ano A</option> <option value="2º B">2º Ano B</option> <option value="2º C">2º Ano C</option>
-                        <option value="3º A">3º Ano A</option> <option value="3º B">3º Ano B</option> <option value="3º C">3º Ano C</option>
+                        <option value="1º A">1º Ano A</option> <option value="1º B">1º Ano B</option>
+                        <option value="2º A">2º Ano A</option> <option value="2º B">2º Ano B</option>
+                        <option value="3º A">3º Ano A</option> <option value="3º B">3º Ano B</option>
                     </select>
+                </div>
+            </div>
+
+            <div id="box-professor-fields" style="display: none;">
+                <div class="form-group">
+                    <label>Selecione sua Disciplina:</label>
+                    <select id="login-prof-subject" class="form-control"></select>
                 </div>
             </div>
 
             <div id="box-password-fields" style="display: none;">
                 <div class="form-group">
-                    <label>Senha de Validação Institucional:</label>
+                    <label>Senha de Validação:</label>
                     <input type="password" id="login-password" class="form-control" placeholder="••••••••">
                 </div>
             </div>
 
-            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="processarAutenticacao()">Entrar na Plataforma ✨</button>
+            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="processarAutenticacao()">Entrar Diretamente ✨</button>
         </div>
     </section>
 
-    <main id="view-portal-alunos" class="view-section app-view">
+    <main id="view-portal-alunos" class="app-view">
         <div class="tab-bar">
             <button class="tab-btn active" onclick="switchTabs('tab-reg-monitoria', this)">Registrar Apoio 📝</button>
             <button class="tab-btn" onclick="switchTabs('tab-pedir-ajuda', this)">Preciso de Ajuda 🧠</button>
-            <button class="tab-btn" onclick="switchTabs('tab-chat-aluno', this); loadChatHub();">Chats de Monitoria 💬</button>
-            <button class="tab-btn" onclick="switchTabs('tab-student-medals', this); carregarMinhasMedalhas();">Minhas Medalhas 🏅</button>
+            <button class="tab-btn" onclick="switchTabs('tab-chat-aluno', this); loadChatHub();">Chats 💬</button>
+            <button class="tab-btn" onclick="switchTabs('tab-perfil-aluno', this); renderMeuPerfil();">Meu Perfil 🏅</button>
+            <button class="tab-btn" onclick="switchTabs('tab-monitores-lista', this); carregarMonitoresPublicos();">Buscar Monitores 🔎</button>
+            <button class="tab-btn" id="btn-tab-recados" onclick="switchTabs('tab-recados-direcao', this); limparNotificacaoDirecao();">Recados da Direção 📢 <span class="notification-dot" id="dot-recados"></span></button>
+            <button class="tab-btn" onclick="switchTabs('tab-links-uteis', this)">Sites de Estudo 🔗</button>
         </div>
 
         <div id="tab-reg-monitoria" class="tab-content active">
             <div class="grid-2">
                 <div class="card">
-                    <h3 style="margin-bottom: 1rem;">Homologar Monitoria Realizada</h3>
+                    <h3>Homologar Sessão Realizada</h3>
                     <form onsubmit="submitMonitoria(event)">
-                        <div class="form-group">
-                            <label>Disciplina Ministrada:</label>
-                            <select id="reg-subject" class="form-control" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Nome do Colega Ajudado:</label>
-                            <input type="text" id="reg-target-student" class="form-control" placeholder="Nome do colega" required>
-                        </div>
+                        <div class="form-group"><label>Disciplina:</label><select id="reg-subject" class="form-control" required></select></div>
+                        <div class="form-group"><label>Nome do Colega Ajudado:</label><input type="text" id="reg-target-student" class="form-control" required></div>
                         <button type="submit" class="btn btn-success">Salvar Sessão (+10 XP) 🏆</button>
                     </form>
                 </div>
-
                 <div class="card" style="text-align: center;">
-                    <h3>Seu Progresso Gamificado</h3>
+                    <h3>Sua Carteira Acadêmica</h3>
                     <div id="student-xp-display" style="font-size: 3rem; font-weight: 700; color: var(--gold-star); margin: 1rem 0;">0 XP</div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Ajude seus colegas para acumular pontos!</p>
                 </div>
             </div>
         </div>
 
         <div id="tab-pedir-ajuda" class="tab-content">
             <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <h3 style="margin-bottom: 1rem;">Solicitar Apoio Pedagógico</h3>
+                <h3>Solicitar Socorro Pedagógico</h3>
                 <form onsubmit="submitPedidoAjuda(event)">
-                    <div class="form-group">
-                        <label>Qual componente curricular você precisa de suporte?</label>
-                        <select id="help-subject" class="form-control" required></select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enviar Solicitação à Coordenação 🚀</button>
+                    <div class="form-group"><label>Componente Curricular:</label><select id="help-subject" class="form-control" required></select></div>
+                    <button type="submit" class="btn btn-primary">Enviar Alerta de Ajuda 🚀</button>
                 </form>
             </div>
         </div>
 
         <div id="tab-chat-aluno" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;">Salas de Conversa Privada 🔒</h3>
+                <h3>Salas de Conversa Privada</h3>
                 <div class="chat-layout">
                     <div class="chat-channels-list" id="student-chat-channels"></div>
                     <div class="chat-main-window">
                         <div class="chat-messages-box" id="student-chat-messages"></div>
                         <div class="chat-input-bar">
-                            <input type="text" id="student-chat-input" class="form-control" placeholder="Sua dúvida ou link de material...">
-                            <button class="btn btn-primary" style="width: auto; padding: 0 1.2rem;" onclick="sendChatMessage('student')">Enviar</button>
+                            <input type="text" id="student-chat-input" class="form-control" placeholder="Mensagem...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendChatMessage('student')">Enviar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="tab-student-medals" class="tab-content">
-            <div class="card">
-                <h3>Minha Galeria de Honra 🏅</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Medalhas oficiais recebidas pela sua dedicação e destaque por matéria.</p>
-                <div id="student-medals-grid" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-portal-gestao" class="view-section app-view">
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTabs('tab-gestao-dash', this)">Dashboard 📈</button>
-            <button class="tab-btn" onclick="switchTabs('tab-gestao-salas', this)">Atenção por Salas 🏢</button>
-            <button class="tab-btn" onclick="switchTabs('tab-gestao-premiação', this)">Lançar Medalhas 🏅</button>
-        </div>
-
-        <div id="tab-gestao-dash" class="tab-content active">
+        <div id="tab-perfil-aluno" class="tab-content">
             <div class="grid-2">
-                <div class="card">
-                    <h4>Livro de Chamada Automático (Presença Digital)</h4>
-                    <ul class="scroll-list" id="gestao-presenca-digital" style="margin-top: 1rem;"></ul>
-                </div>
-                <div class="card">
-                    <h4>Termômetro Escolar (Matérias Mais Pedidas)</h4>
-                    <div class="thermometer-container" id="gestao-thermometer"></div>
-                </div>
-            </div>
-            <div class="grid-2" style="margin-top: 1.5rem;">
-                <div class="card">
-                    <h4>Destaques de Monitores (Por Matéria) 🏆</h4>
-                    <div class="form-group" style="margin-top: 0.5rem;">
-                        <label>Filtrar Destaques por Disciplina:</label>
-                        <select id="filter-ranking-subject" class="form-control" onchange="processarPresencaERanking()"></select>
+                <div class="card" style="text-align: center;">
+                    <div class="profile-avatar-container" id="meu-avatar-wrapper">
+                        <img src="https://via.placeholder.com/100" id="meu-avatar-img" class="profile-avatar">
                     </div>
-                    <ul class="scroll-list" id="gestao-ranking-monitores" style="margin-top: 1rem;"></ul>
+                    <h3 id="meu-nome-perfil">Nome</h3>
+                    <p id="meu-status-estrelas" style="color: var(--gold-star); font-weight: 600;"></p>
+                    <div class="form-group" style="margin-top:1rem;">
+                        <label>Alterar URL da Foto de Perfil:</label>
+                        <input type="text" id="input-avatar-url" class="form-control" placeholder="URL da Imagem..." onchange="salvarFotoPerfil()">
+                    </div>
+                    <h4 style="margin-top: 1rem;">Minhas Medalhas Fixas:</h4>
+                    <div id="meu-painel-medalhas" style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:0.5rem;"></div>
                 </div>
                 <div class="card">
-                    <h4>Solicitações Recentes de Socorro Pedagógico</h4>
-                    <ul class="scroll-list" id="gestao-lista-pedidos" style="margin-top: 1rem;"></ul>
+                    <h3>Loja de Enfeites de Perfil</h3>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:1rem;">
+                        <div style="border:1px solid var(--border-color); padding:0.8rem; text-align:center; border-radius:12px;">
+                            <h5>Moldura Ouro Real</h5>
+                            <p style="font-size:0.8rem; color:var(--gold-star);">50 XP</p>
+                            <button class="btn btn-primary" style="padding:0.4rem; font-size:0.8rem; margin-top:0.5rem;" onclick="comprarItem('gold')">Equipar</button>
+                        </div>
+                        <div style="border:1px solid var(--border-color); padding:0.8rem; text-align:center; border-radius:12px;">
+                            <h5>Moldura Neon Cyber</h5>
+                            <p style="font-size:0.8rem; color:var(--blue-cyan);">80 XP</p>
+                            <button class="btn btn-primary" style="padding:0.4rem; font-size:0.8rem; margin-top:0.5rem;" onclick="comprarItem('neon')">Equipar</button>
+                        </div>
+                    </div>
+                    <h4 style="margin-top: 1.5rem;">Feedbacks Recebidos:</h4>
+                    <ul class="scroll-list" id="lista-meus-comentarios" style="margin-top:0.5rem;"></ul>
                 </div>
             </div>
         </div>
 
-        <div id="tab-gestao-salas" class="tab-content">
+        <div id="tab-monitores-lista" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 1rem;">Foco e Evolução por Turma</h3>
-                <div class="form-group" style="max-width: 300px;">
-                    <label>Filtrar por Sala:</label>
-                    <select id="filter-gestao-room" class="form-control" onchange="renderAtencaoSalas()">
-                        <option value="1º A">1º Ano A</option> <option value="1º B">1º Ano B</option> <option value="1º C">1º Ano C</option>
-                        <option value="2º A">2º Ano A</option> <option value="2º B">2º Ano B</option> <option value="2º C">2º Ano C</option>
-                        <option value="3º A">3º Ano A</option> <option value="3º B">3º Ano B</option> <option value="3º C">3º Ano C</option>
-                    </select>
+                <h3>Monitores Cadastrados e Avaliações</h3>
+                <div id="grid-monitores-publicos" class="grid-2" style="margin-top: 1rem;"></div>
+            </div>
+            <div id="view-visitar-perfil" class="card" style="display:none; margin-top:1.5rem;">
+                <button class="btn btn-secondary" style="width:auto; padding:0.4rem 1rem; margin-bottom:1rem;" onclick="fecharPerfilVisitado()">⬅️ Voltar à Lista</button>
+                <div class="grid-2">
+                    <div style="text-align: center;">
+                        <div class="profile-avatar-container" id="visit-avatar-wrapper">
+                            <img src="" id="visit-avatar" class="profile-avatar">
+                        </div>
+                        <h3 id="visit-name"></h3>
+                        <p id="visit-stars" style="color:var(--gold-star); font-weight:600;"></p>
+                        <div id="visit-medals" style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:1rem;"></div>
+                    </div>
+                    <div>
+                        <h4>Deixar uma Avaliação da Monitoria:</h4>
+                        <div class="form-group" style="margin-top:0.5rem;">
+                            <label>Nota em Estrelas:</label>
+                            <select id="eval-stars" class="form-control"><option value="5">⭐⭐⭐⭐⭐ (5)</option><option value="4">⭐⭐⭐⭐ (4)</option><option value="3">⭐⭐⭐ (3)</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Comentário:</label>
+                            <input type="text" id="eval-comment" class="form-control" placeholder="Ex: Ótima explicação!">
+                        </div>
+                        <button class="btn btn-success" onclick="postarAvaliacao()">Enviar Feedback Oficial</button>
+                        <h4 style="margin-top:1.5rem;">Comentários Recentes:</h4>
+                        <ul class="scroll-list" id="visit-comments-list" style="margin-top:0.5rem;"></ul>
+                    </div>
                 </div>
-                <ul class="scroll-list" id="gestao-salas-dinamico"></ul>
             </div>
         </div>
 
-        <div id="tab-gestao-premiação" class="tab-content">
-            <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <h3>Atribuir Medalha de Destaque</h3>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1.2rem;">Premiar oficialmente alunos de destaque com medalhas fixas no perfil.</p>
-                <form onsubmit="submitMedalha(event)">
-                    <div class="form-group">
-                        <label>Nome Exato do Aluno:</label>
-                        <input type="text" id="medal-student-name" class="form-control" placeholder="Ex: João Silva" required>
+        <div id="tab-recados-direcao" class="tab-content">
+            <div class="card">
+                <h3>Atendimento Direto com a Coordenação / Direção</h3>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Justifique faltas, tire dúvidas institucionais e receba orientações da Eduarda.</p>
+                <div class="chat-layout" style="grid-template-columns: 1fr;">
+                    <div class="chat-main-window">
+                        <div class="chat-messages-box" id="student-direct-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="student-direct-input" class="form-control" placeholder="Escreva sua resposta para a direção...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendDirectMessageFromStudent()">Responder</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Matéria de Destaque:</label>
-                        <select id="medal-subject" class="form-control" required></select>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-links-uteis" class="tab-content">
+            <div class="card">
+                <h3>Portais e Ferramentas Úteis para Estudo</h3>
+                <div class="grid-2">
+                    <div class="utility-card">
+                        <h5>Secretaria de Educação do Piauí (SEDUC)</h5>
+                        <a href="https://seduc.pi.gov.br/" target="_blank">Acessar Portal SEDUC 🔗</a>
                     </div>
-                    <div class="form-group">
-                        <label>Categoria da Medalha:</label>
-                        <select id="medal-type" class="form-control" required>
-                            <option value="Ouro 🥇">Ouro 🥇</option>
-                            <option value="Prata 🥈">Prata 🥈</option>
-                            <option value="Bronze 🥉">Bronze 🥉</option>
-                            <option value="Honra ao Mérito 🎖️">Honra ao Mérito 🎖️</option>
-                        </select>
+                    <div class="utility-card">
+                        <h5>Plataforma Canal Educação</h5>
+                        <a href="https://www.canaleducacao.tv/" target="_blank">Assistir Canal Educação 🔗</a>
                     </div>
-                    <button type="submit" class="btn btn-success">Outorgar Medalha Oficial 🎖️</button>
-                </form>
+                    <div class="utility-card">
+                        <h5>Provas e Gabaritos do ENEM (INEP)</h5>
+                        <a href="https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem/provas-e-gabaritos" target="_blank">Estudar Provas 🔗</a>
+                    </div>
+                    <div class="utility-card">
+                        <h5>Khan Academy & Duolingo</h5>
+                        <a href="https://pt.khanacademy.org/" target="_blank">Khan Academy</a>
+                        <a href="https://pt.duolingo.com/" target="_blank">Duolingo</a>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <main id="view-portal-admin" class="view-section app-view">
-        <div class="grid-2">
-            <div class="card">
-                <h3>Módulo de Customização Livre 👑</h3>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Injete avisos ou blocos de conteúdo gerais no topo do site.</p>
-                <div class="form-group">
-                    <label>Texto do Alerta Geral:</label>
-                    <input type="text" id="admin-banner-text" class="form-control" placeholder="Ex: Plantão de Física hoje às 14h!">
-                </div>
-                <button class="btn btn-primary" onclick="publicarAvisoGlobal()">Atualizar Banner de Avisos</button>
-            </div>
+    <main id="view-portal-professores" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-prof-alertas', this)">Alertas de Monitoria 🚨</button>
+            <button class="tab-btn" onclick="switchTabs('tab-prof-top5', this)">Lançar Top 5 da Matéria 🏅</button>
+        </div>
 
+        <div id="tab-prof-alertas" class="tab-content active">
             <div class="card">
-                <h3>Auditoria de Suporte Técnico</h3>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Monitore e interaja de forma privada com qualquer canal ativo da escola.</p>
+                <h3 id="label-prof-subject">Pedidos na sua Matéria</h3>
+                <ul class="scroll-list" id="prof-lista-alertas" style="margin-top:1rem;"></ul>
+            </div>
+        </div>
+
+        <div id="tab-prof-top5" class="tab-content">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h3>Outorgar Medalhas Automáticas (Top 5 Alunos)</h3>
+                <div class="form-group"><label>1º Lugar (Ouro 🥇):</label><input type="text" id="t-ouro" class="form-control"></div>
+                <div class="form-group"><label>2º Lugar (Prata 🥈):</label><input type="text" id="t-prata" class="form-control"></div>
+                <div class="form-group"><label>3º Lugar (Bronze 🥉):</label><input type="text" id="t-bronze" class="form-control"></div>
+                <div class="form-group"><label>4º Lugar (Honra 🎖️):</label><input type="text" id="t-honra1" class="form-control"></div>
+                <div class="form-group"><label>5º Lugar (Honra 🎖️):</label><input type="text" id="t-honra2" class="form-control"></div>
+                <button class="btn btn-success" onclick="salvarTop5Professor()">Gerar e Distribuir Medalhas</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-portal-admin" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-admin-chamada', this)">Chamada & Presença 📑</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-chats', this)">Auditoria Geral 👁️</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-ouvidoria', this); carregarListaAlunosOuvidoria();">Ouvidoria & Assistência 💬</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-medalhas', this)">Medalhas Administrativas 👑</button>
+        </div>
+
+        <div id="tab-admin-chamada" class="tab-content active">
+            <div class="card">
+                <h3>Livro de Chamada de Presença Digital (Geral)</h3>
+                <ul class="scroll-list" id="admin-livro-chamada" style="margin-top:1rem;"></ul>
+            </div>
+        </div>
+
+        <div id="tab-admin-chats" class="tab-content">
+            <div class="card">
+                <h3>Painel de Auditoria Geral (Todas as Conversas)</h3>
                 <div class="chat-layout">
                     <div class="chat-channels-list" id="admin-chat-channels"></div>
                     <div class="chat-main-window">
                         <div class="chat-messages-box" id="admin-chat-messages"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-admin-ouvidoria" class="tab-content">
+            <div class="card">
+                <h3>Controle de Frequência e Comunicação Direta</h3>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Pesquise qualquer aluno da base de dados e envie mensagens sobre faltas ou orientações privadas.</p>
+                
+                <div class="form-group" style="max-width:400px; margin-bottom:1.5rem;">
+                    <label>🔍 Buscar Aluno pelo Nome:</label>
+                    <input type="text" id="admin-search-student" class="form-control" placeholder="Digite o nome para filtrar..." oninput="filtrarAlunosOuvidoria()">
+                </div>
+
+                <div class="chat-layout">
+                    <div class="chat-channels-list" id="admin-ouvidoria-students-list"></div>
+                    <div class="chat-main-window">
+                        <h4 id="admin-ouvidoria-target-label" style="padding:0.8rem; background:rgba(128,128,128,0.05); font-size:0.9rem; border-bottom:1px solid var(--border-color);">Selecione um aluno na lista para conversar</h4>
+                        <div class="chat-messages-box" id="admin-ouvidoria-messages"></div>
                         <div class="chat-input-bar">
-                            <input type="text" id="admin-chat-input" class="form-control" placeholder="Mensagem administrativa de suporte...">
-                            <button class="btn btn-primary" style="width: auto; padding: 0 1.2rem;" onclick="sendChatMessage('admin')">Enviar</button>
+                            <input type="text" id="admin-ouvidoria-input" class="form-control" placeholder="Escreva o comunicado ou pergunta...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendDirectMessageFromAdmin()">Enviar Alerta</button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="tab-admin-medalhas" class="tab-content">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h3>Premiação Oficial para os Melhores Monitores</h3>
+                <div class="form-group"><label>Nome do Aluno Monitor:</label><input type="text" id="adm-medal-student" class="form-control"></div>
+                <div class="form-group"><label>Matéria Relacionada:</label><select id="adm-medal-subject" class="form-control"></select></div>
+                <div class="form-group">
+                    <label>Categoria:</label>
+                    <select id="adm-medal-type" class="form-control">
+                        <option value="Ouro 🥇">Ouro 🥇</option> <option value="Prata 🥈">Prata 🥈</option>
+                        <option value="Bronze 🥉">Bronze 🥉</option> <option value="Honra ao Mérito 🎖️">Honra ao Mérito 🎖️</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="concederMedalhaAdmin()">Outorgar Medalha Suprema</button>
             </div>
         </div>
     </main>
@@ -599,35 +659,42 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        const disciplinas = ["Matemática", "Português", "Biologia", "Química", "Física", "Artes", "História", "Geografia", "Educação Física", "Filosofia", "Sociologia", "Inglês", "Espanhol"];
-        
-        let currentUser = { name: "", profile: "", class: "", email: "" };
+        const disciplinas = ["Matemática", "Português", "Biologia", "Química", "Física", "História", "Geografia", "Inglês", "Espanhol"];
+        let currentUser = null;
         let activeChatKey = null;
-        let isListeningToRealtime = false;
+        let visitandoName = null;
+        let ouvidoriaTargetStudent = null;
+        let listaAlunosCache = [];
 
-        function initSubjectDropdowns() {
-            const dropdowns = [
-                document.getElementById('reg-subject'), 
-                document.getElementById('help-subject'),
-                document.getElementById('filter-ranking-subject'),
-                document.getElementById('medal-subject')
-            ];
-            dropdowns.forEach(drop => {
-                if(drop) {
-                    drop.innerHTML = "";
-                    disciplinas.forEach(sub => {
-                        let opt = document.createElement('option');
-                        opt.value = sub; opt.innerText = sub;
-                        drop.appendChild(opt);
-                    });
+        function initSubjectOptions() {
+            const boxes = [document.getElementById('reg-subject'), document.getElementById('help-subject'), document.getElementById('login-prof-subject'), document.getElementById('adm-medal-subject')];
+            boxes.forEach(box => {
+                if(box) {
+                    box.innerHTML = "";
+                    disciplinas.forEach(d => { box.innerHTML += `<option value="${d}">${d}</option>`; });
                 }
             });
         }
-        initSubjectDropdowns();
+        initSubjectOptions();
+
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('avanca_user');
+            if(saved) {
+                currentUser = JSON.parse(saved);
+                direcionarPortal();
+            }
+            if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+        });
+
+        window.toggleTheme = function() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        };
 
         window.toggleLoginFields = function() {
             const p = document.getElementById('login-profile').value;
             document.getElementById('box-aluno-fields').style.display = p === 'aluno' ? 'block' : 'none';
+            document.getElementById('box-professor-fields').style.display = p === 'professor' ? 'block' : 'none';
             document.getElementById('box-password-fields').style.display = p !== 'aluno' ? 'block' : 'none';
         };
 
@@ -635,40 +702,50 @@
             const p = document.getElementById('login-profile').value;
             const pass = document.getElementById('login-password').value;
 
-            if (p === 'aluno') {
+            if(p === 'aluno') {
                 const name = document.getElementById('login-student-name').value.trim();
                 const room = document.getElementById('login-student-class').value;
-                if(!name) return alert("Por favor, digite seu nome!");
-                
-                currentUser = { name, profile: 'aluno', class: room, email: "" };
-                showPortal('view-portal-alunos', `Aluno: ${name} [${room}]`);
-                startRealtimeListeners();
-            } else if (p === 'gestor') {
-                if (pass !== 'dia de sol') return alert("Senha de acesso incorreta!");
-                currentUser = { name: "Equipe Técnica", profile: 'gestor', class: "Coordenação", email: "" };
-                showPortal('view-portal-gestao', "Painel de Controle Gestor 🏢");
-                startRealtimeListeners();
-            } else if (p === 'admin') {
-                if (pass !== 'Chernobyl 1986') return alert("Senha da Administradora incorreta!");
-                currentUser = { name: "Eduarda", profile: 'admin', class: "Direção", email: "eduardabrito044@gmail.com" };
-                showPortal('view-portal-admin', "Administradora Suprema 👑");
-                startRealtimeListeners();
+                if(!name) return alert("Insira seu nome!");
+                currentUser = { name, profile: 'aluno', class: room };
+                set(ref(db, `users/${name}/init`), true); 
+            } else if(p === 'professor') {
+                if(pass !== 'dia de sol') return alert("Senha incorreta!");
+                currentUser = { name: `Prof. de ${document.getElementById('login-prof-subject').value}`, profile: 'professor', subject: document.getElementById('login-prof-subject').value };
+            } else if(p === 'admin') {
+                if(pass !== 'Chernobyl 1986') return alert("Senha incorreta!");
+                currentUser = { name: "Eduarda", profile: 'admin' };
             }
+            localStorage.setItem('avanca_user', JSON.stringify(currentUser));
+            direcionarPortal();
         };
 
-        function showPortal(viewId, labelText) {
+        function direcionarPortal() {
             document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
             document.getElementById('app-header').style.display = 'flex';
-            document.getElementById(viewId).classList.add('active');
-            document.getElementById('user-display-label').innerText = labelText;
+            
+            if(currentUser.profile === 'aluno') {
+                document.getElementById('view-portal-alunos').classList.add('active');
+                document.getElementById('user-display-label').innerText = `${currentUser.name} (${currentUser.class})`;
+                ouvirMeusDadosRealtime();
+                ouvirMensagensDiretasAluno();
+            } else if(currentUser.profile === 'professor') {
+                document.getElementById('view-portal-professores').classList.add('active');
+                document.getElementById('user-display-label').innerText = currentUser.name;
+                document.getElementById('label-prof-subject').innerText = `Pedidos Recentes: ${currentUser.subject}`;
+                ouvirAlertasProfessor();
+            } else if(currentUser.profile === 'admin') {
+                document.getElementById('view-portal-admin').classList.add('active');
+                document.getElementById('user-display-label').innerText = "Gestora Suprema 👑";
+                ouvirDadosAdministrativos();
+            }
         }
 
         window.logoutApp = function() {
+            localStorage.removeItem('avanca_user');
             document.getElementById('app-header').style.display = 'none';
             document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-login').classList.add('active');
-            currentUser = { name: "", profile: "", class: "", email: "" };
-            activeChatKey = null;
+            currentUser = null;
         };
 
         window.switchTabs = function(contentId, btnElement) {
@@ -681,345 +758,333 @@
             document.getElementById(contentId).classList.add('active');
         };
 
+        // MONITORES E XP
         window.submitMonitoria = function(e) {
             e.preventDefault();
             const subject = document.getElementById('reg-subject').value;
             const target = document.getElementById('reg-target-student').value.trim();
+            push(ref(db, 'monitorias'), { monitor: currentUser.name, class: currentUser.class, subject, studentAjudado: target, timestamp: Date.now() });
+            
+            onValue(ref(db, `users/${currentUser.name}/xp`), (snap) => {
+                let currentXp = snap.val() || 0;
+                set(ref(db, `users/${currentUser.name}/xp`), currentXp + 10);
+            }, { onlyOnce: true });
 
-            push(ref(db, 'monitorias'), {
-                monitor: currentUser.name,
-                class: currentUser.class,
-                subject: subject,
-                studentAjudado: target,
-                timestamp: Date.now()
-            }).then(() => {
-                alert("Sessão de Monitoria salva com sucesso! +10 XP");
-                document.getElementById('reg-target-student').value = "";
-            });
+            alert("Sessão salva no Livro de Chamada! +10 XP");
+            document.getElementById('reg-target-student').value = "";
         };
 
         window.submitPedidoAjuda = function(e) {
             e.preventDefault();
-            const subject = document.getElementById('help-subject').value;
-
-            push(ref(db, 'pedidos_ajuda'), {
-                student: currentUser.name,
-                class: currentUser.class,
-                subject: subject,
-                status: "Precisa de Atenção",
-                timestamp: Date.now()
-            }).then(() => {
-                alert("Sua solicitação de apoio foi enviada para a coordenação!");
-            });
+            push(ref(db, 'pedidos_ajuda'), { student: currentUser.name, class: currentUser.class, subject: document.getElementById('help-subject').value, timestamp: Date.now() });
+            alert("Pedido enviado aos professores!");
         };
 
-        // Salvar medalhas outorgadas pela coordenação no banco de dados
-        window.submitMedalha = function(e) {
-            e.preventDefault();
-            const student = document.getElementById('medal-student-name').value.trim();
-            const subject = document.getElementById('medal-subject').value;
-            const type = document.getElementById('medal-type').value;
-
-            push(ref(db, 'medalhas'), {
-                student: student,
-                subject: subject,
-                type: type,
-                timestamp: Date.now()
-            }).then(() => {
-                alert(`Medalha de ${type} concedida com sucesso para ${student}!`);
-                document.getElementById('medal-student-name').value = "";
+        function ouvirMeusDadosRealtime() {
+            onValue(ref(db, `users/${currentUser.name}`), (snap) => {
+                const data = snap.val() || {};
+                document.getElementById('student-xp-display').innerText = `${data.xp || 0} XP`;
             });
-        };
+        }
 
-        window.carregarMinhasMedalhas = function() {
-            const container = document.getElementById('student-medals-grid');
-            if(!container) return;
-            container.innerHTML = "";
+        // CUSTOMIZAÇÃO E LOJA
+        window.renderMeuPerfil = function() {
+            document.getElementById('meu-nome-perfil').innerText = currentUser.name;
+            onValue(ref(db, `users/${currentUser.name}`), (snap) => {
+                const data = snap.val() || {};
+                document.getElementById('meu-avatar-img').src = data.avatar || "https://via.placeholder.com/100";
+                document.getElementById('meu-avatar-wrapper').className = "profile-avatar-container " + (data.frame === 'gold' ? 'avatar-frame-gold' : data.frame === 'neon' ? 'avatar-frame-neon' : '');
 
-            onValue(ref(db, 'medalhas'), (snap) => {
-                container.innerHTML = "";
-                let encontrou = false;
-                if(snap.exists()) {
-                    snap.forEach(child => {
-                        let data = child.val();
-                        if(data.student.toLowerCase() === currentUser.name.toLowerCase()) {
-                            encontrou = true;
-                            let span = document.createElement('span');
-                            let mClass = "m-honra";
-                            if(data.type.includes("Ouro")) mClass = "m-ouro";
-                            if(data.type.includes("Prata")) mClass = "m-prata";
-                            if(data.type.includes("Bronze")) mClass = "m-bronze";
-                            
-                            span.className = `medal-badge ${mClass}`;
-                            span.innerText = `${data.type} em ${data.subject}`;
-                            container.appendChild(span);
-                        }
+                let estrelas = "Ainda não avaliado";
+                if(data.ratings) {
+                    let arr = Object.values(data.ratings);
+                    let med = arr.reduce((a,b) => a+b, 0) / arr.length;
+                    estrelas = `⭐ ${med.toFixed(1)} (${arr.length} avaliações)`;
+                }
+                document.getElementById('meu-status-estrelas').innerText = estrelas;
+
+                const cBox = document.getElementById('lista-meus-comentarios');
+                cBox.innerHTML = "";
+                if(data.comments) {
+                    Object.values(data.comments).forEach(c => { cBox.innerHTML += `<li class="list-item">${c}</li>`; });
+                }
+
+                const mBox = document.getElementById('meu-painel-medalhas');
+                mBox.innerHTML = "";
+                if(data.medalhas) {
+                    Object.values(data.medalhas).forEach(m => {
+                        let cls = m.type.includes('Ouro') ? 'm-ouro' : m.type.includes('Prata') ? 'm-prata' : m.type.includes('Bronze') ? 'm-bronze' : 'm-honra';
+                        mBox.innerHTML += `<span class="medal-badge ${cls}">${m.type} - ${m.subject}</span>`;
                     });
                 }
-                if(!encontrou) {
-                    container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">Você ainda não possui medalhas registradas. Continue se destacando!</p>`;
-                }
+            });
+        };
+
+        window.salvarFotoPerfil = function() {
+            const url = document.getElementById('input-avatar-url').value.trim();
+            if(url) update(ref(db, `users/${currentUser.name}`), { avatar: url });
+        };
+
+        window.comprarItem = function(tipo) {
+            onValue(ref(db, `users/${currentUser.name}/xp`), (snap) => {
+                let xp = snap.val() || 0;
+                let preco = tipo === 'gold' ? 50 : 80;
+                if(xp < preco) return alert("Pontos/XP insuficientes!");
+                update(ref(db, `users/${currentUser.name}`), { xp: xp - preco, frame: tipo });
+                alert("Item equipado!");
             }, { onlyOnce: true });
         };
 
-        window.publicarAvisoGlobal = function() {
-            const txt = document.getElementById('admin-banner-text').value.trim();
-            set(ref(db, 'config/aviso_global'), txt).then(() => {
-                alert("Banner atualizado globalmente!");
-            });
-        };
-
-        onValue(ref(db, 'config/aviso_global'), (snap) => {
-            const banner = document.getElementById('admin-custom-banner');
-            if (snap.exists() && snap.val() !== "") {
-                banner.innerText = "📢 " + snap.val();
-                banner.style.display = 'block';
-            } else {
-                banner.style.display = 'none';
-            }
-        });
-
-        let globalMonitorias = [];
-        let globalPedidos = [];
-
-        function startRealtimeListeners() {
-            if (isListeningToRealtime) return;
-            isListeningToRealtime = true;
-
-            onValue(ref(db, 'monitorias'), (snap) => {
-                globalMonitorias = [];
-                if(snap.exists()) {
-                    snap.forEach(child => { globalMonitorias.push(child.val()); });
-                }
-                processarGamificacao();
-                processarPresencaERanking();
-            });
-
-            onValue(ref(db, 'pedidos_ajuda'), (snap) => {
-                globalPedidos = [];
-                if(snap.exists()) {
-                    snap.forEach(child => {
-                        let data = child.val();
-                        data.key = child.key;
-                        globalPedidos.push(data);
-                    });
-                }
-                processarTermometro();
-                renderAtencaoSalas();
-                renderPedidosRecentes();
-            });
-        }
-
-        function processarGamificacao() {
-            if(currentUser.profile !== 'aluno') return;
-            let count = globalMonitorias.filter(m => m.monitor === currentUser.name).length;
-            let xp = count * 10;
-            
-            const display = document.getElementById('student-xp-display');
-            if(display) display.innerText = `${xp} XP`;
-        }
-
-        function processarPresencaERanking() {
-            const listaPresenca = document.getElementById('gestao-presenca-digital');
-            const listaRanking = document.getElementById('gestao-ranking-monitores');
-            if(!listaPresenca) return;
-
-            listaPresenca.innerHTML = "";
-            globalMonitorias.slice().reverse().forEach(m => {
-                let li = document.createElement('li');
-                li.className = "list-item";
-                let hora = new Date(m.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-                li.innerHTML = `<div><strong>${m.monitor} (${m.class})</strong> ajudou ${m.studentAjudado}</div><span class="badge-status badge-green">${m.subject} às ${hora}</span>`;
-                listaPresenca.appendChild(li);
-            });
-
-            // Ranking de Monitores com filtro específico por Matéria
-            const filterSubject = document.getElementById('filter-ranking-subject').value;
-            let ranks = {};
-            globalMonitorias.forEach(m => { 
-                if(m.subject === filterSubject) {
-                    ranks[m.monitor] = (ranks[m.monitor] || 0) + 10; 
-                }
-            });
-            
-            listaRanking.innerHTML = "";
-            let keys = Object.keys(ranks).sort((a,b) => ranks[b] - ranks[a]);
-            
-            if(keys.length === 0) {
-                listaRanking.innerHTML = `<li style="font-size:0.85rem; color:var(--text-muted); padding:0.5rem;">Nenhuma atividade registrada nesta matéria ainda.</li>`;
-                return;
-            }
-
-            keys.forEach((name, index) => {
-                let li = document.createElement('li');
-                li.className = "list-item";
-                let podio = "";
-                if(index === 0) podio = "🥇 (Ouro em Potencial)";
-                else if(index === 1) podio = "🥈 (Prata em Potencial)";
-                else if(index === 2) podio = "🥉 (Bronze em Potencial)";
-                else podio = "🎖️ (Menção de Destaque)";
-
-                li.innerHTML = `<div>👤 <strong>${name}</strong> <br><span style="font-size:0.75rem; color:var(--text-muted);">${podio}</span></div><span style="color:var(--gold-star); font-weight:600;">${ranks[name]} XP</span>`;
-                listaRanking.appendChild(li);
-            });
-        }
-
-        function processarTermometro() {
-            const container = document.getElementById('gestao-thermometer');
-            if(!container) return;
-            
-            let counts = {};
-            disciplinas.forEach(d => counts[d] = 0);
-            globalPedidos.forEach(p => { if(counts[p.subject] !== undefined) counts[p.subject]++; });
-
-            let max = Math.max(...Object.values(counts), 1);
-            container.innerHTML = "";
-
-            Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 5).forEach(sub => {
-                let pct = (counts[sub] / max) * 100;
-                let row = document.createElement('div');
-                row.className = "thermometer-row";
-                row.innerHTML = `
-                    <div class="thermometer-info"><span>${sub}</span><strong>${counts[sub]} solicitações</strong></div>
-                    <div class="thermometer-bar-bg"><div class="thermometer-bar-fill" style="width: ${pct}%"></div></div>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function renderPedidosRecentes() {
-            const list = document.getElementById('gestao-lista-pedidos');
-            if(!list) return;
-            list.innerHTML = "";
-            globalPedidos.slice().reverse().forEach(p => {
-                let li = document.createElement('li');
-                li.className = "list-item";
-                li.innerHTML = `<div><strong>${p.student} (${p.class})</strong> pede socorro</div><span class="badge-status badge-orange">${p.subject}</span>`;
-                list.appendChild(li);
-            });
-        }
-
-        window.alterarStatusEvolucao = function(key, currentStatus) {
-            let next = currentStatus === "Precisa de Atenção" ? "Já Melhorou Bastante" : "Precisa de Atenção";
-            update(ref(db, `pedidos_ajuda/${key}`), { status: next });
-        };
-
-        window.renderAtencaoSalas = function() {
-            const room = document.getElementById('filter-gestao-room').value;
-            const container = document.getElementById('gestao-salas-dinamico');
-            if(!container) return;
-
-            container.innerHTML = "";
-            let filtrados = globalPedidos.filter(p => p.class === room);
-
-            if(filtrados.length === 0) {
-                container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nenhum apontamento pedagógico nesta sala.</p>`;
-                return;
-            }
-
-            filtrados.forEach(p => {
-                let li = document.createElement('li');
-                li.className = "list-item";
-                let badgeClass = p.status === "Já Melhorou Bastante" ? "badge-green" : "badge-orange";
-                let icon = p.status === "Já Melhorou Bastante" ? "🟢" : "🟡";
-                li.innerHTML = `
-                    <div><strong>${p.student}</strong> <br><span style="font-size:0.75rem; color:var(--text-muted)">Necessidade: ${p.subject}</span></div>
-                    <span class="badge-status ${badgeClass}" onclick="alterarStatusEvolucao('${p.key}', '${p.status}')">${icon} ${p.status}</span>
-                `;
-                container.appendChild(li);
-            });
-        };
-
-        window.loadChatHub = function() {
-            const chanContainer = document.getElementById('student-chat-channels');
-            if(!chanContainer) return;
-            chanContainer.innerHTML = "";
-
-            disciplinas.forEach(dis => {
-                let div = document.createElement('div');
-                div.className = "channel-tab";
-                div.innerText = `💬 Canal de ${dis}`;
-                div.onclick = () => selectChatChannel(dis, div);
-                chanContainer.appendChild(div);
-            });
-        };
-
-        function selectChatChannel(discipline, element) {
-            element.parentElement.querySelectorAll('.channel-tab').forEach(e => e.classList.remove('active'));
-            element.classList.add('active');
-
-            if(currentUser.profile === 'aluno') {
-                activeChatKey = `${currentUser.name}_com_${discipline}`;
-            }
-            listenChatMessages(activeChatKey, 'student-chat-messages');
-        }
-
-        function listenChatMessages(chatKey, boxId) {
-            const box = document.getElementById(boxId);
-            if(!box) return;
-
-            onValue(ref(db, `chats/${chatKey}`), (snap) => {
-                box.innerHTML = "";
-                if(snap.exists()) {
-                    snap.forEach(msgSnap => {
-                        let msg = msgSnap.val();
-                        let bubble = document.createElement('div');
-                        let isMe = msg.sender === currentUser.name;
-                        bubble.className = `chat-bubble ${isMe ? 'sent' : 'received'}`;
-                        let time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-                        bubble.innerHTML = `<strong>${msg.sender}:</strong><br>${msg.text}<span class="msg-meta">${time}</span>`;
-                        box.appendChild(bubble);
-                    });
-                    box.scrollTop = box.scrollHeight;
-                } else {
-                    box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:2rem;">Início do chat privado de monitoria.</p>`;
-                }
-            });
-        }
-
-        window.sendChatMessage = function(type) {
-            const input = document.getElementById(`${type}-chat-input`);
-            const txt = input.value.trim();
-            if(!txt || !activeChatKey) return;
-
-            push(ref(db, `chats/${activeChatKey}`), {
-                sender: currentUser.name,
-                text: txt,
-                timestamp: Date.now()
-            }).then(() => {
-                input.value = "";
-            });
-        };
-
-        function initAdminChatAuditoria() {
-            const container = document.getElementById('admin-chat-channels');
-            if(!container) return;
-
-            onValue(ref(db, 'chats'), (snap) => {
+        // VISITAÇÃO E CHATS DE MATÉRIA
+        window.carregarMonitoresPublicos = function() {
+            onValue(ref(db, 'users'), (snap) => {
+                const container = document.getElementById('grid-monitores-publicos');
                 container.innerHTML = "";
                 if(snap.exists()) {
                     snap.forEach(child => {
+                        let name = child.key;
                         let div = document.createElement('div');
-                        div.className = "channel-tab";
-                        div.innerText = `🔒 Sala: ${child.key.replace(/_com_/g, ' ➜ ')}`;
+                        div.className = "card"; div.style.textAlign = "center";
+                        div.innerHTML = `<h5>${name}</h5><button class="btn btn-primary" style="margin-top:0.5rem; padding:0.4rem;" onclick="abrirPerfilPublico('${name}')">Visitar Perfil</button>`;
+                        container.appendChild(div);
+                    });
+                }
+            });
+        };
+
+        window.abrirPerfilPublico = function(name) {
+            visitandoName = name;
+            document.getElementById('view-visitar-perfil').style.display = "block";
+            onValue(ref(db, `users/${name}`), (snap) => {
+                const data = snap.val() || {};
+                document.getElementById('visit-name').innerText = name;
+                document.getElementById('visit-avatar').src = data.avatar || "https://via.placeholder.com/100";
+                document.getElementById('visit-avatar-wrapper').className = "profile-avatar-container " + (data.frame === 'gold' ? 'avatar-frame-gold' : data.frame === 'neon' ? 'avatar-frame-neon' : '');
+
+                let mBox = document.getElementById('visit-medals'); mBox.innerHTML = "";
+                if(data.medalhas) {
+                    Object.values(data.medalhas).forEach(m => {
+                        let cls = m.type.includes('Ouro') ? 'm-ouro' : m.type.includes('Prata') ? 'm-prata' : m.type.includes('Bronze') ? 'm-bronze' : 'm-honra';
+                        mBox.innerHTML += `<span class="medal-badge ${cls}">${m.type} - ${m.subject}</span>`;
+                    });
+                }
+
+                let cBox = document.getElementById('visit-comments-list'); cBox.innerHTML = "";
+                if(data.comments) {
+                    Object.values(data.comments).forEach(c => { cBox.innerHTML += `<li class="list-item">${c}</li>`; });
+                }
+            });
+        };
+
+        window.fecharPerfilVisitado = function() { document.getElementById('view-visitar-perfil').style.display = "none"; };
+
+        window.postarAvaliacao = function() {
+            const star = parseInt(document.getElementById('eval-stars').value);
+            const comm = document.getElementById('eval-comment').value.trim();
+            if(!comm) return alert("Escreva um comentário!");
+            push(ref(db, `users/${visitandoName}/ratings`), star);
+            push(ref(db, `users/${visitandoName}/comments`), `${currentUser.name}: "${comm}"`);
+            alert("Feedback enviado!"); document.getElementById('eval-comment').value = "";
+        };
+
+        window.loadChatHub = function() {
+            const container = document.getElementById('student-chat-channels'); container.innerHTML = "";
+            disciplinas.forEach(d => { container.innerHTML += `<div class="channel-tab" onclick="abrirCanalAluno('${d}', this)">Sala de ${d}</div>`; });
+        };
+
+        window.abrirCanalAluno = function(sub, el) {
+            el.parentElement.querySelectorAll('.channel-tab').forEach(b => b.classList.remove('active'));
+            el.classList.add('active'); activeChatKey = `${currentUser.name}_com_${sub}`;
+            onValue(ref(db, `chats/${activeChatKey}`), (snap) => {
+                const box = document.getElementById('student-chat-messages'); box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        let m = c.val();
+                        box.innerHTML += `<div class="chat-bubble ${m.sender === currentUser.name ? 'sent' : 'received'}"><strong>${m.sender}:</strong><br>${m.text}</div>`;
+                    });
+                }
+            });
+        };
+
+        window.sendChatMessage = function(type) {
+            const inp = document.getElementById(`${type}-chat-input`);
+            if(!inp.value.trim() || !activeChatKey) return;
+            push(ref(db, `chats/${activeChatKey}`), { sender: currentUser.name, text: inp.value.trim() });
+            inp.value = "";
+        };
+
+        // ATENDIMENTO DIRETO & NOTIFICAÇÕES (ALUNO)
+        function ouvirMensagensDiretasAluno() {
+            onValue(ref(db, `direcao_chats/${currentUser.name}`), (snap) => {
+                const box = document.getElementById('student-direct-messages');
+                box.innerHTML = "";
+                let ultimaMsgVindaDaDirecao = false;
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let msg = child.val();
+                        if(msg.sender === "Eduarda") ultimaMsgVindaDaDirecao = true;
+                        else if(msg.sender === currentUser.name) ultimaMsgVindaDaDirecao = false;
+
+                        box.innerHTML += `<div class="chat-bubble ${msg.sender === currentUser.name ? 'sent' : 'received'}"><strong>${msg.sender}:</strong><br>${msg.text}</div>`;
+                    });
+                    
+                    // Se o último recado foi a direção que mandou, acende o ponto vermelho de notificação no menu
+                    if(ultimaMsgVindaDaDirecao && document.getElementById('tab-recados-direcao').classList.contains('active') === false) {
+                        document.getElementById('dot-recados').style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        window.limparNotificacaoDirecao = function() {
+            document.getElementById('dot-recados').style.display = 'none';
+        };
+
+        window.sendDirectMessageFromStudent = function() {
+            const inp = document.getElementById('student-direct-input');
+            const txt = inp.value.trim();
+            if(!txt) return;
+
+            push(ref(db, `direcao_chats/${currentUser.name}`), { sender: currentUser.name, text: txt, timestamp: Date.now() });
+            inp.value = "";
+        };
+
+        // PROFESSORES
+        function ouvirAlertasProfessor() {
+            onValue(ref(db, 'pedidos_ajuda'), (snap) => {
+                const container = document.getElementById('prof-lista-alertas'); container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let p = child.val();
+                        if(p.subject === currentUser.subject) {
+                            container.innerHTML += `<li class="list-item"><strong>${p.student} (${p.class})</strong> solicitou monitoria desta disciplina.</li>`;
+                        }
+                    });
+                }
+            });
+        }
+
+        window.salvarTop5Professor = function() {
+            const arr = [
+                { name: document.getElementById('t-ouro').value.trim(), type: "Ouro 🥇" },
+                { name: document.getElementById('t-prata').value.trim(), type: "Prata 🥈" },
+                { name: document.getElementById('t-bronze').value.trim(), type: "Bronze 🥉" },
+                { name: document.getElementById('t-honra1').value.trim(), type: "Honra ao Mérito 🎖️" },
+                { name: document.getElementById('t-honra2').value.trim(), type: "Honra ao Mérito 🎖️" }
+            ];
+            arr.forEach(aluno => {
+                if(aluno.name) push(ref(db, `users/${aluno.name}/medalhas`), { type: aluno.type, subject: currentUser.subject });
+            });
+            alert("Medalhas automáticas distribuídas!");
+        };
+
+        // ADMINISTRAÇÃO SUPREMA (EDUARDA)
+        function ouvirDadosAdministrativos() {
+            onValue(ref(db, 'monitorias'), (snap) => {
+                const container = document.getElementById('admin-livro-chamada'); container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        let m = c.val();
+                        container.innerHTML += `<li class="list-item">🧑‍🎓 Monitor: <b>${m.monitor}</b> | Matéria: ${m.subject} | Ajudou: ${m.studentAjudado} (${m.class})</li>`;
+                    });
+                }
+            });
+
+            onValue(ref(db, 'chats'), (snap) => {
+                const container = document.getElementById('admin-chat-channels'); container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let div = document.createElement('div'); div.className = "channel-tab";
+                        div.innerText = `Canal: ${child.key.replace(/_com_/g, ' ➜ ')}`;
                         div.onclick = () => {
-                            container.querySelectorAll('.channel-tab').forEach(e => e.classList.remove('active'));
-                            div.classList.add('active');
-                            activeChatKey = child.key;
-                            listenChatMessages(activeChatKey, 'admin-chat-messages');
+                            onValue(ref(db, `chats/${child.key}`), (mSnap) => {
+                                const box = document.getElementById('admin-chat-messages'); box.innerHTML = "";
+                                mSnap.forEach(msg => {
+                                    let v = msg.val(); box.innerHTML += `<div class="chat-bubble received"><strong>${v.sender}:</strong><br>${v.text}</div>`;
+                                });
+                            });
                         };
                         container.appendChild(div);
                     });
                 }
             });
         }
-        
-        setInterval(() => {
-            if(currentUser.profile === 'admin' && document.getElementById('admin-chat-channels') && document.getElementById('admin-chat-channels').innerHTML === "") {
-                initAdminChatAuditoria();
-            }
-        }, 1500);
 
+        // BARRA DE PESQUISA EM TEMPO REAL (OUVIDORIA ADMIN)
+        window.carregarListaAlunosOuvidoria = function() {
+            onValue(ref(db, 'users'), (snap) => {
+                listaAlunosCache = [];
+                if(snap.exists()) {
+                    snap.forEach(child => { listaAlunosCache.push(child.key); });
+                }
+                filtrarAlunosOuvidoria(); 
+            });
+        };
+
+        window.filtrarAlunosOuvidoria = function() {
+            const query = document.getElementById('admin-search-student').value.toLowerCase().trim();
+            const container = document.getElementById('admin-ouvidoria-students-list');
+            container.innerHTML = "";
+
+            const filtrados = listaAlunosCache.filter(nome => nome.toLowerCase().includes(query));
+
+            if(filtrados.length === 0) {
+                container.innerHTML = `<p style="padding:0.5rem; font-size:0.8rem; color:var(--text-muted);">Nenhum aluno encontrado.</p>`;
+                return;
+            }
+
+            filtrados.forEach(nome => {
+                let div = document.createElement('div');
+                div.className = "channel-tab";
+                div.innerText = `👤 ${nome}`;
+                if(ouvidoriaTargetStudent === nome) div.classList.add('active');
+                
+                div.onclick = () => {
+                    container.querySelectorAll('.channel-tab').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                    abrirChatOuvidoriaAdmin(nome);
+                };
+                container.appendChild(div);
+            });
+        };
+
+        function abrirChatOuvidoriaAdmin(studentName) {
+            ouvidoriaTargetStudent = studentName;
+            document.getElementById('admin-ouvidoria-target-label').innerText = `Conversando com: ${studentName}`;
+            
+            onValue(ref(db, `direcao_chats/${studentName}`), (snap) => {
+                const box = document.getElementById('admin-ouvidoria-messages');
+                box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let msg = child.val();
+                        box.innerHTML += `<div class="chat-bubble ${msg.sender === 'Eduarda' ? 'sent' : 'received'}"><strong>${msg.sender}:</strong><br>${msg.text}</div>`;
+                    });
+                } else {
+                    box.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:1rem;">Nenhum histórico com este aluno.</p>`;
+                }
+            });
+        }
+
+        window.sendDirectMessageFromAdmin = function() {
+            const inp = document.getElementById('admin-ouvidoria-input');
+            const txt = inp.value.trim();
+            if(!txt || !ouvidoriaTargetStudent) return;
+
+            push(ref(db, `direcao_chats/${ouvidoriaTargetStudent}`), { sender: "Eduarda", text: txt, timestamp: Date.now() });
+            inp.value = "";
+        };
+
+        window.concederMedalhaAdmin = function() {
+            const student = document.getElementById('adm-medal-student').value.trim();
+            const subject = document.getElementById('adm-medal-subject').value;
+            const type = document.getElementById('adm-medal-type').value;
+            if(!student) return alert("Insira o nome do aluno!");
+            push(ref(db, `users/${student}/medalhas`), { type, subject });
+            alert(`Medalha Suprema outorgada para ${student}!`);
+            document.getElementById('adm-medal-student').value = "";
+        };
     </script>
 </body>
 </html>
