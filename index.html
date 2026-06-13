@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avança Escolar - Sistema Gamificado de Monitoria</title>
+    <title>Avança Escolar - OBNE 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Variáveis do Tema Visual - Tons de Roxo, Azul, Verde e Destaques em Amarelo/Dourado */
         :root {
-            --purple-deep: #1e0b36;
-            --purple-medium: #3b1c6e;
-            --purple-light: #9d66ff;
-            --blue-electric: #0052cc;
-            --blue-cyan: #00bfff;
-            --green-primary: #00b36b;
-            --green-glow: #26e695;
-            --gold-soft: #ffd700;
-            --dark-bg: #0b0314;
-            --card-glass: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --white: #ffffff;
-            --error-red: #ff3b30;
+            --purple-bg: #130924;
+            --purple-card: #21123e;
+            --purple-light: #8a4fff;
+            --blue-electric: #0073ff;
+            --blue-cyan: #00dfa2;
+            --green-success: #00dfa2;
+            --gold-star: #ffb800;
+            --text-main: #ffffff;
+            --text-muted: #b3a4cd;
+            --danger: #ff4a4a;
         }
 
-        /* Configurações Globais Preventivas de Overflow e Layout */
         * {
             margin: 0;
             padding: 0;
@@ -33,604 +28,542 @@
         }
 
         body {
-            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--purple-deep) 50%, #0d1e36 100%);
-            color: var(--white);
+            background-color: var(--purple-bg);
+            color: var(--text-main);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Elementos Decorativos Flutuantes para Ambiente Educativo Dinâmico */
-        .floating-emoji {
-            position: absolute;
-            font-size: 1.8rem;
-            opacity: 0.15;
-            pointer-events: none;
-            user-select: none;
-            z-index: 1;
-            animation: floatingEffect 7s ease-in-out infinite;
-        }
-        .fe-1 { top: 8%; left: 10%; animation-delay: 0s; }
-        .fe-2 { top: 22%; right: 12%; animation-delay: 2s; }
-        .fe-3 { bottom: 15%; left: 8%; animation-delay: 4s; }
-        .fe-4 { bottom: 25%; right: 9%; animation-delay: 1s; }
-
-        @keyframes floatingEffect {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(15deg); }
-        }
-
-        /* Estrutura de Telas com Transição Fluida */
-        .view-section {
-            display: none;
-            padding: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-
-        .view-section.active {
-            display: block;
-            animation: screenFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes screenFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Requisito de Design Crítico: Recorte Perfeito e Circular da Logo */
-        .avatar-logo-wrapper {
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 1.5rem auto;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--purple-light), var(--blue-cyan));
-            padding: 4px;
-            box-shadow: 0 8px 24px rgba(157, 102, 255, 0.35);
-        }
-
-        .avatar-logo-img {
-            width: 100%;
-            height: 100%;
+        /* REQUISITO CRÍTICO DA LOGO: Corte circular perfeito */
+        .circular-logo {
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
+            border: 3px solid var(--purple-light);
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.4);
             display: block;
-            background-color: var(--purple-medium);
+            margin: 0 auto;
         }
 
-        /* Header Pequeno Adaptável da Aplicação */
-        .navbar-top {
-            background: rgba(11, 3, 20, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--card-border);
+        .mini-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--blue-cyan);
+        }
+
+        /* Emojis Decorativos */
+        .decor-icon {
+            display: inline-block;
+            margin: 0 4px;
+        }
+
+        /* Controle de Exibição das Telas */
+        .app-view {
+            display: none;
+            padding: 1rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .app-view.active {
+            display: block;
+        }
+
+        /* Elementos de Layout Comuns */
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background-color: var(--purple-card);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card {
+            background-color: var(--purple-card);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--purple-light);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: linear-gradient(90deg, var(--purple-light), #6c2eff); color: white; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn-success { background: linear-gradient(90deg, #00b884, var(--green-success)); color: #130924; }
+
+        /* Componente de Abas de Navegação Interna */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background-color: var(--purple-light);
+            color: white;
+            border-color: var(--purple-light);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Header do App */
+        header {
+            background-color: var(--purple-card);
             padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .navbar-brand-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .navbar-mini-logo {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--green-glow);
-        }
-
-        .navbar-brand-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-        }
-        .navbar-brand-title span { color: var(--green-glow); }
-
-        .navbar-logout-btn {
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid var(--error-red);
-            color: #ff6b6b;
-            padding: 0.4rem 0.9rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .navbar-logout-btn:hover {
-            background: var(--error-red);
-            color: var(--white);
-        }
-
-        /* ================= ESTILOS DA TELA DE LOGIN ================= */
-        .login-view-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 1.5rem;
-        }
-
-        .login-card-container {
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(16px);
-            border-radius: 24px;
-            width: 100%;
-            max-width: 440px;
-            padding: 2.2rem 1.8rem;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            text-align: center;
-        }
-
-        .login-card-container h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-        }
-
-        .login-card-container p {
-            color: #bfa6eb;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .selector-button-gate {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .selector-button-gate:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        .gate-student:hover { border-color: var(--green-glow); box-shadow: 0 0 15px rgba(38, 230, 149, 0.25); }
-        .gate-staff:hover { border-color: var(--blue-cyan); box-shadow: 0 0 15px rgba(0, 191, 255, 0.25); }
-
-        /* Área do formulário de autenticação embutido */
-        .password-guard-box {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .password-input-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            text-align: left;
-            margin-bottom: 1rem;
-        }
-
-        .password-input-wrapper label {
-            font-size: 0.85rem;
-            color: #bfa6eb;
-            font-weight: 500;
-        }
-
-        .password-field {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--white);
-            font-size: 1rem;
-            outline: none;
-        }
-        .password-field:focus { border-color: var(--blue-cyan); }
-
-        .btn-authorize {
-            width: 100%;
-            padding: 0.85rem;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, var(--blue-electric), var(--blue-cyan));
-            color: var(--white);
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-        .btn-authorize:hover { opacity: 0.95; }
-
-        .error-message-alert {
-            color: var(--error-red);
-            font-size: 0.85rem;
-            margin-top: 0.6rem;
-            display: none;
-            font-weight: 500;
-        }
-
-        /* ================= CARDS E COMPONENTES DE DASHBOARD ================= */
-        .dashboard-main-grid {
+        /* Grid System Responsivo */
+        .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            margin: 1.5rem 0;
         }
 
-        .metric-card {
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
+        /* Termômetro Escolar / Gráfico Visual */
+        .thermometer-container {
+            margin-top: 1rem;
         }
-        .mc-purple { border-left: 5px solid var(--purple-light); }
-        .mc-blue { border-left: 5px solid var(--blue-cyan); }
-        .mc-green { border-left: 5px solid var(--green-glow); }
-
-        .metric-card-icon {
-            position: absolute;
-            top: 1.2rem;
-            right: 1.2rem;
-            font-size: 1.8rem;
-            opacity: 0.4;
+        .thermometer-row {
+            margin-bottom: 0.8rem;
         }
-
-        .metric-card-title {
-            font-size: 0.9rem;
-            color: #bfa6eb;
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-        }
-
-        .metric-card-value {
-            font-size: 2rem;
-            font-weight: 700;
+        .thermometer-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
             margin-bottom: 0.2rem;
         }
-
-        .metric-card-sub {
-            font-size: 0.8rem;
-            color: #a2c4e8;
+        .thermometer-bar-bg {
+            background: rgba(0,0,0,0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .thermometer-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-electric), var(--blue-cyan));
+            width: 0%;
+            transition: width 0.5s ease;
         }
 
-        /* Sessões e Contêineres de Dados */
-        .content-panel-card {
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .panel-heading-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1.2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 0.6rem;
-        }
-
-        .panel-heading-row h3 {
-            font-size: 1.15rem;
-            font-weight: 600;
-        }
-
-        /* Lista de Risco Pedagógico e Homologação */
-        .data-ul-list {
+        /* Listas e Badges */
+        .scroll-list {
+            max-height: 300px;
+            overflow-y: auto;
             list-style: none;
         }
 
-        .data-li-item {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--card-border);
+        .list-item {
+            background: rgba(0,0,0,0.15);
+            padding: 0.8rem 1rem;
             border-radius: 12px;
-            padding: 0.9rem 1.2rem;
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.6rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        .badge-risk {
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid var(--error-red);
-            color: #ff6b6b;
-            padding: 0.2rem 0.6rem;
-            border-radius: 6px;
+        .badge-status {
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
             font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .badge-success {
-            background: rgba(38, 230, 149, 0.12);
-            border: 1px solid var(--green-glow);
-            color: var(--green-glow);
-            padding: 0.2rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Formulários Operacionais Internos */
-        .form-layout-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-layout-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: #bfa6eb;
-            margin-bottom: 0.4rem;
-            font-weight: 500;
-        }
-
-        .form-layout-control {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-            background: rgba(0, 0, 0, 0.25);
-            color: var(--white);
-            outline: none;
-            font-size: 0.95rem;
-        }
-        .form-layout-control:focus { border-color: var(--purple-light); }
-
-        select.form-layout-control option {
-            background: #190a2b;
-            color: var(--white);
-        }
-
-        .btn-action-submit {
-            width: 100%;
-            padding: 0.9rem;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(90deg, var(--green-primary), var(--green-glow));
-            color: var(--white);
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(38, 230, 149, 0.2);
-            transition: opacity 0.2s;
         }
-        .btn-action-submit:hover { opacity: 0.95; }
+        .badge-green { background-color: rgba(0, 223, 162, 0.15); color: var(--green-success); border: 1px solid var(--green-success); }
+        .badge-orange { background-color: rgba(255, 184, 0, 0.15); color: var(--gold-star); border: 1px solid var(--gold-star); }
 
-        /* Estrutura de Medalhas e Gamificação Visual */
-        .gamification-xp-display {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--gold-soft);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-            margin: 0.5rem 0 1.2rem 0;
+        /* Estrutura do Chat Privado */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            height: 450px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .badges-flex-container {
+        @media (min-width: 768px) {
+            .chat-layout { grid-template-columns: 250px 1fr; }
+        }
+        .chat-channels-list {
+            background: rgba(0,0,0,0.15);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        .channel-tab {
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.4rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.02);
+            transition: background 0.2s;
+        }
+        .channel-tab:hover, .channel-tab.active {
+            background: rgba(138, 79, 255, 0.2);
+            border-left: 3px solid var(--purple-light);
+        }
+        .chat-main-window {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
+            flex-direction: column;
+            height: 100%;
+        }
+        .chat-messages-box {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .chat-bubble {
+            max-width: 75%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+        .chat-bubble.sent {
+            background-color: var(--purple-light);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-bubble.received {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .chat-bubble .msg-meta {
+            display: block;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 0.2rem;
+            text-align: right;
+        }
+        .chat-input-bar {
+            padding: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        .badge-medal-pill {
+        /* Banner de Avisos Customizados da Administradora */
+        #admin-custom-banner {
+            background: linear-gradient(90deg, #ff0077, var(--purple-light));
+            color: white;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Medalhas */
+        .medal-pill {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 0.4rem 0.8rem;
+            gap: 5px;
+            padding: 0.3rem 0.7rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #d1c4e9;
-            opacity: 0.4;
-            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            opacity: 0.3;
         }
-        .badge-medal-pill.unlocked {
+        .medal-pill.unlocked {
             opacity: 1;
-            background: rgba(255, 215, 0, 0.08);
-            border-color: var(--gold-soft);
-            color: var(--gold-soft);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
-        }
-
-        /* Responsividade para Celulares (Mobile-First Check) */
-        @media(max-width: 768px) {
-            .dashboard-main-grid { grid-template-columns: 1fr; }
-            .view-section { padding: 1rem; }
-            .login-card-container { padding: 1.8rem 1.2rem; }
+            border-color: var(--gold-star);
+            background: rgba(255, 184, 0, 0.08);
+            color: var(--gold-star);
         }
     </style>
 </head>
 <body>
 
-    <div class="floating-emoji fe-1">🚀</div>
-    <div class="floating-emoji fe-2">📚</div>
-    <div class="floating-emoji fe-3">🧠</div>
-    <div class="floating-emoji fe-4">✨</div>
+    <div id="admin-custom-banner"></div>
 
-    <section id="view-login" class="view-section active">
-        <div class="login-view-wrapper">
-            <div class="login-card-container">
-                <div class="avatar-logo-wrapper">
-                    <img src="Logo.png" alt="Avança Escolar Logo" class="avatar-logo-img">
+    <header id="app-header" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="Logo.png" alt="Logo Escolar" class="mini-logo">
+            <div>
+                <h4 style="font-size: 0.95rem; line-height: 1.1;">Avança Escolar</h4>
+                <span id="user-display-label" style="font-size: 0.75rem; color: var(--blue-cyan);"></span>
+            </div>
+        </div>
+        <button class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="logoutApp()">Sair 🚪</button>
+    </header>
+
+    <section id="view-login" class="app-view active">
+        <div class="auth-container">
+            <img src="Logo.png" alt="Logo Avança Escolar" class="circular-logo">
+            <h2 style="margin-top: 1rem; font-size: 1.6rem;">Avança Escolar</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Olimpíada Brasileira de Neuroengenharia 2026 🚀</p>
+            
+            <div class="form-group">
+                <label>Selecione seu Perfil de Acesso:</label>
+                <select id="login-profile" class="form-control" onchange="toggleLoginFields()">
+                    <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
+                    <option value="gestor">Direção, Coordenação ou Professor 🏢</option>
+                    <option value="admin">Administradora Geral (Eduarda) 👑</option>
+                </select>
+            </div>
+
+            <div id="box-aluno-fields">
+                <div class="form-group">
+                    <label>Seu Nome Completo:</label>
+                    <input type="text" id="login-student-name" class="form-control" placeholder="Ex: João Silva">
                 </div>
-                <h1>Avança Escolar</h1>
-                <p>Monitoria Cooperativa & Inteligência Pedagógica 🎓</p>
-                
-                <button class="selector-button-gate gate-student" onclick="entrarComoEstudante()">
-                    <span>🧑‍🎓</span> Área dos Alunos / Monitores
-                </button>
-                
-                <button class="selector-button-gate gate-staff" onclick="mostrarGuardaSenha()">
-                    <span>🏢</span> Área Técnica (Direção e Professores)
-                </button>
-
-                <div id="wrapper-guarda-senha" class="password-guard-box">
-                    <div class="password-input-wrapper">
-                        <label for="campo-senha-restrita">Senha de Validação de Rota:</label>
-                        <input type="password" id="campo-senha-restrita" class="password-field" placeholder="Digite a chave corporativa...">
-                    </div>
-                    <button class="btn-authorize" onclick="autenticarAreaRestrita()">Liberar Acesso Administrativo 🔐</button>
-                    <div id="erro-senha-msg" class="error-message-alert">❌ Senha inválida. Acesso de rota negado!</div>
+                <div class="form-group">
+                    <label>Sua Turma (Ensino Médio):</label>
+                    <select id="login-student-class" class="form-control">
+                        <option value="1º A">1º Ano A</option> <option value="1º B">1º Ano B</option> <option value="1º C">1º Ano C</option>
+                        <option value="2º A">2º Ano A</option> <option value="2º B">2º Ano B</option> <option value="2º C">2º Ano C</option>
+                        <option value="3º A">3º Ano A</option> <option value="3º B">3º Ano B</option> <option value="3º C">3º Ano C</option>
+                    </select>
                 </div>
             </div>
+
+            <div id="box-password-fields" style="display: none;">
+                <div class="form-group">
+                    <label>Senha de Validação Institucional:</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 1rem;" onclick="processarAutenticacao()">Entrar na Plataforma ✨</button>
         </div>
     </section>
 
-    <header id="global-nav-app" class="navbar-top" style="display: none;">
-        <div class="navbar-brand-container">
-            <img src="Logo.png" alt="Mini Logo" class="navbar-mini-logo">
-            <div class="navbar-brand-title">Avança <span>Escolar</span></div>
+    <main id="view-portal-alunos" class="view-section app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-reg-monitoria', this)">Registrar Apoio 📝</button>
+            <button class="tab-btn" onclick="switchTabs('tab-pedir-ajuda', this)">Preciso de Ajuda 🧠</button>
+            <button class="tab-btn" onclick="switchTabs('tab-chat-aluno', this); loadChatHub();">Chats de Monitoria 💬</button>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span id="label-role-session" style="font-size: 0.85rem; font-weight: 500; color: var(--blue-cyan);"></span>
-            <button class="navbar-logout-btn" onclick="executarLogoutGlobal()">Sair 🚪</button>
-        </div>
-    </header>
 
-    <main id="view-alunos-painel" class="view-section">
-        <div class="panel-heading-row">
-            <h2>Ambiente Cooperativo Estudantil 🧑‍🎓</h2>
-        </div>
-        
-        <div class="dashboard-main-grid">
-            <div class="content-panel-card" style="margin-bottom: 0;">
-                <div class="panel-heading-row">
-                    <h3>Registrar Nova Sessão de Apoio 📝</h3>
+        <div id="tab-reg-monitoria" class="tab-content active">
+            <div class="grid-2">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">Homologar Monitoria Realizada</h3>
+                    <form onsubmit="submitMonitoria(event)">
+                        <div class="form-group">
+                            <label>Disciplina Ministrada:</label>
+                            <select id="reg-subject" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome do Colega Ajudado:</label>
+                            <input type="text" id="reg-target-student" class="form-control" placeholder="Nome do colega" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Salvar Sessão (+10 XP) 🏆</button>
+                    </form>
                 </div>
-                <form id="form-registro-monitoria" onsubmit="enviarSessaoFirebase(event)">
-                    <div class="form-layout-group">
-                        <label for="txt-nome-monitor">Seu Nome Completo (Monitor):</label>
-                        <input type="text" id="txt-nome-monitor" class="form-layout-control" placeholder="Digite seu nome..." required>
+
+                <div class="card" style="text-align: center;">
+                    <h3>Seu Progresso Gamificado</h3>
+                    <div id="student-xp-display" style="font-size: 3rem; font-weight: 700; color: var(--gold-star); margin: 1rem 0;">0 XP</div>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <span id="badge-calouro" class="medal-pill">🌱 Calouro Pro</span>
+                        <span id="badge-agil" class="medal-pill">🚀 Ajudante Ágil</span>
+                        <span id="badge-ouro" class="medal-pill">🥇 Monitor Ouro</span>
                     </div>
-                    <div class="form-layout-group">
-                        <label for="sel-disciplina">Componente Curricular / Matéria:</label>
-                        <select id="sel-disciplina" class="form-layout-control" required>
-                            <option value="Matemática">Matemática 📐</option>
-                            <option value="Física">Física ⚛️</option>
-                            <option value="Química">Química 🧪</option>
-                            <option value="Redação / Literatura">Redação / Literatura ✍️</option>
-                        </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-pedir-ajuda" class="tab-content">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h3 style="margin-bottom: 1rem;">Solicitar Apoio Pedagógico</h3>
+                <form onsubmit="submitPedidoAjuda(event)">
+                    <div class="form-group">
+                        <label>Qual componente curricular você precisa de suporte?</label>
+                        <select id="help-subject" class="form-control" required></select>
                     </div>
-                    <div class="form-layout-group">
-                        <label for="txt-aluno-ajudado">Nome do Colega Ajudado:</label>
-                        <input type="text" id="txt-aluno-ajudado" class="form-layout-control" placeholder="Quem recebeu ajuda?" required>
-                    </div>
-                    <button type="submit" class="btn-action-submit">Validar Sessão de Apoio (+10 XP) ✨</button>
+                    <button type="submit" class="btn btn-primary">Enviar Solicitação à Coordenação 🚀</button>
                 </form>
             </div>
+        </div>
 
-            <div class="content-panel-card" style="margin-bottom: 0;">
-                <div class="panel-heading-row">
-                    <h3>Seu Progresso & Conquistas 🏆</h3>
+        <div id="tab-chat-aluno" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;">Salas de Conversa Privada 🔒</h3>
+                <div class="chat-layout">
+                    <div class="chat-channels-list" id="student-chat-channels"></div>
+                    <div class="chat-main-window">
+                        <div class="chat-messages-box" id="student-chat-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="student-chat-input" class="form-control" placeholder="Sua dúvida ou link de material...">
+                            <button class="btn btn-primary" style="width: auto; padding: 0 1.2rem;" onclick="sendChatMessage('student')">Enviar</button>
+                        </div>
+                    </div>
                 </div>
-                <p style="font-size: 0.9rem; color: #bfa6eb;">Experiência Acumulada Total:</p>
-                <div id="total-xp-counter" class="gamification-xp-display">0 XP</div>
-                
-                <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Suas Medalhas de Protagonismo:</h4>
-                <div class="badges-flex-container">
-                    <div id="medal-calouro" class="badge-medal-pill unlocked">🌱 Calouro Pro</div>
-                    <div id="medal-agil" class="badge-medal-pill">🚀 Ajudante Ágil</div>
-                    <div id="medal-ouro" class="badge-medal-pill">🥇 Monitor Ouro</div>
-                </div>
-                <p style="font-size: 0.75rem; color: #a2c4e8; margin-top: 1.5rem;">Ajude mais colegas para subir no ranking e liberar novas insígnias digitais automáticas!</p>
             </div>
         </div>
     </main>
 
-    <main id="view-gestao-painel" class="view-section">
-        <div class="panel-heading-row">
-            <h2>Painel de Controle Estratégico & Inteligência 📈</h2>
+    <main id="view-portal-gestao" class="view-section app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-gestao-dash', this)">Dashboard 📈</button>
+            <button class="tab-btn" onclick="switchTabs('tab-gestao-salas', this)">Atenção por Salas 🏢</button>
         </div>
 
-        <div class="dashboard-main-grid">
-            <div class="metric-card mc-blue">
-                <div class="metric-card-title">Frequência Geral Extracurricular</div>
-                <div class="metric-card-value">94.6%</div>
-                <div class="metric-card-sub" style="color: var(--green-glow);">↑ 1.8% em relação ao mês anterior</div>
-                <div class="metric-card-icon">📊</div>
+        <div id="tab-gestao-dash" class="tab-content active">
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Livro de Chamada Automático (Presença Digital)</h4>
+                    <ul class="scroll-list" id="gestao-presenca-digital" style="margin-top: 1rem;"></ul>
+                </div>
+                <div class="card">
+                    <h4>Termômetro Escolar (Matérias Mais Pedidas)</h4>
+                    <div class="thermometer-container" id="gestao-thermometer"></div>
+                </div>
             </div>
-            <div class="metric-card mc-purple">
-                <div class="metric-card-title">Sessões Totais Registradas</div>
-                <div id="dash-metric-sessoes" class="metric-card-value">0</div>
-                <div class="metric-card-sub">Registros armazenados na nuvem</div>
-                <div class="metric-card-icon">🗂️</div>
-            </div>
-            <div class="metric-card mc-green">
-                <div class="metric-card-title">Alunos Atuando como Monitores</div>
-                <div id="dash-metric-monitores" class="metric-card-value">0</div>
-                <div class="metric-card-sub">Estudantes engajados ativos</div>
-                <div class="metric-card-icon">🏅</div>
+            <div class="grid-2" style="margin-top: 1.5rem;">
+                <div class="card">
+                    <h4>Ranking de Monitores em Destaque 🥇</h4>
+                    <ul class="scroll-list" id="gestao-ranking-monitores" style="margin-top: 1rem;"></ul>
+                </div>
+                <div class="card">
+                    <h4>Solicitações Recentes de Socorro Pedagógico</h4>
+                    <ul class="scroll-list" id="gestao-lista-pedidos" style="margin-top: 1rem;"></ul>
+                </div>
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-            <div class="content-panel-card">
-                <div class="panel-heading-row">
-                    <h3>Alertas Críticos / Risco Pedagógico ⚠️</h3>
+        <div id="tab-gestao-salas" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 1rem;">Foco e Evolução por Turma</h3>
+                <div class="form-group" style="max-width: 300px;">
+                    <label>Filtrar por Sala:</label>
+                    <select id="filter-gestao-room" class="form-control" onchange="renderAtencaoSalas()">
+                        <option value="1º A">1º Ano A</option> <option value="1º B">1º Ano B</option> <option value="1º C">1º Ano C</option>
+                        <option value="2º A">2º Ano A</option> <option value="2º B">2º Ano B</option> <option value="2º C">2º Ano C</option>
+                        <option value="3º A">3º Ano A</option> <option value="3º B">3º Ano B</option> <option value="3º C">3º Ano C</option>
+                    </select>
                 </div>
-                <ul class="data-ul-list">
-                    <li class="data-li-item">
-                        <div>
-                            <strong>Bruno Oliveira</strong>
-                            <p style="font-size: 0.75rem; color: #ff8c8c;">Baixo rendimento em Exatas</p>
-                        </div>
-                        <span class="badge-risk">Intervenção Imediata</span>
-                    </li>
-                    <li class="data-li-item">
-                        <div>
-                            <strong>Letícia Costa</strong>
-                            <p style="font-size: 0.75rem; color: #ff8c8c;">Dificuldade estrutural em Redação</p>
-                        </div>
-                        <span class="badge-risk">Intervenção Imediata</span>
-                    </li>
-                    <li class="data-li-item">
-                        <div>
-                            <strong>Gustavo Santos</strong>
-                            <p style="font-size: 0.75rem; color: #ffcc00;">Abaixo da média em Química</p>
-                        </div>
-                        <span class="badge-risk" style="background:rgba(255,204,0,0.15); border-color:#ffcc00; color:#ffcc00;">Acompanhamento</span>
-                    </li>
-                </ul>
+                <ul class="scroll-list" id="gestao-salas-dinamico"></ul>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-portal-admin" class="view-section app-view">
+        <div class="grid-2">
+            <div class="card">
+                <h3>Módulo de Customização Livre 👑</h3>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Injete avisos globais no topo do sistema em tempo real.</p>
+                <div class="form-group">
+                    <label>Texto do Alerta Geral:</label>
+                    <input type="text" id="admin-banner-text" class="form-control" placeholder="Ex: Plantão de Física hoje às 14h!">
+                </div>
+                <button class="btn btn-primary" onclick="publicarAvisoGlobal()">Atualizar Banner de Avisos</button>
             </div>
 
-            <div class="content-panel-card">
-                <div class="panel-heading-row">
-                    <h3>Quadro Atual de Monitores Homologados 📜</h3>
+            <div class="card">
+                <h3>Auditoria de Suporte Técnico</h3>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Monitore e interaja de forma privada com qualquer canal ativo da escola.</p>
+                <div class="chat-layout">
+                    <div class="chat-channels-list" id="admin-chat-channels"></div>
+                    <div class="chat-main-window">
+                        <div class="chat-messages-box" id="admin-chat-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="admin-chat-input" class="form-control" placeholder="Mensagem administrativa de suporte...">
+                            <button class="btn btn-primary" style="width: auto; padding: 0 1.2rem;" onclick="sendChatMessage('admin')">Enviar</button>
+                        </div>
+                    </div>
                 </div>
-                <ul id="container-lista-homologados" class="data-ul-list">
-                    </ul>
             </div>
         </div>
     </main>
 
     <script type="module">
-        // Importações necessárias para os produtos oficiais do Firebase JS SDK
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
 
-        // Credenciais estruturadas do banco de dados do projeto Avança Escolar
+        // Configuração Oficial Fornecida
         const firebaseConfig = {
             apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
             authDomain: "avancaescolar.firebaseapp.com",
@@ -642,145 +575,370 @@
             measurementId: "G-HEN3NWEF6L"
         };
 
-        // Inicialização Core do Firebase
         const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        const db = getDatabase(app);
 
-        // Definição do nó principal de dados operacionais
-        const monitoriasNodeRef = ref(database, 'monitorias');
+        // Lista de Disciplinas Homologadas no Escopo
+        const disciplinas = ["Matemática", "Português", "Biologia", "Química", "Física", "Artes", "História", "Geografia", "Educação Física", "Filosofia", "Sociologia", "Inglês", "Espanhol"];
+        
+        // Estado Interno da Sessão do Usuário Conectado
+        let currentUser = { name: "", profile: "", class: "", email: "" };
+        let activeChatKey = null;
 
-        // Escopo Global Temporário para os gatilhos nativos de cliques do HTML ordinário
-        window.entrarComoEstudante = function() {
-            mudarInterfaceAtiva('view-alunos-painel', 'Área do Aluno / Monitor 🧑‍🎓');
+        // Inicializa Listas Suspensas de Componentes Curriculares
+        function initSubjectDropdowns() {
+            const dropdowns = [document.getElementById('reg-subject'), document.getElementById('help-subject')];
+            dropdowns.forEach(drop => {
+                if(drop) {
+                    drop.innerHTML = "";
+                    disciplinas.forEach(sub => {
+                        let opt = document.createElement('option');
+                        opt.value = sub; opt.innerText = sub;
+                        drop.appendChild(opt);
+                    });
+                }
+            });
         }
+        initSubjectDropdowns();
 
-        window.mostrarGuardaSenha = function() {
-            document.getElementById('wrapper-guarda-senha').style.display = 'block';
-            document.getElementById('campo-senha-restrita').focus();
-        }
+        // Gerenciador de Comportamento dos Campos de Login
+        window.toggleLoginFields = function() {
+            const p = document.getElementById('login-profile').value;
+            document.getElementById('box-aluno-fields').style.display = p === 'aluno' ? 'block' : 'none';
+            document.getElementById('box-password-fields').style.display = p !== 'aluno' ? 'block' : 'none';
+        };
 
-        window.autenticarAreaRestrita = function() {
-            const senhaDigitada = document.getElementById('campo-senha-restrita').value;
-            const feedbackErro = document.getElementById('erro-senha-msg');
-            
-            // Regra de validação estrita definida no escopo técnico
-            if (senhaDigitada === 'dia de sol') {
-                feedbackErro.style.display = 'none';
-                document.getElementById('campo-senha-restrita').value = '';
-                document.getElementById('wrapper-guarda-senha').style.display = 'none';
-                mudarInterfaceAtiva('view-gestao-painel', 'Gestão & Coordenação Geral 🏢');
+        // Autenticador de Rotas e Segurança de Perfil
+        window.processarAutenticacao = function() {
+            const p = document.getElementById('login-profile').value;
+            const pass = document.getElementById('login-password').value;
+
+            if (p === 'aluno') {
+                const name = document.getElementById('login-student-name').value.trim();
+                const room = document.getElementById('login-student-class').value;
+                if(!name) return alert("Por favor, digite seu nome!");
+                
+                currentUser = { name, profile: 'aluno', class: room, email: "" };
+                showPortal('view-portal-alunos', `Aluno: ${name} [${room}]`);
             } else {
-                feedbackErro.style.display = 'block';
-                feedbackErro.style.animation = 'shakeEffect 0.3s ease';
+                if (pass !== 'dia de sol') return alert("Senha de acesso incorreta!");
+                
+                if (p === 'admin') {
+                    currentUser = { name: "Eduarda", profile: 'admin', class: "Direção", email: "eduardabrito044@gmail.com" };
+                    showPortal('view-portal-admin', "Administradora Suprema 👑");
+                } else {
+                    currentUser = { name: "Equipe Técnica", profile: 'gestor', class: "Coordenação", email: "" };
+                    showPortal('view-portal-gestao', "Painel de Controle Gestor 🏢");
+                }
             }
+        };
+
+        function showPortal(viewId, labelText) {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('app-header').style.display = 'flex';
+            document.getElementById(viewId).classList.add('active');
+            document.getElementById('user-display-label').innerText = labelText;
         }
 
-        window.executarLogoutGlobal = function() {
-            document.getElementById('global-nav-app').style.display = 'none';
-            document.getElementById('view-alunos-painel').classList.remove('active');
-            document.getElementById('view-gestao-painel').classList.remove('active');
+        window.logoutApp = function() {
+            document.getElementById('app-header').style.display = 'none';
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-login').classList.add('active');
-        }
+            currentUser = { name: "", profile: "", class: "", email: "" };
+            activeChatKey = null;
+        };
 
-        function mudarInterfaceAtiva(idTela, stringRotulo) {
-            document.getElementById('view-login').classList.remove('active');
-            document.getElementById(idTela).classList.add('active');
+        window.switchTabs = function(contentId, btnElement) {
+            const parent = btnElement.parentElement;
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
             
-            const navTop = document.getElementById('global-nav-app');
-            navTop.style.display = 'flex';
-            document.getElementById('label-role-session').innerText = stringRotulo;
+            const container = parent.nextElementSibling || parent.parentElement;
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(contentId).classList.add('active');
+        };
+
+        // OPERAÇÃO 1: Registrar Monitoria (Monitor -> Firebase)
+        window.submitMonitoria = function(e) {
+            e.preventDefault();
+            const subject = document.getElementById('reg-subject').value;
+            const target = document.getElementById('reg-target-student').value.trim();
+
+            push(ref(db, 'monitorias'), {
+                monitor: currentUser.name,
+                class: currentUser.class,
+                subject: subject,
+                studentAjudado: target,
+                timestamp: Date.now()
+            }).then(() => {
+                alert("Sessão de Monitoria salva e homologada com sucesso! +10 XP");
+                document.getElementById('reg-target-student').value = "";
+            });
+        };
+
+        // OPERAÇÃO 2: Pedir Ajuda (Aluno -> Firebase)
+        window.submitPedidoAjuda = function(e) {
+            e.preventDefault();
+            const subject = document.getElementById('help-subject').value;
+
+            push(ref(db, 'pedidos_ajuda'), {
+                student: currentUser.name,
+                class: currentUser.class,
+                subject: subject,
+                status: "Precisa de Atenção",
+                timestamp: Date.now()
+            }).then(() => {
+                alert("Sua solicitação de apoio foi enviada para a coordenação!");
+            });
+        };
+
+        // OPERAÇÃO 3: Controle e Atualização do Painel de Avisos por Eduarda
+        window.publicarAvisoGlobal = function() {
+            const txt = document.getElementById('admin-banner-text').value.trim();
+            set(ref(db, 'config/aviso_global'), txt).then(() => {
+                alert("Banner atualizado globalmente!");
+            });
+        };
+
+        onValue(ref(db, 'config/aviso_global'), (snap) => {
+            const banner = document.getElementById('admin-custom-banner');
+            if (snap.exists() && snap.val() !== "") {
+                banner.innerText = "📢 " + snap.val();
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
+        });
+
+        // ESCUTA EM TEMPO REAL: Processamento de Dados, Gamificação e Inteligência
+        let globalMonitorias = [];
+        let globalPedidos = [];
+
+        onValue(ref(db, 'monitorias'), (snap) => {
+            globalMonitorias = [];
+            if(snap.exists()) {
+                snap.forEach(child => { globalMonitorias.push(child.val()); });
+            }
+            processarGamificacao();
+            processarPresencaE-Ranking();
+        });
+
+        onValue(ref(db, 'pedidos_ajuda'), (snap) => {
+            globalPedidos = [];
+            if(snap.exists()) {
+                snap.forEach(child => {
+                    let data = child.val();
+                    data.key = child.key;
+                    globalPedidos.push(data);
+                });
+            }
+            processarTermometro();
+            renderAtencaoSalas();
+            renderPedidosRecentes();
+        });
+
+        // Mecanismo de Gamificação
+        function processarGamificacao() {
+            if(currentUser.profile !== 'aluno') return;
+            let count = globalMonitorias.filter(m => m.monitor === currentUser.name).length;
+            let xp = count * 10;
+            
+            const display = document.getElementById('student-xp-display');
+            if(display) display.innerText = `${xp} XP`;
+
+            if(xp >= 10) document.getElementById('badge-calouro').classList.add('unlocked');
+            if(xp >= 20) document.getElementById('badge-agil').classList.add('unlocked');
+            if(xp >= 50) document.getElementById('badge-ouro').classList.add('unlocked');
         }
 
-        // Envio estruturado dos dados do formulário para o Firebase Realtime
-        window.enviarSessaoFirebase = function(event) {
-            event.preventDefault();
+        // Histórico de Presença Digital e Quadro de Líderes
+        function processarPresencaE-Ranking() {
+            const listaPresenca = document.getElementById('gestao-presenca-digital');
+            const listaRanking = document.getElementById('gestao-ranking-monitores');
+            if(!listaPresenca) return;
 
-            const monitor = document.getElementById('txt-nome-monitor').value;
-            const disciplina = document.getElementById('sel-disciplina').value;
-            const alunoAjudado = document.getElementById('txt-aluno-ajudado').value;
+            listaPresenca.innerHTML = "";
+            globalMonitorias.slice().reverse().forEach(m => {
+                let li = document.createElement('li');
+                li.className = "list-item";
+                let hora = new Date(m.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                li.innerHTML = `<div><strong>${m.monitor} (${m.class})</strong> ajudou ${m.studentAjudado}</div><span class="badge-status badge-green">${m.subject} às ${hora}</span>`;
+                listaPresenca.appendChild(li);
+            });
 
-            push(monitoriasNodeRef, {
-                monitorName: monitor,
-                subject: disciplina,
-                targetStudent: alunoAjudado,
-                recordedAt: Date.now()
-            }).then(() => {
-                alert(`Excelente trabalho, ${monitor}! Sessão de monitoria homologada e guardada no Firebase! 🎉`);
-                document.getElementById('form-registro-monitoria').reset();
-            }).catch((error) => {
-                console.error("Falha ao persistir dados de monitoria no Firebase: ", error);
+            // Geração de Rankings por Frequência Absoluta
+            let ranks = {};
+            globalMonitorias.forEach(m => { ranks[m.monitor] = (ranks[m.monitor] || 0) + 10; });
+            listaRanking.innerHTML = "";
+            Object.keys(ranks).sort((a,b) => ranks[b] - ranks[a]).forEach(name => {
+                let li = document.createElement('li');
+                li.className = "list-item";
+                li.innerHTML = `<div>👤 <strong>${name}</strong></div><span style="color:var(--gold-star); font-weight:600;">${ranks[name]} XP</span>`;
+                listaRanking.appendChild(li);
             });
         }
 
-        // Monitoramento Inteligente e Processamento em Tempo Real dos Snapshots do Firebase
-        onValue(monitoriasNodeRef, (snapshot) => {
-            const dataset = snapshot.val();
+        // Termômetro de Demandas Escolares
+        function processarTermometro() {
+            const container = document.getElementById('gestao-thermometer');
+            if(!container) return;
             
-            // Elementos visuais a serem atualizados dinamicamente
-            const listContainerGestor = document.getElementById('container-lista-homologados');
-            const metricSessoes = document.getElementById('dash-metric-sessoes');
-            const metricMonitores = document.getElementById('dash-metric-monitores');
-            const xpCounter = document.getElementById('total-xp-counter');
-            
-            // Elementos das Medalhas
-            const badgeAgil = document.getElementById('medal-agil');
-            const badgeOuro = document.getElementById('medal-ouro');
+            let counts = {};
+            disciplinas.forEach(d => counts[d] = 0);
+            globalPedidos.forEach(p => { if(counts[p.subject] !== undefined) counts[p.subject]++; });
 
-            // Reset estrutural preventivo das listas antes da remontagem
-            listContainerGestor.innerHTML = "";
+            let max = Math.max(...Object.values(counts), 1);
+            container.innerHTML = "";
 
-            if (dataset) {
-                const sessoesArray = Object.values(dataset);
-                const contagemTotalSessoes = sessoesArray.length;
-                
-                // Atualiza métricas do Dashboard Administrativo
-                metricSessoes.innerText = contagemTotalSessoes;
-                
-                // Mapeia e filtra monitores únicos para contagem do indicador
-                const monitoresUnicos = [...new Set(sessoesArray.map(item => item.monitorName))];
-                metricMonitores.innerText = monitoresUnicos.length;
+            Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, 5).forEach(sub => {
+                let pct = (counts[sub] / max) * 100;
+                let row = document.createElement('div');
+                row.className = "thermometer-row";
+                row.innerHTML = `
+                    <div class="thermometer-info"><span>${sub}</span><strong>${counts[sub]} solicitações</strong></div>
+                    <div class="thermometer-bar-bg"><div class="thermometer-bar-fill" style="width: ${pct}%"></div></div>
+                `;
+                container.appendChild(row);
+            });
+        }
 
-                // Sistema Dinâmico de Recompensa de XP (+10 XP por sessão)
-                const totalXPCalculado = contagemTotalSessoes * 10;
-                xpCounter.innerText = `${totalXPCalculado} XP`;
+        function renderPedidosRecentes() {
+            const list = document.getElementById('gestao-lista-pedidos');
+            if(!list) return;
+            list.innerHTML = "";
+            globalPedidos.slice().reverse().forEach(p => {
+                let li = document.createElement('li');
+                li.className = "list-item";
+                li.innerHTML = `<div><strong>${p.student} (${p.class})</strong> pede socorro</div><span class="badge-status badge-orange">${p.subject}</span>`;
+                list.appendChild(li);
+            });
+        }
 
-                // Gatilhos e Regras de Negócio de Desbloqueio das Medalhas Virtuais
-                if (totalXPCalculado >= 20) {
-                    badgeAgil.classList.add('unlocked');
-                } else {
-                    badgeAgil.classList.remove('unlocked');
-                }
+        // Painel Separado por Salas com Gatilho de Status de Evolução
+        window.alterarStatusEvolucao = function(key, currentStatus) {
+            let next = currentStatus === "Precisa de Atenção" ? "Já Melhorou Bastante" : "Precisa de Atenção";
+            update(ref(db, `pedidos_ajuda/${key}`), { status: next });
+        };
 
-                if (totalXPCalculado >= 50) {
-                    badgeOuro.classList.add('unlocked');
-                } else {
-                    badgeOuro.classList.remove('unlocked');
-                }
+        window.renderAtencaoSalas = function() {
+            const room = document.getElementById('filter-gestao-room').value;
+            const container = document.getElementById('gestao-salas-dinamico');
+            if(!container) return;
 
-                // Popula o Quadro Geral do Gestor na Ordem Inversa (Mais Recentes no Topo)
-                sessoesArray.reverse().forEach(registro => {
-                    const liNode = document.createElement('li');
-                    liNode.className = "data-li-item";
-                    liNode.innerHTML = `
-                        <div>
-                            <strong>${registro.monitorName}</strong>
-                            <p style="font-size: 0.75rem; color: #bfa6eb;">Ajudou <em>${registro.targetStudent}</em> em ${registro.subject}</p>
-                        </div>
-                        <span class="badge-success">Homologado ✔️</span>
-                    `;
-                    listContainerGestor.appendChild(liNode);
-                });
+            container.innerHTML = "";
+            let filtrados = globalPedidos.filter(p => p.class === room);
 
-            } else {
-                // Estado Padrão Inicial do Sistema na ausência de registros
-                metricSessoes.innerText = "0";
-                metricMonitores.innerText = "0";
-                xpCounter.innerText = "0 XP";
-                badgeAgil.classList.remove('unlocked');
-                badgeOuro.classList.remove('unlocked');
-                listContainerGestor.innerHTML = `<p style="font-size: 0.85rem; color:#bfa6eb; text-align:center; padding:1rem;">Nenhuma monitoria registrada na nuvem até o momento.</p>`;
+            if(filtrados.length === 0) {
+                container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:1rem;">Nenhum apontamento pedagógico nesta sala.</p>`;
+                return;
             }
-        });
+
+            filtrados.forEach(p => {
+                let li = document.createElement('li');
+                li.className = "list-item";
+                let badgeClass = p.status === "Já Melhorou Bastante" ? "badge-green" : "badge-orange";
+                let icon = p.status === "Já Melhorou Bastante" ? "🟢" : "🟡";
+                li.innerHTML = `
+                    <div><strong>${p.student}</strong> <br><span style="font-size:0.75rem; color:var(--text-muted)">Necessidade: ${p.subject}</span></div>
+                    <span class="badge-status ${badgeClass}" onclick="alterarStatusEvolucao('${p.key}', '${p.status}')">${icon} ${p.status}</span>
+                `;
+                container.appendChild(li);
+            });
+        };
+
+        // OPERAÇÃO DE CHAT: Comunicação Particular Criptografada por Nó Isolado
+        window.loadChatHub = function() {
+            const chanContainer = document.getElementById('student-chat-channels');
+            if(!chanContainer) return;
+            chanContainer.innerHTML = "";
+
+            disciplinas.forEach(dis => {
+                let div = document.createElement('div');
+                div.className = "channel-tab";
+                div.innerText = `💬 Canal de ${dis}`;
+                div.onclick = () => selectChatChannel(dis, div);
+                chanContainer.appendChild(div);
+            });
+        };
+
+        function selectChatChannel(discipline, element) {
+            element.parentElement.querySelectorAll('.channel-tab').forEach(e => e.classList.remove('active'));
+            element.classList.add('active');
+
+            if(currentUser.profile === 'aluno') {
+                activeChatKey = `${currentUser.name}_com_${discipline}`;
+            }
+            listenChatMessages(activeChatKey, 'student-chat-messages');
+        }
+
+        function listenChatMessages(chatKey, boxId) {
+            const box = document.getElementById(boxId);
+            if(!box) return;
+
+            onValue(ref(db, `chats/${chatKey}`), (snap) => {
+                box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(msgSnap => {
+                        let msg = msgSnap.val();
+                        let bubble = document.createElement('div');
+                        let isMe = msg.sender === currentUser.name;
+                        bubble.className = `chat-bubble ${isMe ? 'sent' : 'received'}`;
+                        let time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                        bubble.innerHTML = `<strong>${msg.sender}:</strong><br>${msg.text}<span class="msg-meta">${time}</span>`;
+                        box.appendChild(bubble);
+                    });
+                    box.scrollTop = box.scrollHeight;
+                } else {
+                    box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:2rem;">Início do chat privado de monitoria. Compartilhe suas dúvidas e materiais com segurança.</p>`;
+                }
+            });
+        }
+
+        window.sendChatMessage = function(type) {
+            const input = document.getElementById(`${type}-chat-input`);
+            const txt = input.value.trim();
+            if(!txt || !activeChatKey) return;
+
+            push(ref(db, `chats/${activeChatKey}`), {
+                sender: currentUser.name,
+                text: txt,
+                timestamp: Date.now()
+            }).then(() => {
+                input.value = "";
+            });
+        };
+
+        // Rotinas de Escuta de Canais para Perfil Administrador (Eduarda)
+        function initAdminChatAuditoria() {
+            const container = document.getElementById('admin-chat-channels');
+            if(!container) return;
+
+            onValue(ref(db, 'chats'), (snap) => {
+                container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let div = document.createElement('div');
+                        div.className = "channel-tab";
+                        div.innerText = `🔒 Sala: ${child.key.replace(/_com_/g, ' ➜ ')}`;
+                        div.onclick = () => {
+                            container.querySelectorAll('.channel-tab').forEach(e => e.classList.remove('active'));
+                            div.classList.add('active');
+                            activeChatKey = child.key;
+                            listenChatMessages(activeChatKey, 'admin-chat-messages');
+                        };
+                        container.appendChild(div);
+                    });
+                }
+            });
+        }
+        
+        // Inicialização de Gatilhos de Monitoração para a visão Administrativa
+        setInterval(() => {
+            if(currentUser.profile === 'admin' && document.getElementById('admin-chat-channels').innerHTML === "") {
+                initAdminChatAuditoria();
+            }
+        }, 1500);
+
     </script>
 </body>
 </html>
