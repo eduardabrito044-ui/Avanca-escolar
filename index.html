@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avança Escolar - OBNE 2026</title>
+    <title>Avança Escolar</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,6 +15,9 @@
             --blue-cyan: #00dfa2;
             --green-success: #00dfa2;
             --gold-star: #ffb800;
+            --silver: #d1d1d1;
+            --bronze: #cd7f32;
+            --honra: #4da6ff;
             --text-main: #ffffff;
             --text-muted: #b3a4cd;
             --danger: #ff4a4a;
@@ -56,13 +59,6 @@
             border: 2px solid var(--blue-cyan);
         }
 
-        /* Emojis Decorativos */
-        .decor-icon {
-            display: inline-block;
-            margin: 0 4px;
-        }
-
-        /* Controle de Exibição das Telas */
         .app-view {
             display: none;
             padding: 1rem;
@@ -76,7 +72,6 @@
             display: block;
         }
 
-        /* Elementos de Layout Comuns */
         .auth-container {
             max-width: 450px;
             margin: 4rem auto;
@@ -145,7 +140,6 @@
         .btn-secondary { background: rgba(255, 255, 255, 0.06); color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-success { background: linear-gradient(90deg, #00b884, var(--green-success)); color: #130924; }
 
-        /* Componente de Abas de Navegação Interna */
         .tab-bar {
             display: flex;
             gap: 8px;
@@ -180,7 +174,6 @@
             display: block;
         }
 
-        /* Header do App */
         header {
             background-color: var(--purple-card);
             padding: 0.8rem 1.5rem;
@@ -190,14 +183,12 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Grid System Responsivo */
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
-        /* Termômetro Escolar / Gráfico Visual */
         .thermometer-container {
             margin-top: 1rem;
         }
@@ -223,7 +214,6 @@
             transition: width 0.5s ease;
         }
 
-        /* Listas e Badges */
         .scroll-list {
             max-height: 300px;
             overflow-y: auto;
@@ -252,7 +242,6 @@
         .badge-green { background-color: rgba(0, 223, 162, 0.15); color: var(--green-success); border: 1px solid var(--green-success); }
         .badge-orange { background-color: rgba(255, 184, 0, 0.15); color: var(--gold-star); border: 1px solid var(--gold-star); }
 
-        /* Estrutura do Chat Privado */
         .chat-layout {
             display: grid;
             grid-template-columns: 1fr;
@@ -332,7 +321,6 @@
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Banner de Avisos Customizados da Administradora */
         #admin-custom-banner {
             background: linear-gradient(90deg, #ff0077, var(--purple-light));
             color: white;
@@ -343,24 +331,21 @@
             display: none;
         }
 
-        /* Medalhas */
-        .medal-pill {
+        .medal-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 0.3rem 0.7rem;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            opacity: 0.3;
+            gap: 6px;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .medal-pill.unlocked {
-            opacity: 1;
-            border-color: var(--gold-star);
-            background: rgba(255, 184, 0, 0.08);
-            color: var(--gold-star);
-        }
+        .m-ouro { border-color: var(--gold-star); color: var(--gold-star); background: rgba(255, 184, 0, 0.1); }
+        .m-prata { border-color: var(--silver); color: var(--silver); background: rgba(209, 209, 209, 0.1); }
+        .m-bronze { border-color: var(--bronze); color: var(--bronze); background: rgba(205, 127, 50, 0.1); }
+        .m-honra { border-color: var(--honra); color: var(--honra); background: rgba(77, 166, 255, 0.1); }
     </style>
 </head>
 <body>
@@ -382,7 +367,7 @@
         <div class="auth-container">
             <img src="Logo.png" alt="Logo Avança Escolar" class="circular-logo">
             <h2 style="margin-top: 1rem; font-size: 1.6rem;">Avança Escolar</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Olimpíada Brasileira de Neuroengenharia 2026 🚀</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Inovação e Crescimento 🚀</p>
             
             <div class="form-group">
                 <label>Selecione seu Perfil de Acesso:</label>
@@ -424,6 +409,7 @@
             <button class="tab-btn active" onclick="switchTabs('tab-reg-monitoria', this)">Registrar Apoio 📝</button>
             <button class="tab-btn" onclick="switchTabs('tab-pedir-ajuda', this)">Preciso de Ajuda 🧠</button>
             <button class="tab-btn" onclick="switchTabs('tab-chat-aluno', this); loadChatHub();">Chats de Monitoria 💬</button>
+            <button class="tab-btn" onclick="switchTabs('tab-student-medals', this); carregarMinhasMedalhas();">Minhas Medalhas 🏅</button>
         </div>
 
         <div id="tab-reg-monitoria" class="tab-content active">
@@ -446,11 +432,7 @@
                 <div class="card" style="text-align: center;">
                     <h3>Seu Progresso Gamificado</h3>
                     <div id="student-xp-display" style="font-size: 3rem; font-weight: 700; color: var(--gold-star); margin: 1rem 0;">0 XP</div>
-                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                        <span id="badge-calouro" class="medal-pill">🌱 Calouro Pro</span>
-                        <span id="badge-agil" class="medal-pill">🚀 Ajudante Ágil</span>
-                        <span id="badge-ouro" class="medal-pill">🥇 Monitor Ouro</span>
-                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Ajude seus colegas para acumular pontos!</p>
                 </div>
             </div>
         </div>
@@ -483,12 +465,21 @@
                 </div>
             </div>
         </div>
+
+        <div id="tab-student-medals" class="tab-content">
+            <div class="card">
+                <h3>Minha Galeria de Honra 🏅</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Medalhas oficiais recebidas pela sua dedicação e destaque por matéria.</p>
+                <div id="student-medals-grid" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+            </div>
+        </div>
     </main>
 
     <main id="view-portal-gestao" class="view-section app-view">
         <div class="tab-bar">
             <button class="tab-btn active" onclick="switchTabs('tab-gestao-dash', this)">Dashboard 📈</button>
             <button class="tab-btn" onclick="switchTabs('tab-gestao-salas', this)">Atenção por Salas 🏢</button>
+            <button class="tab-btn" onclick="switchTabs('tab-gestao-premiação', this)">Lançar Medalhas 🏅</button>
         </div>
 
         <div id="tab-gestao-dash" class="tab-content active">
@@ -504,7 +495,11 @@
             </div>
             <div class="grid-2" style="margin-top: 1.5rem;">
                 <div class="card">
-                    <h4>Ranking de Monitores em Destaque 🥇</h4>
+                    <h4>Destaques de Monitores (Por Matéria) 🏆</h4>
+                    <div class="form-group" style="margin-top: 0.5rem;">
+                        <label>Filtrar Destaques por Disciplina:</label>
+                        <select id="filter-ranking-subject" class="form-control" onchange="processarPresencaERanking()"></select>
+                    </div>
                     <ul class="scroll-list" id="gestao-ranking-monitores" style="margin-top: 1rem;"></ul>
                 </div>
                 <div class="card">
@@ -528,13 +523,40 @@
                 <ul class="scroll-list" id="gestao-salas-dinamico"></ul>
             </div>
         </div>
+
+        <div id="tab-gestao-premiação" class="tab-content">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h3>Atribuir Medalha de Destaque</h3>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1.2rem;">Premiar oficialmente alunos de destaque com medalhas fixas no perfil.</p>
+                <form onsubmit="submitMedalha(event)">
+                    <div class="form-group">
+                        <label>Nome Exato do Aluno:</label>
+                        <input type="text" id="medal-student-name" class="form-control" placeholder="Ex: João Silva" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Matéria de Destaque:</label>
+                        <select id="medal-subject" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria da Medalha:</label>
+                        <select id="medal-type" class="form-control" required>
+                            <option value="Ouro 🥇">Ouro 🥇</option>
+                            <option value="Prata 🥈">Prata 🥈</option>
+                            <option value="Bronze 🥉">Bronze 🥉</option>
+                            <option value="Honra ao Mérito 🎖️">Honra ao Mérito 🎖️</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Outorgar Medalha Oficial 🎖️</button>
+                </form>
+            </div>
+        </div>
     </main>
 
     <main id="view-portal-admin" class="view-section app-view">
         <div class="grid-2">
             <div class="card">
                 <h3>Módulo de Customização Livre 👑</h3>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Injete avisos globais no topo do sistema em tempo real.</p>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Injete avisos ou blocos de conteúdo gerais no topo do site.</p>
                 <div class="form-group">
                     <label>Texto do Alerta Geral:</label>
                     <input type="text" id="admin-banner-text" class="form-control" placeholder="Ex: Plantão de Física hoje às 14h!">
@@ -563,7 +585,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
 
-        // Configuração Oficial Fornecida
         const firebaseConfig = {
             apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
             authDomain: "avancaescolar.firebaseapp.com",
@@ -578,16 +599,19 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Lista de Disciplinas Homologadas no Escopo
         const disciplinas = ["Matemática", "Português", "Biologia", "Química", "Física", "Artes", "História", "Geografia", "Educação Física", "Filosofia", "Sociologia", "Inglês", "Espanhol"];
         
-        // Estado Interno da Sessão do Usuário Conectado
         let currentUser = { name: "", profile: "", class: "", email: "" };
         let activeChatKey = null;
+        let isListeningToRealtime = false;
 
-        // Inicializa Listas Suspensas de Componentes Curriculares
         function initSubjectDropdowns() {
-            const dropdowns = [document.getElementById('reg-subject'), document.getElementById('help-subject')];
+            const dropdowns = [
+                document.getElementById('reg-subject'), 
+                document.getElementById('help-subject'),
+                document.getElementById('filter-ranking-subject'),
+                document.getElementById('medal-subject')
+            ];
             dropdowns.forEach(drop => {
                 if(drop) {
                     drop.innerHTML = "";
@@ -601,14 +625,12 @@
         }
         initSubjectDropdowns();
 
-        // Gerenciador de Comportamento dos Campos de Login
         window.toggleLoginFields = function() {
             const p = document.getElementById('login-profile').value;
             document.getElementById('box-aluno-fields').style.display = p === 'aluno' ? 'block' : 'none';
             document.getElementById('box-password-fields').style.display = p !== 'aluno' ? 'block' : 'none';
         };
 
-        // Autenticador de Rotas e Segurança de Perfil
         window.processarAutenticacao = function() {
             const p = document.getElementById('login-profile').value;
             const pass = document.getElementById('login-password').value;
@@ -620,16 +642,17 @@
                 
                 currentUser = { name, profile: 'aluno', class: room, email: "" };
                 showPortal('view-portal-alunos', `Aluno: ${name} [${room}]`);
-            } else {
+                startRealtimeListeners();
+            } else if (p === 'gestor') {
                 if (pass !== 'dia de sol') return alert("Senha de acesso incorreta!");
-                
-                if (p === 'admin') {
-                    currentUser = { name: "Eduarda", profile: 'admin', class: "Direção", email: "eduardabrito044@gmail.com" };
-                    showPortal('view-portal-admin', "Administradora Suprema 👑");
-                } else {
-                    currentUser = { name: "Equipe Técnica", profile: 'gestor', class: "Coordenação", email: "" };
-                    showPortal('view-portal-gestao', "Painel de Controle Gestor 🏢");
-                }
+                currentUser = { name: "Equipe Técnica", profile: 'gestor', class: "Coordenação", email: "" };
+                showPortal('view-portal-gestao', "Painel de Controle Gestor 🏢");
+                startRealtimeListeners();
+            } else if (p === 'admin') {
+                if (pass !== 'Chernobyl 1986') return alert("Senha da Administradora incorreta!");
+                currentUser = { name: "Eduarda", profile: 'admin', class: "Direção", email: "eduardabrito044@gmail.com" };
+                showPortal('view-portal-admin', "Administradora Suprema 👑");
+                startRealtimeListeners();
             }
         };
 
@@ -658,7 +681,6 @@
             document.getElementById(contentId).classList.add('active');
         };
 
-        // OPERAÇÃO 1: Registrar Monitoria (Monitor -> Firebase)
         window.submitMonitoria = function(e) {
             e.preventDefault();
             const subject = document.getElementById('reg-subject').value;
@@ -671,12 +693,11 @@
                 studentAjudado: target,
                 timestamp: Date.now()
             }).then(() => {
-                alert("Sessão de Monitoria salva e homologada com sucesso! +10 XP");
+                alert("Sessão de Monitoria salva com sucesso! +10 XP");
                 document.getElementById('reg-target-student').value = "";
             });
         };
 
-        // OPERAÇÃO 2: Pedir Ajuda (Aluno -> Firebase)
         window.submitPedidoAjuda = function(e) {
             e.preventDefault();
             const subject = document.getElementById('help-subject').value;
@@ -692,7 +713,55 @@
             });
         };
 
-        // OPERAÇÃO 3: Controle e Atualização do Painel de Avisos por Eduarda
+        // Salvar medalhas outorgadas pela coordenação no banco de dados
+        window.submitMedalha = function(e) {
+            e.preventDefault();
+            const student = document.getElementById('medal-student-name').value.trim();
+            const subject = document.getElementById('medal-subject').value;
+            const type = document.getElementById('medal-type').value;
+
+            push(ref(db, 'medalhas'), {
+                student: student,
+                subject: subject,
+                type: type,
+                timestamp: Date.now()
+            }).then(() => {
+                alert(`Medalha de ${type} concedida com sucesso para ${student}!`);
+                document.getElementById('medal-student-name').value = "";
+            });
+        };
+
+        window.carregarMinhasMedalhas = function() {
+            const container = document.getElementById('student-medals-grid');
+            if(!container) return;
+            container.innerHTML = "";
+
+            onValue(ref(db, 'medalhas'), (snap) => {
+                container.innerHTML = "";
+                let encontrou = false;
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let data = child.val();
+                        if(data.student.toLowerCase() === currentUser.name.toLowerCase()) {
+                            encontrou = true;
+                            let span = document.createElement('span');
+                            let mClass = "m-honra";
+                            if(data.type.includes("Ouro")) mClass = "m-ouro";
+                            if(data.type.includes("Prata")) mClass = "m-prata";
+                            if(data.type.includes("Bronze")) mClass = "m-bronze";
+                            
+                            span.className = `medal-badge ${mClass}`;
+                            span.innerText = `${data.type} em ${data.subject}`;
+                            container.appendChild(span);
+                        }
+                    });
+                }
+                if(!encontrou) {
+                    container.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted);">Você ainda não possui medalhas registradas. Continue se destacando!</p>`;
+                }
+            }, { onlyOnce: true });
+        };
+
         window.publicarAvisoGlobal = function() {
             const txt = document.getElementById('admin-banner-text').value.trim();
             set(ref(db, 'config/aviso_global'), txt).then(() => {
@@ -710,34 +779,37 @@
             }
         });
 
-        // ESCUTA EM TEMPO REAL: Processamento de Dados, Gamificação e Inteligência
         let globalMonitorias = [];
         let globalPedidos = [];
 
-        onValue(ref(db, 'monitorias'), (snap) => {
-            globalMonitorias = [];
-            if(snap.exists()) {
-                snap.forEach(child => { globalMonitorias.push(child.val()); });
-            }
-            processarGamificacao();
-            processarPresencaE-Ranking();
-        });
+        function startRealtimeListeners() {
+            if (isListeningToRealtime) return;
+            isListeningToRealtime = true;
 
-        onValue(ref(db, 'pedidos_ajuda'), (snap) => {
-            globalPedidos = [];
-            if(snap.exists()) {
-                snap.forEach(child => {
-                    let data = child.val();
-                    data.key = child.key;
-                    globalPedidos.push(data);
-                });
-            }
-            processarTermometro();
-            renderAtencaoSalas();
-            renderPedidosRecentes();
-        });
+            onValue(ref(db, 'monitorias'), (snap) => {
+                globalMonitorias = [];
+                if(snap.exists()) {
+                    snap.forEach(child => { globalMonitorias.push(child.val()); });
+                }
+                processarGamificacao();
+                processarPresencaERanking();
+            });
 
-        // Mecanismo de Gamificação
+            onValue(ref(db, 'pedidos_ajuda'), (snap) => {
+                globalPedidos = [];
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let data = child.val();
+                        data.key = child.key;
+                        globalPedidos.push(data);
+                    });
+                }
+                processarTermometro();
+                renderAtencaoSalas();
+                renderPedidosRecentes();
+            });
+        }
+
         function processarGamificacao() {
             if(currentUser.profile !== 'aluno') return;
             let count = globalMonitorias.filter(m => m.monitor === currentUser.name).length;
@@ -745,14 +817,9 @@
             
             const display = document.getElementById('student-xp-display');
             if(display) display.innerText = `${xp} XP`;
-
-            if(xp >= 10) document.getElementById('badge-calouro').classList.add('unlocked');
-            if(xp >= 20) document.getElementById('badge-agil').classList.add('unlocked');
-            if(xp >= 50) document.getElementById('badge-ouro').classList.add('unlocked');
         }
 
-        // Histórico de Presença Digital e Quadro de Líderes
-        function processarPresencaE-Ranking() {
+        function processarPresencaERanking() {
             const listaPresenca = document.getElementById('gestao-presenca-digital');
             const listaRanking = document.getElementById('gestao-ranking-monitores');
             if(!listaPresenca) return;
@@ -766,19 +833,37 @@
                 listaPresenca.appendChild(li);
             });
 
-            // Geração de Rankings por Frequência Absoluta
+            // Ranking de Monitores com filtro específico por Matéria
+            const filterSubject = document.getElementById('filter-ranking-subject').value;
             let ranks = {};
-            globalMonitorias.forEach(m => { ranks[m.monitor] = (ranks[m.monitor] || 0) + 10; });
+            globalMonitorias.forEach(m => { 
+                if(m.subject === filterSubject) {
+                    ranks[m.monitor] = (ranks[m.monitor] || 0) + 10; 
+                }
+            });
+            
             listaRanking.innerHTML = "";
-            Object.keys(ranks).sort((a,b) => ranks[b] - ranks[a]).forEach(name => {
+            let keys = Object.keys(ranks).sort((a,b) => ranks[b] - ranks[a]);
+            
+            if(keys.length === 0) {
+                listaRanking.innerHTML = `<li style="font-size:0.85rem; color:var(--text-muted); padding:0.5rem;">Nenhuma atividade registrada nesta matéria ainda.</li>`;
+                return;
+            }
+
+            keys.forEach((name, index) => {
                 let li = document.createElement('li');
                 li.className = "list-item";
-                li.innerHTML = `<div>👤 <strong>${name}</strong></div><span style="color:var(--gold-star); font-weight:600;">${ranks[name]} XP</span>`;
+                let podio = "";
+                if(index === 0) podio = "🥇 (Ouro em Potencial)";
+                else if(index === 1) podio = "🥈 (Prata em Potencial)";
+                else if(index === 2) podio = "🥉 (Bronze em Potencial)";
+                else podio = "🎖️ (Menção de Destaque)";
+
+                li.innerHTML = `<div>👤 <strong>${name}</strong> <br><span style="font-size:0.75rem; color:var(--text-muted);">${podio}</span></div><span style="color:var(--gold-star); font-weight:600;">${ranks[name]} XP</span>`;
                 listaRanking.appendChild(li);
             });
         }
 
-        // Termômetro de Demandas Escolares
         function processarTermometro() {
             const container = document.getElementById('gestao-thermometer');
             if(!container) return;
@@ -814,7 +899,6 @@
             });
         }
 
-        // Painel Separado por Salas com Gatilho de Status de Evolução
         window.alterarStatusEvolucao = function(key, currentStatus) {
             let next = currentStatus === "Precisa de Atenção" ? "Já Melhorou Bastante" : "Precisa de Atenção";
             update(ref(db, `pedidos_ajuda/${key}`), { status: next });
@@ -846,7 +930,6 @@
             });
         };
 
-        // OPERAÇÃO DE CHAT: Comunicação Particular Criptografada por Nó Isolado
         window.loadChatHub = function() {
             const chanContainer = document.getElementById('student-chat-channels');
             if(!chanContainer) return;
@@ -889,7 +972,7 @@
                     });
                     box.scrollTop = box.scrollHeight;
                 } else {
-                    box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:2rem;">Início do chat privado de monitoria. Compartilhe suas dúvidas e materiais com segurança.</p>`;
+                    box.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-top:2rem;">Início do chat privado de monitoria.</p>`;
                 }
             });
         }
@@ -908,7 +991,6 @@
             });
         };
 
-        // Rotinas de Escuta de Canais para Perfil Administrador (Eduarda)
         function initAdminChatAuditoria() {
             const container = document.getElementById('admin-chat-channels');
             if(!container) return;
@@ -932,9 +1014,8 @@
             });
         }
         
-        // Inicialização de Gatilhos de Monitoração para a visão Administrativa
         setInterval(() => {
-            if(currentUser.profile === 'admin' && document.getElementById('admin-chat-channels').innerHTML === "") {
+            if(currentUser.profile === 'admin' && document.getElementById('admin-chat-channels') && document.getElementById('admin-chat-channels').innerHTML === "") {
                 initAdminChatAuditoria();
             }
         }, 1500);
