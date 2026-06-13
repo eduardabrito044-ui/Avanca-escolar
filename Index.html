@@ -1,1 +1,786 @@
-hikanui
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avança Escolar - Sistema Gamificado de Monitoria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variáveis do Tema Visual - Tons de Roxo, Azul, Verde e Destaques em Amarelo/Dourado */
+        :root {
+            --purple-deep: #1e0b36;
+            --purple-medium: #3b1c6e;
+            --purple-light: #9d66ff;
+            --blue-electric: #0052cc;
+            --blue-cyan: #00bfff;
+            --green-primary: #00b36b;
+            --green-glow: #26e695;
+            --gold-soft: #ffd700;
+            --dark-bg: #0b0314;
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --white: #ffffff;
+            --error-red: #ff3b30;
+        }
+
+        /* Configurações Globais Preventivas de Overflow e Layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--purple-deep) 50%, #0d1e36 100%);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Elementos Decorativos Flutuantes para Ambiente Educativo Dinâmico */
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.15;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            animation: floatingEffect 7s ease-in-out infinite;
+        }
+        .fe-1 { top: 8%; left: 10%; animation-delay: 0s; }
+        .fe-2 { top: 22%; right: 12%; animation-delay: 2s; }
+        .fe-3 { bottom: 15%; left: 8%; animation-delay: 4s; }
+        .fe-4 { bottom: 25%; right: 9%; animation-delay: 1s; }
+
+        @keyframes floatingEffect {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(15deg); }
+        }
+
+        /* Estrutura de Telas com Transição Fluida */
+        .view-section {
+            display: none;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .view-section.active {
+            display: block;
+            animation: screenFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes screenFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Requisito de Design Crítico: Recorte Perfeito e Circular da Logo */
+        .avatar-logo-wrapper {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--purple-light), var(--blue-cyan));
+            padding: 4px;
+            box-shadow: 0 8px 24px rgba(157, 102, 255, 0.35);
+        }
+
+        .avatar-logo-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background-color: var(--purple-medium);
+        }
+
+        /* Header Pequeno Adaptável da Aplicação */
+        .navbar-top {
+            background: rgba(11, 3, 20, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-mini-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--green-glow);
+        }
+
+        .navbar-brand-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .navbar-brand-title span { color: var(--green-glow); }
+
+        .navbar-logout-btn {
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid var(--error-red);
+            color: #ff6b6b;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .navbar-logout-btn:hover {
+            background: var(--error-red);
+            color: var(--white);
+        }
+
+        /* ================= ESTILOS DA TELA DE LOGIN ================= */
+        .login-view-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .login-card-container {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 440px;
+            padding: 2.2rem 1.8rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .login-card-container h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .login-card-container p {
+            color: #bfa6eb;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .selector-button-gate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .selector-button-gate:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .gate-student:hover { border-color: var(--green-glow); box-shadow: 0 0 15px rgba(38, 230, 149, 0.25); }
+        .gate-staff:hover { border-color: var(--blue-cyan); box-shadow: 0 0 15px rgba(0, 191, 255, 0.25); }
+
+        /* Área do formulário de autenticação embutido */
+        .password-guard-box {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .password-input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .password-input-wrapper label {
+            font-size: 0.85rem;
+            color: #bfa6eb;
+            font-weight: 500;
+        }
+
+        .password-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--white);
+            font-size: 1rem;
+            outline: none;
+        }
+        .password-field:focus { border-color: var(--blue-cyan); }
+
+        .btn-authorize {
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--blue-electric), var(--blue-cyan));
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .btn-authorize:hover { opacity: 0.95; }
+
+        .error-message-alert {
+            color: var(--error-red);
+            font-size: 0.85rem;
+            margin-top: 0.6rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* ================= CARDS E COMPONENTES DE DASHBOARD ================= */
+        .dashboard-main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-card {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .mc-purple { border-left: 5px solid var(--purple-light); }
+        .mc-blue { border-left: 5px solid var(--blue-cyan); }
+        .mc-green { border-left: 5px solid var(--green-glow); }
+
+        .metric-card-icon {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            font-size: 1.8rem;
+            opacity: 0.4;
+        }
+
+        .metric-card-title {
+            font-size: 0.9rem;
+            color: #bfa6eb;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .metric-card-sub {
+            font-size: 0.8rem;
+            color: #a2c4e8;
+        }
+
+        /* Sessões e Contêineres de Dados */
+        .content-panel-card {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-heading-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.6rem;
+        }
+
+        .panel-heading-row h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        /* Lista de Risco Pedagógico e Homologação */
+        .data-ul-list {
+            list-style: none;
+        }
+
+        .data-li-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .badge-risk {
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid var(--error-red);
+            color: #ff6b6b;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(38, 230, 149, 0.12);
+            border: 1px solid var(--green-glow);
+            color: var(--green-glow);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Formulários Operacionais Internos */
+        .form-layout-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-layout-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #bfa6eb;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .form-layout-control {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: rgba(0, 0, 0, 0.25);
+            color: var(--white);
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .form-layout-control:focus { border-color: var(--purple-light); }
+
+        select.form-layout-control option {
+            background: #190a2b;
+            color: var(--white);
+        }
+
+        .btn-action-submit {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--green-primary), var(--green-glow));
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(38, 230, 149, 0.2);
+            transition: opacity 0.2s;
+        }
+        .btn-action-submit:hover { opacity: 0.95; }
+
+        /* Estrutura de Medalhas e Gamificação Visual */
+        .gamification-xp-display {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold-soft);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            margin: 0.5rem 0 1.2rem 0;
+        }
+
+        .badges-flex-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .badge-medal-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d1c4e9;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+        .badge-medal-pill.unlocked {
+            opacity: 1;
+            background: rgba(255, 215, 0, 0.08);
+            border-color: var(--gold-soft);
+            color: var(--gold-soft);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+        }
+
+        /* Responsividade para Celulares (Mobile-First Check) */
+        @media(max-width: 768px) {
+            .dashboard-main-grid { grid-template-columns: 1fr; }
+            .view-section { padding: 1rem; }
+            .login-card-container { padding: 1.8rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-emoji fe-1">🚀</div>
+    <div class="floating-emoji fe-2">📚</div>
+    <div class="floating-emoji fe-3">🧠</div>
+    <div class="floating-emoji fe-4">✨</div>
+
+    <section id="view-login" class="view-section active">
+        <div class="login-view-wrapper">
+            <div class="login-card-container">
+                <div class="avatar-logo-wrapper">
+                    <img src="Logo.png" alt="Avança Escolar Logo" class="avatar-logo-img">
+                </div>
+                <h1>Avança Escolar</h1>
+                <p>Monitoria Cooperativa & Inteligência Pedagógica 🎓</p>
+                
+                <button class="selector-button-gate gate-student" onclick="entrarComoEstudante()">
+                    <span>🧑‍🎓</span> Área dos Alunos / Monitores
+                </button>
+                
+                <button class="selector-button-gate gate-staff" onclick="mostrarGuardaSenha()">
+                    <span>🏢</span> Área Técnica (Direção e Professores)
+                </button>
+
+                <div id="wrapper-guarda-senha" class="password-guard-box">
+                    <div class="password-input-wrapper">
+                        <label for="campo-senha-restrita">Senha de Validação de Rota:</label>
+                        <input type="password" id="campo-senha-restrita" class="password-field" placeholder="Digite a chave corporativa...">
+                    </div>
+                    <button class="btn-authorize" onclick="autenticarAreaRestrita()">Liberar Acesso Administrativo 🔐</button>
+                    <div id="erro-senha-msg" class="error-message-alert">❌ Senha inválida. Acesso de rota negado!</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <header id="global-nav-app" class="navbar-top" style="display: none;">
+        <div class="navbar-brand-container">
+            <img src="Logo.png" alt="Mini Logo" class="navbar-mini-logo">
+            <div class="navbar-brand-title">Avança <span>Escolar</span></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <span id="label-role-session" style="font-size: 0.85rem; font-weight: 500; color: var(--blue-cyan);"></span>
+            <button class="navbar-logout-btn" onclick="executarLogoutGlobal()">Sair 🚪</button>
+        </div>
+    </header>
+
+    <main id="view-alunos-painel" class="view-section">
+        <div class="panel-heading-row">
+            <h2>Ambiente Cooperativo Estudantil 🧑‍🎓</h2>
+        </div>
+        
+        <div class="dashboard-main-grid">
+            <div class="content-panel-card" style="margin-bottom: 0;">
+                <div class="panel-heading-row">
+                    <h3>Registrar Nova Sessão de Apoio 📝</h3>
+                </div>
+                <form id="form-registro-monitoria" onsubmit="enviarSessaoFirebase(event)">
+                    <div class="form-layout-group">
+                        <label for="txt-nome-monitor">Seu Nome Completo (Monitor):</label>
+                        <input type="text" id="txt-nome-monitor" class="form-layout-control" placeholder="Digite seu nome..." required>
+                    </div>
+                    <div class="form-layout-group">
+                        <label for="sel-disciplina">Componente Curricular / Matéria:</label>
+                        <select id="sel-disciplina" class="form-layout-control" required>
+                            <option value="Matemática">Matemática 📐</option>
+                            <option value="Física">Física ⚛️</option>
+                            <option value="Química">Química 🧪</option>
+                            <option value="Redação / Literatura">Redação / Literatura ✍️</option>
+                        </select>
+                    </div>
+                    <div class="form-layout-group">
+                        <label for="txt-aluno-ajudado">Nome do Colega Ajudado:</label>
+                        <input type="text" id="txt-aluno-ajudado" class="form-layout-control" placeholder="Quem recebeu ajuda?" required>
+                    </div>
+                    <button type="submit" class="btn-action-submit">Validar Sessão de Apoio (+10 XP) ✨</button>
+                </form>
+            </div>
+
+            <div class="content-panel-card" style="margin-bottom: 0;">
+                <div class="panel-heading-row">
+                    <h3>Seu Progresso & Conquistas 🏆</h3>
+                </div>
+                <p style="font-size: 0.9rem; color: #bfa6eb;">Experiência Acumulada Total:</p>
+                <div id="total-xp-counter" class="gamification-xp-display">0 XP</div>
+                
+                <h4 style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">Suas Medalhas de Protagonismo:</h4>
+                <div class="badges-flex-container">
+                    <div id="medal-calouro" class="badge-medal-pill unlocked">🌱 Calouro Pro</div>
+                    <div id="medal-agil" class="badge-medal-pill">🚀 Ajudante Ágil</div>
+                    <div id="medal-ouro" class="badge-medal-pill">🥇 Monitor Ouro</div>
+                </div>
+                <p style="font-size: 0.75rem; color: #a2c4e8; margin-top: 1.5rem;">Ajude mais colegas para subir no ranking e liberar novas insígnias digitais automáticas!</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-gestao-painel" class="view-section">
+        <div class="panel-heading-row">
+            <h2>Painel de Controle Estratégico & Inteligência 📈</h2>
+        </div>
+
+        <div class="dashboard-main-grid">
+            <div class="metric-card mc-blue">
+                <div class="metric-card-title">Frequência Geral Extracurricular</div>
+                <div class="metric-card-value">94.6%</div>
+                <div class="metric-card-sub" style="color: var(--green-glow);">↑ 1.8% em relação ao mês anterior</div>
+                <div class="metric-card-icon">📊</div>
+            </div>
+            <div class="metric-card mc-purple">
+                <div class="metric-card-title">Sessões Totais Registradas</div>
+                <div id="dash-metric-sessoes" class="metric-card-value">0</div>
+                <div class="metric-card-sub">Registros armazenados na nuvem</div>
+                <div class="metric-card-icon">🗂️</div>
+            </div>
+            <div class="metric-card mc-green">
+                <div class="metric-card-title">Alunos Atuando como Monitores</div>
+                <div id="dash-metric-monitores" class="metric-card-value">0</div>
+                <div class="metric-card-sub">Estudantes engajados ativos</div>
+                <div class="metric-card-icon">🏅</div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="content-panel-card">
+                <div class="panel-heading-row">
+                    <h3>Alertas Críticos / Risco Pedagógico ⚠️</h3>
+                </div>
+                <ul class="data-ul-list">
+                    <li class="data-li-item">
+                        <div>
+                            <strong>Bruno Oliveira</strong>
+                            <p style="font-size: 0.75rem; color: #ff8c8c;">Baixo rendimento em Exatas</p>
+                        </div>
+                        <span class="badge-risk">Intervenção Imediata</span>
+                    </li>
+                    <li class="data-li-item">
+                        <div>
+                            <strong>Letícia Costa</strong>
+                            <p style="font-size: 0.75rem; color: #ff8c8c;">Dificuldade estrutural em Redação</p>
+                        </div>
+                        <span class="badge-risk">Intervenção Imediata</span>
+                    </li>
+                    <li class="data-li-item">
+                        <div>
+                            <strong>Gustavo Santos</strong>
+                            <p style="font-size: 0.75rem; color: #ffcc00;">Abaixo da média em Química</p>
+                        </div>
+                        <span class="badge-risk" style="background:rgba(255,204,0,0.15); border-color:#ffcc00; color:#ffcc00;">Acompanhamento</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-panel-card">
+                <div class="panel-heading-row">
+                    <h3>Quadro Atual de Monitores Homologados 📜</h3>
+                </div>
+                <ul id="container-lista-homologados" class="data-ul-list">
+                    </ul>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        // Importações necessárias para os produtos oficiais do Firebase JS SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+
+        // Credenciais estruturadas do banco de dados do projeto Avança Escolar
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
+            authDomain: "avancaescolar.firebaseapp.com",
+            databaseURL: "https://avancaescolar-default-rtdb.firebaseio.com",
+            projectId: "avancaescolar",
+            storageBucket: "avancaescolar.firebasestorage.app",
+            messagingSenderId: "511418032087",
+            appId: "1:511418032087:web:9a43effe7ea1a9e2753592",
+            measurementId: "G-HEN3NWEF6L"
+        };
+
+        // Inicialização Core do Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Definição do nó principal de dados operacionais
+        const monitoriasNodeRef = ref(database, 'monitorias');
+
+        // Escopo Global Temporário para os gatilhos nativos de cliques do HTML ordinário
+        window.entrarComoEstudante = function() {
+            mudarInterfaceAtiva('view-alunos-painel', 'Área do Aluno / Monitor 🧑‍🎓');
+        }
+
+        window.mostrarGuardaSenha = function() {
+            document.getElementById('wrapper-guarda-senha').style.display = 'block';
+            document.getElementById('campo-senha-restrita').focus();
+        }
+
+        window.autenticarAreaRestrita = function() {
+            const senhaDigitada = document.getElementById('campo-senha-restrita').value;
+            const feedbackErro = document.getElementById('erro-senha-msg');
+            
+            // Regra de validação estrita definida no escopo técnico
+            if (senhaDigitada === 'dia de sol') {
+                feedbackErro.style.display = 'none';
+                document.getElementById('campo-senha-restrita').value = '';
+                document.getElementById('wrapper-guarda-senha').style.display = 'none';
+                mudarInterfaceAtiva('view-gestao-painel', 'Gestão & Coordenação Geral 🏢');
+            } else {
+                feedbackErro.style.display = 'block';
+                feedbackErro.style.animation = 'shakeEffect 0.3s ease';
+            }
+        }
+
+        window.executarLogoutGlobal = function() {
+            document.getElementById('global-nav-app').style.display = 'none';
+            document.getElementById('view-alunos-painel').classList.remove('active');
+            document.getElementById('view-gestao-painel').classList.remove('active');
+            document.getElementById('view-login').classList.add('active');
+        }
+
+        function mudarInterfaceAtiva(idTela, stringRotulo) {
+            document.getElementById('view-login').classList.remove('active');
+            document.getElementById(idTela).classList.add('active');
+            
+            const navTop = document.getElementById('global-nav-app');
+            navTop.style.display = 'flex';
+            document.getElementById('label-role-session').innerText = stringRotulo;
+        }
+
+        // Envio estruturado dos dados do formulário para o Firebase Realtime
+        window.enviarSessaoFirebase = function(event) {
+            event.preventDefault();
+
+            const monitor = document.getElementById('txt-nome-monitor').value;
+            const disciplina = document.getElementById('sel-disciplina').value;
+            const alunoAjudado = document.getElementById('txt-aluno-ajudado').value;
+
+            push(monitoriasNodeRef, {
+                monitorName: monitor,
+                subject: disciplina,
+                targetStudent: alunoAjudado,
+                recordedAt: Date.now()
+            }).then(() => {
+                alert(`Excelente trabalho, ${monitor}! Sessão de monitoria homologada e guardada no Firebase! 🎉`);
+                document.getElementById('form-registro-monitoria').reset();
+            }).catch((error) => {
+                console.error("Falha ao persistir dados de monitoria no Firebase: ", error);
+            });
+        }
+
+        // Monitoramento Inteligente e Processamento em Tempo Real dos Snapshots do Firebase
+        onValue(monitoriasNodeRef, (snapshot) => {
+            const dataset = snapshot.val();
+            
+            // Elementos visuais a serem atualizados dinamicamente
+            const listContainerGestor = document.getElementById('container-lista-homologados');
+            const metricSessoes = document.getElementById('dash-metric-sessoes');
+            const metricMonitores = document.getElementById('dash-metric-monitores');
+            const xpCounter = document.getElementById('total-xp-counter');
+            
+            // Elementos das Medalhas
+            const badgeAgil = document.getElementById('medal-agil');
+            const badgeOuro = document.getElementById('medal-ouro');
+
+            // Reset estrutural preventivo das listas antes da remontagem
+            listContainerGestor.innerHTML = "";
+
+            if (dataset) {
+                const sessoesArray = Object.values(dataset);
+                const contagemTotalSessoes = sessoesArray.length;
+                
+                // Atualiza métricas do Dashboard Administrativo
+                metricSessoes.innerText = contagemTotalSessoes;
+                
+                // Mapeia e filtra monitores únicos para contagem do indicador
+                const monitoresUnicos = [...new Set(sessoesArray.map(item => item.monitorName))];
+                metricMonitores.innerText = monitoresUnicos.length;
+
+                // Sistema Dinâmico de Recompensa de XP (+10 XP por sessão)
+                const totalXPCalculado = contagemTotalSessoes * 10;
+                xpCounter.innerText = `${totalXPCalculado} XP`;
+
+                // Gatilhos e Regras de Negócio de Desbloqueio das Medalhas Virtuais
+                if (totalXPCalculado >= 20) {
+                    badgeAgil.classList.add('unlocked');
+                } else {
+                    badgeAgil.classList.remove('unlocked');
+                }
+
+                if (totalXPCalculado >= 50) {
+                    badgeOuro.classList.add('unlocked');
+                } else {
+                    badgeOuro.classList.remove('unlocked');
+                }
+
+                // Popula o Quadro Geral do Gestor na Ordem Inversa (Mais Recentes no Topo)
+                sessoesArray.reverse().forEach(registro => {
+                    const liNode = document.createElement('li');
+                    liNode.className = "data-li-item";
+                    liNode.innerHTML = `
+                        <div>
+                            <strong>${registro.monitorName}</strong>
+                            <p style="font-size: 0.75rem; color: #bfa6eb;">Ajudou <em>${registro.targetStudent}</em> em ${registro.subject}</p>
+                        </div>
+                        <span class="badge-success">Homologado ✔️</span>
+                    `;
+                    listContainerGestor.appendChild(liNode);
+                });
+
+            } else {
+                // Estado Padrão Inicial do Sistema na ausência de registros
+                metricSessoes.innerText = "0";
+                metricMonitores.innerText = "0";
+                xpCounter.innerText = "0 XP";
+                badgeAgil.classList.remove('unlocked');
+                badgeOuro.classList.remove('unlocked');
+                listContainerGestor.innerHTML = `<p style="font-size: 0.85rem; color:#bfa6eb; text-align:center; padding:1rem;">Nenhuma monitoria registrada na nuvem até o momento.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
