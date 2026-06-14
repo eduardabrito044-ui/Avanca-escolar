@@ -3,895 +3,1350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Escolar Acadêmica & Monitoria</title>
+    <title>Avança Escolar - Seleta (OBNE 2026)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --gold: #fbbf24;
-            --silver: #cbd5e1;
-            --bronze: #b45309;
-            --honra: #a855f7;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
+            --bg-main: #130924;
+            --bg-card: #21123e;
+            --purple-light: #8a4fff;
+            --blue-electric: #0073ff;
+            --blue-cyan: #00dfa2;
+            --green-success: #00dfa2;
+            --gold-star: #ffb800;
+            --silver: #d1d1d1;
+            --bronze: #cd7f32;
+            --honra: #4da6ff;
+            --text-main: #ffffff;
+            --text-muted: #b3a4cd;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --shadow: rgba(0, 0, 0, 0.5);
+            --danger: #ff4a4a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; }
-        header { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .light-mode {
+            --bg-main: #f4f2f7;
+            --bg-card: #ffffff;
+            --purple-light: #7033ff;
+            --blue-electric: #0056cc;
+            --blue-cyan: #00b380;
+            --green-success: #00996d;
+            --text-main: #1c1230;
+            --text-muted: #625875;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .circular-logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--purple-light);
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.4);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mini-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--blue-cyan);
+        }
+
+        .app-view {
+            display: none;
+            padding: 1.2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .app-view.active {
+            display: block;
+        }
+
+        .auth-container {
+            max-width: 450px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
         
-        .user-selector { display: flex; gap: 10px; align-items: center; }
-        select, input, button { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
-        button { background: var(--primary); color: white; border: none; cursor: pointer; font-weight: 600; }
-        button:hover { background: var(--primary-dark); }
+        .light-mode .form-control {
+            background-color: #fff;
+        }
 
-        .container { display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
-        .sidebar { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); height: fit-content; }
-        .sidebar ul { list-style: none; }
-        .sidebar li { padding: 12px; margin-bottom: 8px; border-radius: 6px; cursor: pointer; font-weight: 500; color: var(--text-light); }
-        .sidebar li.active { background: var(--primary); color: white; }
+        .btn {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary { background: linear-gradient(90deg, var(--purple-light), #6c2eff); color: white; }
+        .btn-secondary { background: rgba(128,128,128,0.15); color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-success { background: linear-gradient(90deg, #00b884, var(--green-success)); color: #130924; }
+        .btn-danger { background: var(--danger); color: white; }
+
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+        .tab-bar::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: rgba(128, 128, 128, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            background-color: var(--purple-light);
+            color: white;
+            border-color: var(--purple-light);
+        }
+
+        .notification-dot {
+            width: 9px;
+            height: 9px;
+            background-color: var(--danger);
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            display: none;
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .tab-content {
+            display: none !important;
+        }
+
+        .tab-content.active {
+            display: block !important;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .scroll-list {
+            max-height: 250px;
+            overflow-y: auto;
+            list-style: none;
+        }
+
+        .list-item {
+            background: rgba(128,128,128,0.08);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            height: 400px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        @media (min-width: 768px) { .chat-layout { grid-template-columns: 240px 1fr; } }
+
+        .chat-channels-list {
+            background: rgba(128,128,128,0.04);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .channel-tab {
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.4rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            background: rgba(128,128,128,0.05);
+        }
+        .channel-tab.active { background: rgba(138, 79, 255, 0.2); border-left: 3px solid var(--purple-light); }
+
+        .chat-main-window { display: flex; flex-direction: column; height: 100%; }
+        .chat-messages-box { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; }
         
-        .main-content { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); min-height: 500px; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
+        .chat-bubble { max-width: 80%; padding: 0.6rem 0.9rem; border-radius: 14px; font-size: 0.88rem; line-height: 1.4; }
+        .chat-bubble.sent { background-color: var(--purple-light); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-bubble.received { background-color: rgba(128,128,128,0.2); align-self: flex-start; border-bottom-left-radius: 2px; }
 
-        h2 { margin-bottom: 20px; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        h3 { margin: 15px 0 10px 0; }
+        .chat-input-bar { padding: 0.6rem; background: rgba(0,0,0,0.2); display: flex; gap: 8px; border-top: 1px solid var(--border-color); }
 
-        /* Componentes de Perfil e Molduras */
-        .avatar-container { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
-        .avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #e2e8f0; }
-        .moldura { position: absolute; top: -5px; left: -5px; width: 110px; height: 110px; border-radius: 50%; pointer-events: none; box-sizing: border-box; }
+        .profile-avatar-container { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 1rem auto; position: relative; }
+        .profile-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        /* Estilos de Molduras Compráveis */
-        .m-1 { border: 5px solid var(--gold); }
-        .m-2 { border: 5px solid #38bdf8; }
-        .m-3 { border: 5px dashed #f43f5e; }
-        .m-4 { border: 5px dotted #10b981; }
-        .m-5 { border: 5px double #8b5cf6; }
-        .m-6 { border: 5px solid #f97316; box-shadow: 0 0 10px #f97316; }
-        .m-7 { border: 5px solid #ec4899; }
-        .m-8 { border: 5px ridge #64748b; }
-        .m-9 { border: 5px solid #06b6d4; animation: pulse 2s infinite; }
-        .m-10 { border: 5px solid #e11d48; border-radius: 30%; }
+        /* 10 Molduras Temáticas Modulares */
+        .frame-none { border: none; }
+        .frame-gold { border: 4px dashed var(--gold-star); padding: 2px; }
+        .frame-neon { border: 4px solid var(--blue-cyan); box-shadow: 0 0 10px var(--blue-cyan); }
+        .frame-emerald { border: 4px solid #00ff66; box-shadow: 0 0 10px #00ff66; }
+        .frame-ruby { border: 4px ridge #ff0055; }
+        .frame-sapphire { border: 4px double #0055ff; }
+        .frame-cyberpunk { border: 4px linear-gradient(45deg, #ff00ff, #00ffff); border-style: solid; }
+        .frame-royal { border: 4px dotted #ffcc00; }
+        .frame-obsidian { border: 4px solid #333333; background: #000; }
+        .frame-cosmic { border: 4px dashed #7f00ff; box-shadow: 0 0 15px #ff007f; }
+        .frame-vintage { border: 4px solid #8b5a2b; }
 
-        /* Status de Alerta do Dashboard Direção */
-        .badge { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: white; display: inline-block; }
-        .badge-red { background: var(--danger); }
-        .badge-orange { background: var(--warning); }
-        .badge-green { background: var(--success); }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(138, 79, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+            text-align: left;
+            cursor: pointer;
+        }
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
 
-        /* Medalhas */
-        .medal-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-right: 5px; color: white; }
-        .med-ouro { background: var(--gold); }
-        .med-prata { background: var(--silver); color: #333; }
-        .med-bronze { background: var(--bronze); }
-        .med-honra { background: var(--honra); }
+        .utility-card {
+            background: rgba(128,128,128,0.05);
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+        .utility-card a { color: var(--purple-light); font-weight: 600; text-decoration: none; }
 
-        /* Grid de Cards e Listas */
-        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
-        .card { background: var(--bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border); position: relative; }
-        
-        .stars { color: #eab308; font-size: 18px; }
-        .notification-bar { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-bottom: 15px; display: none; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        table th, table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
-        table th { background: var(--bg); }
+        .badge-pill {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 30px;
+            margin-right: 4px;
+            margin-top: 4px;
+        }
+        .badge-gold { background-color: rgba(255,184,0,0.2); color: var(--gold-star); border: 1px solid var(--gold-star); }
+        .badge-silver { background-color: rgba(209,209,209,0.2); color: var(--silver); border: 1px solid var(--silver); }
+        .badge-bronze { background-color: rgba(205,127,50,0.2); color: var(--bronze); border: 1px solid var(--bronze); }
+        .badge-honra { background-color: rgba(77,166,255,0.2); color: var(--honra); border: 1px solid var(--honra); }
+
+        .risk-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .risk-high { background-color: rgba(255,74,74,0.2); color: #ff4a4a; border: 1px solid #ff4a4a; }
+        .risk-normal { background-color: rgba(0,223,162,0.2); color: #00dfa2; border: 1px solid #00dfa2; }
+
+        .grid-menu-hours {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+        .hour-pill {
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            cursor: pointer;
+            background: rgba(128,128,128,0.05);
+        }
+        .hour-pill.booked {
+            background: rgba(255,74,74,0.15) !important;
+            color: var(--danger);
+            border-color: var(--danger);
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <div>
-            <h1>Avança Escolar Portal</h1>
-            <p id="time-display">Log de Sessão Ativo</p>
+    <header id="app-header" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <img src="Logo.png" alt="Logo" class="mini-logo">
+            <div>
+                <h4 style="font-size: 0.9rem; line-height: 1.1;">Avança Escolar</h4>
+                <span id="user-display-label" style="font-size: 0.75rem; color: var(--blue-cyan);"></span>
+            </div>
         </div>
-        <div class="user-selector">
-            <label><strong>Ambiente / Visão de:</strong></label>
-            <select id="currentUserSelect" onchange="switchUser(this.value)">
-                <option value="1">Carlos Silva (Aluno/Monitor - Mat.)</option>
-                <option value="2">Ana Souza (Aluna comum)</option>
-                <option value="3">Prof. Ricardo (Química)</option>
-                <option value="4">Diretora Helena (Gestão)</option>
-                <option value="5">Admin Geral (TI)</option>
-            </select>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.75rem;" onclick="toggleTheme()">🌗 Modo Visual</button>
+            <button class="btn btn-secondary" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.75rem;" onclick="logoutApp()">Sair 🚪</button>
         </div>
     </header>
 
-    <div class="container">
-        <div class="sidebar">
-            <ul id="menu-items"></ul>
-        </div>
-
-        <div class="main-content">
-            <div id="notif-area" class="notification-bar"></div>
-
-            <div id="panel-aluno" class="tab-panel">
-                <h2>Área do Aluno</h2>
-                <div style="display: flex; gap: 30px; margin-bottom: 30px;">
-                    <div>
-                        <div class="avatar-container">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="avatar" id="aluno-avatar">
-                            <div id="aluno-moldura-placeholder"></div>
-                        </div>
-                        <h3 id="aluno-nome">Nome</h3>
-                        <p id="aluno-status-cargo" style="font-size:13px; color:var(--text-light);"></p>
-                    </div>
-                    <div>
-                        <h3>Minhas Medalhas & Conquistas</h3>
-                        <div id="aluno-mural-medalhas">Nenhuma medalha recebida ainda.</div>
-                        
-                        <div id="monitor-candidatura-box" style="margin-top: 20px; padding: 15px; background: var(--bg); border-radius: 8px;">
-                            <h4>Candidatura de Monitoria</h4>
-                            <p style="font-size:12px; margin-bottom:10px;">Deseja se candidatar para auxiliar outros alunos?</p>
-                            <select id="select-materia-candidata">
-                                <option value="Matemática">Matemática</option>
-                                <option value="Química">Química</option>
-                                <option value="Física">Física</option>
-                            </select>
-                            <button onclick="registrarComoMonitor()" style="margin-top:5px;">Ativar Modo Monitor</button>
-                        </div>
-                    </div>
-                </div>
-
-                <hr style="border: 0; border-top:1px solid var(--border); margin:20px 0;">
-                
-                <h3>Buscar Monitores Disponíveis (Agendamento Automático)</h3>
-                <input type="text" id="busca-monitor-input" placeholder="Digite a matéria (Ex: Matemática, Química)..." style="width: 70%; margin-right: 10px;" onkeyup="filtrarMonitores()">
-                <div class="grid-cards" id="lista-monitores-busca"></div>
+    <section id="view-login" class="app-view active">
+        <div class="auth-container">
+            <img src="Logo.png" alt="Logo Avança Escolar" class="circular-logo">
+            <h2 style="margin-top: 1rem; font-size: 1.4rem;">Avança Escolar</h2>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">Olimpíada Brasileira de Negócios e Empreendedorismo 2026 🚀</p>
+            
+            <div class="form-group">
+                <label>Selecione seu Perfil de Acesso:</label>
+                <select id="login-profile" class="form-control" onchange="toggleLoginFields()">
+                    <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
+                    <option value="professor">Professor por Matéria 👨‍🏫</option>
+                    <option value="coordenacao">Direção e Coordenação 🧭</option>
+                    <option value="admin">Administradora Suprema (Eduarda) 👑</option>
+                </select>
             </div>
 
-            <div id="panel-monitor" class="tab-panel">
-                <h2>Painel do Monitor</h2>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                    <div>
-                        <p><strong>Minha Matéria:</strong> <span id="mon-materia-tag">-</span></p>
-                        <p><strong>Saldo de Pontos:</strong> <span id="mon-pontos-tag">0</span> ★</p>
-                    </div>
+            <div id="box-aluno-fields">
+                <div class="form-group">
+                    <label>Seu Nome Completo:</label>
+                    <input type="text" id="login-student-name" class="form-control" placeholder="Ex: Eduarda">
                 </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-                    <div style="background: var(--bg); padding:15px; border-radius:8px;">
-                        <h3>Registrar Ficha de Atendimento (Antifraude)</h3>
-                        <label style="display:block; margin-bottom:5px; font-size:13px;">Selecione o Aluno Ajudado:</label>
-                        <select id="ficha-aluno-id" style="width:100%; margin-bottom:15px;"></select>
-                        <button onclick="enviarFichaAtendimento()" style="width:100%;">Enviar Ficha para Confirmação do Aluno</button>
-                    </div>
-
-                    <div style="background: var(--bg); padding:15px; border-radius:8px;">
-                        <h3>Loja de Cosméticos (Gamificação)</h3>
-                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; max-height:250px; overflow-y:auto; padding-right:5px;" id="vitrine-loja"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="panel-professor" class="tab-panel">
-                <h2>Painel do Professor</h2>
-                <p>Matéria Vinculada: <strong id="prof-materia-nome">Química</strong></p>
-                
-                <div style="background: #eff6ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                    <h4>Regra Escolar Obrigatória:</h4>
-                    <p style="font-size:13px; color:#1e40af;">Selecione rigorosamente os <strong>4 melhores alunos</strong> da sua disciplina para outorgar as condecorações institucionais de mérito acadêmico.</p>
-                </div>
-
-                <table id="tabela-prof-alunos">
-                    <thead>
-                        <tr>
-                            <th>Aluno</th>
-                            <th>Medalha de Ouro</th>
-                            <th>Medalha de Prata</th>
-                            <th>Medalha de Bronze</th>
-                            <th>Honra ao Mérito</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-tabela-prof"></tbody>
-                </table>
-                <button onclick="salvarMedalhasProfessor()" style="margin-top: 15px; float: right;">Publicar Quadro de Medalhas</button>
-
-                <div style="margin-top: 50px;">
-                    <h3>📋 Homologação e Auditoria de Monitorias (Aprovações Pendentes)</h3>
-                    <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">Valide se o atendimento ocorreu em conformidade pedagógica para efetivar a liberação final de pontos.</p>
-                    <table id="tabela-homologacao-professor">
-                        <thead>
-                            <tr>
-                                <th>Monitor</th>
-                                <th>Aluno Atendido</th>
-                                <th>Data</th>
-                                <th>Status Antifraude</th>
-                                <th>Ação Docente</th>
-                            </tr>
-                        </thead>
-                        <tbody id="corpo-homologacao-professor"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="panel-direcao" class="tab-panel">
-                <h2>Painel de Controle Estratégico (Direção/Coordenação)</h2>
-                
-                <div style="margin-bottom: 20px;">
-                    <label><strong>Filtrar Destaques Acadêmicos por Disciplina:</strong></label>
-                    <select id="select-filtro-direcao" onchange="renderizarDirecao()">
-                        <option value="Matemática">Matemática</option>
-                        <option value="Química">Química</option>
-                        <option value="Física">Física</option>
+                <div class="form-group">
+                    <label>Sua Categoria / Nível (OBNE):</label>
+                    <select id="login-student-class" class="form-control">
+                        <option value="8º/9º Anos">8º e 9º Anos (Fundamental)</option>
+                        <option value="Nível Médio">Nível Médio (NM)</option>
+                        <option value="Nível Livre">Nível Livre (NL)</option>
                     </select>
                 </div>
-
-                <div class="grid-cards">
-                    <div class="card" style="border-top: 4px solid var(--gold);">
-                        <h4>Alunos Destaque da Disciplina</h4>
-                        <ul id="dir-lista-destaques" style="padding-left:15px; margin-top:10px; font-size:13px;"></ul>
-                    </div>
-                    <div class="card" style="border-top: 4px solid #ef4444;">
-                        <h4>⚠️ Diagnóstico Automático de Gargalos</h4>
-                        <div id="dir-alertas-criticos" style="font-size:12px; margin-top:10px; color:#b91c1c;"></div>
-                    </div>
-                </div>
-
-                <h3 style="margin-top:30px;">⚠️ Painel Integrado de Risco Pedagógico e Evasão</h3>
-                <p style="font-size:12px; color:var(--text-light); margin-bottom:10px;">Cruzamento em tempo real de faltas em monitorias sugerindo intervenção imediata da coordenação.</p>
-                <table id="tabela-risco-direcao">
-                    <thead>
-                        <tr>
-                            <th>Aluno</th>
-                            <th>Faltas em Monitorias</th>
-                            <th>Status de Alerta</th>
-                            <th>Plano Preventivo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-risco-direcao"></tbody>
-                </table>
-
-                <h3 style="margin-top:30px;">Evolução e Engajamento dos Alunos</h3>
-                <table id="tabela-evolucao-direcao">
-                    <thead>
-                        <tr>
-                            <th>Aluno Solicitante</th>
-                            <th>Atendimentos Confirmados</th>
-                            <th>Status de Desempenho</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpo-evolucao-direcao"></tbody>
-                </table>
-            </div>
-
-            <div id="panel-admin" class="tab-panel">
-                <h2>Painel Geral do Administrador (Controle Total)</h2>
                 
-                <div class="grid-cards" style="margin-bottom: 25px;">
-                    <div class="card">
-                        <h3>Métricas em Tempo Real</h3>
-                        <p style="font-size:24px; font-weight:bold; margin-top:10px;" id="adm-total-acessos">0</p>
-                        <p style="font-size:12px; color:var(--text-light);">Acessos Únicos Registrados</p>
-                    </div>
-                    <div class="card">
-                        <h3>Usuários na Plataforma</h3>
-                        <p style="font-size:24px; font-weight:bold; margin-top:10px;" id="adm-total-cadastrados">0</p>
-                        <p style="font-size:12px; color:var(--text-light);">Contas Ativas</p>
-                    </div>
-                </div>
-
-                <h3>Monitores Mais Requisitados & Certificados</h3>
-                <table style="margin-bottom: 25px;">
-                    <thead>
-                        <tr>
-                            <th>Monitor</th>
-                            <th>Matéria</th>
-                            <th>Atendimentos Válidos</th>
-                            <th>Outorgar Especial</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adm-tabela-monitores"></tbody>
-                </table>
-
-                <h3>Logs de Auditoria de Sessão (Entradas/Saídas)</h3>
-                <div style="background:#0f172a; color:#38bdf8; padding:15px; border-radius:8px; font-family:Courier, monospace; font-size:12px; max-height:200px; overflow-y:auto;" id="adm-logs-navegacao"></div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="login-is-monitor" checked>
+                    <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-main);">Quero me cadastrar como Monitor Ativo OBNE 🙋‍♂️</span>
+                </label>
             </div>
 
-            <div id="panel-perfil-publico-monitor" class="tab-panel">
-                <button onclick="voltarParaBusca()" style="margin-bottom: 15px; background:#64748b;">← Voltar para Busca</button>
-                <div style="display:flex; gap:30px; background:var(--bg); padding:20px; border-radius:12px;">
-                    <div style="text-align:center;">
-                        <div class="avatar-container" style="margin: 0 auto 10px auto;">
-                            <img src="" class="avatar" id="pub-mon-avatar">
-                            <div id="pub-mon-moldura"></div>
-                        </div>
-                        <h3 id="pub-mon-nome">Nome</h3>
-                        <p id="pub-mon-materia" style="font-weight:bold; color:var(--primary);"></p>
-                        <div id="pub-mon-estrelas" class="stars"></div>
-                    </div>
-                    <div style="flex:1;">
-                        <h3>Conquistas do Monitor</h3>
-                        <div id="pub-mon-medalhas" style="margin-bottom:15px;"></div>
-                        
-                        <h3>Chat Direto / Plantão de Dúvidas</h3>
-                        <div style="border:1px solid var(--border); background:white; height:100px; padding:10px; border-radius:6px; margin-bottom:10px; overflow-y:auto; font-size:13px;" id="chat-box">
-                            <p style="color:var(--text-light); font-style:italic;">Inicie uma conversa digitando abaixo...</p>
-                        </div>
-                        <div style="display:flex; gap:10px;">
-                            <input type="text" id="chat-input" placeholder="Escreva sua dúvida..." style="flex:1;">
-                            <button onclick="enviarMensagemChat()">Enviar</button>
-                        </div>
-                    </div>
+            <div id="box-professor-fields" style="display: none;">
+                <div class="form-group">
+                    <label>Selecione sua Disciplina de Curadoria:</label>
+                    <select id="login-prof-subject" class="form-control"></select>
                 </div>
-
-                <h3 style="margin-top:25px;">Avaliações e Depoimentos (Estilo e-Commerce)</h3>
-                <div style="background: white; border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom:15px;">
-                    <h4>Deixe seu depoimento:</h4>
-                    <div style="margin: 10px 0; display:flex; gap:15px; align-items:center;">
-                        <select id="nota-avaliacao">
-                            <option value="5">⭐⭐⭐⭐⭐ (5 Estrelas)</option>
-                            <option value="4">⭐⭐⭐⭐ (4 Estrelas)</option>
-                            <option value="3">⭐⭐⭐ (3 Estrelas)</option>
-                            <option value="2">⭐⭐ (2 Estrelas)</option>
-                            <option value="1">⭐ (1 Estrela)</option>
-                        </select>
-                        <input type="text" id="comentario-texto" placeholder="Comente como foi a monitoria com este aluno..." style="flex:1;">
-                        <button onclick="adicionarComentario()">Publicar Avaliação</button>
-                    </div>
-                </div>
-                <div id="lista-comentarios-publicos"></div>
             </div>
 
+            <div id="box-password-fields" style="display: none;">
+                <div class="form-group">
+                    <label>Senha de Acesso:</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="processarAutenticacao()">Entrar na Plataforma ✨</button>
         </div>
-    </div>
+    </section>
 
-    <script>
-        // MOCK DE BANCO DE DADOS EM MEMÓRIA
-        let usuarios = [
-            { id: 1, nome: "Carlos Silva", foto: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150", cargo: "aluno", isMonitor: true, materiaMonitoria: "Matemática", pontos: 120, molduraEquipada: 1, medalhas: [{tipo:"Ouro", materia:"Matemática"}, {tipo:"Honra ao Mérito", materia:"Física"}], faltasMonitoria: 0 },
-            { id: 2, nome: "Ana Souza", foto: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", cargo: "aluno", isMonitor: false, materiaMonitoria: "", pontos: 0, molduraEquipada: 0, medalhas: [], faltasMonitoria: 3 },
-            { id: 3, nome: "Prof. Ricardo", foto: "", cargo: "professor", materia: "Química" },
-            { id: 4, nome: "Diretora Helena", foto: "", cargo: "direcao" },
-            { id: 5, nome: "Admin Geral", foto: "", cargo: "admin" }
-        ];
+    <main id="view-portal-alunos" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-reg-monitoria', this)">Registrar Apoio 📝</button>
+            <button class="tab-btn" onclick="switchTabs('tab-pedir-ajuda', this)">Preciso de Ajuda 🧠</button>
+            <button class="tab-btn" onclick="switchTabs('tab-agenda-horarios', this); renderCardapioDisponibilidade();">Cardápio de Horários 📅</button>
+            <button class="tab-btn" onclick="switchTabs('tab-chat-aluno', this); loadChatHub();">Chats 💬</button>
+            <button class="tab-btn" onclick="switchTabs('tab-perfil-aluno', this); renderMeuPerfil();">Meu Portfólio 🏅</button>
+            <button class="tab-btn" onclick="switchTabs('tab-monitores-lista', this); carregarMonitoresPublicos();">Buscar Monitores 🔎</button>
+            <button class="tab-btn" id="btn-tab-recados" onclick="switchTabs('tab-recados-direcao', this); limparNotificacaoDirecao();">Recados da Direção 📢 <span class="notification-dot" id="dot-recados"></span></button>
+            <button class="tab-btn" onclick="switchTabs('tab-links-uteis', this)">Materiais OBNE 🔗</button>
+        </div>
 
-        // Status das Fichas: "Pendente" (Aguardando Aluno) -> "Validado Pelo Aluno" -> "Homologado" (Aprovado pelo Prof)
-        let fichasMonitoria = [
-            { id: 101, monitorId: 1, alunoAtendidoId: 2, status: "Pendente", data: "13/06/2026", materia: "Matemática" }
-        ];
+        <div id="tab-reg-monitoria" class="tab-content active">
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Ficha de Atendimento Eletrônico</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Preencha os dados da sessão. O ganho de XP passará pelo fluxo antifraude de duplo fator.</p>
+                    <form onsubmit="submitMonitoria(event)">
+                        <div class="form-group"><label>Disciplina Ministrada:</label><select id="reg-subject" class="form-control" required></select></div>
+                        <div class="form-group"><label>Nome do Colega Ajudado:</label><input type="text" id="reg-target-student" class="form-control" placeholder="Nome completo do colega" required></div>
+                        <button type="submit" class="btn btn-success">Lançar Atendimento (Aguardando Confirmação) 🏆</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Confirmações de Ajuda Pendentes</h3>
+                    <p style="font-size: 0.8rem; color:var(--text-muted); margin-bottom:1rem;">Se algum monitor te ajudou, confirme abaixo para liberar os pontos dele:</p>
+                    <div id="lista-confirmacoes-aluno" style="display:flex; flex-direction:column; gap:8px;"></div>
+                </div>
+            </div>
+        </div>
 
-        let comentariosMonitores = [
-            { monitorId: 1, autor: "Ana Souza", estrelas: 5, texto: "Excelente explicação! Me ajudou muito na prova de matrizes." }
-        ];
+        <div id="tab-pedir-ajuda" class="tab-content">
+            <div class="card">
+                <h3>Solicitar Socorro Pedagógico</h3>
+                <form onsubmit="submitPedidoAjuda(event)">
+                    <div class="form-group"><label>Componente Curricular:</label><select id="help-subject" class="form-control" required></select></div>
+                    <button type="submit" class="btn btn-primary">Enviar Alerta de Ajuda 🚀</button>
+                </form>
+            </div>
+        </div>
 
-        let logsAcesso = [
-            { usuario: "Carlos Silva", acao: "Entrada", hora: "13/06/2026, 19:30:12" },
-            { usuario: "Ana Souza", acao: "Entrada", hora: "13/06/2026, 20:15:45" }
-        ];
+        <div id="tab-agenda-horarios" class="tab-content">
+            <div class="grid-2">
+                <div class="card" id="box-configurar-agenda" style="display:none;">
+                    <h3>Sua Disponibilidade de Horários</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Marque os turnos semanais que você possui livres para oferecer monitoria aos seus colegas.</p>
+                    <div class="form-group">
+                        <label>Dia Escolhido:</label>
+                        <select id="schedule-day" class="form-control">
+                            <option value="Segunda-feira">Segunda-feira</option>
+                            <option value="Terça-feira">Terça-feira</option>
+                            <option value="Quarta-feira">Quarta-feira</option>
+                            <option value="Quinta-feira">Quinta-feira</option>
+                            <option value="Sexta-feira">Sexta-feira</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Faixa de Horário:</label>
+                        <select id="schedule-time" class="form-control">
+                            <option value="14:00 - 15:00">14:00 - 15:00</option>
+                            <option value="15:00 - 16:00">15:00 - 16:00</option>
+                            <option value="16:00 - 17:00">16:00 - 17:00</option>
+                            <option value="17:00 - 18:00">17:00 - 18:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Sua Matéria de Foco:</label><select id="schedule-subject" class="form-control"></select></div>
+                    <button class="btn btn-primary" onclick="salvarSlotAgenda()">Abrir Vaga no Cardápio 📅</button>
+                </div>
+                <div class="card">
+                    <h3>Agendamento Direto via Cardápio</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Selecione abaixo um monitor para visualizar e reservar horários de mentoria:</p>
+                    <select id="select-filter-monitor-agenda" class="form-control" onchange="carregarGradeHorariosMonitor()"></select>
+                    <div class="grid-menu-hours" id="grid-slots-resultado"></div>
+                </div>
+            </div>
+        </div>
 
-        let moldurasLoja = [
-            { id: 1, nome: "Borda de Ouro Imperial", preco: 50, classe: "m-1" },
-            { id: 2, nome: "Neon Futurista", preco: 40, classe: "m-2" },
-            { id: 3, nome: "Fogo Rubro", preco: 60, classe: "m-3" },
-            { id: 4, nome: "Grama Esmeralda", preco: 30, classe: "m-4" },
-            { id: 5, nome: "Ametista Mística", preco: 45, classe: "m-5" },
-            { id: 6, nome: "Luz de Sombra Aura", preco: 70, classe: "m-6" },
-            { id: 7, nome: "Rosa Algodão", preco: 25, classe: "m-7" },
-            { id: 8, nome: "Aço Escovado", preco: 35, classe: "m-8" },
-            { id: 9, nome: "Ciano Pulsante", preco: 80, classe: "m-9" },
-            { id: 10, nome: "Cyber Quadrado", preco: 90, classe: "m-10" }
-        ];
+        <div id="tab-chat-aluno" class="tab-content">
+            <div class="card">
+                <h3>Salas de Conversa Privada</h3>
+                <div class="chat-layout">
+                    <div class="chat-channels-list" id="student-chat-channels"></div>
+                    <div class="chat-main-window">
+                        <div class="chat-messages-box" id="student-chat-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="student-chat-input" class="form-control" placeholder="Mensagem...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendChatMessage('student')">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        let totalAcessosUnicos = 42; 
-        let usuarioLogado = usuarios[0];
-        let monitorSelecionadoParaVer = null;
+        <div id="tab-perfil-aluno" class="tab-content">
+            <div class="grid-2">
+                <div class="card" style="text-align: center;">
+                    <div class="profile-avatar-container" id="meu-avatar-wrapper"><img src="https://via.placeholder.com/100" id="meu-avatar-img" class="profile-avatar"></div>
+                    <h3 id="meu-nome-perfil">Nome</h3>
+                    <p style="font-size: 0.85rem; color: var(--blue-cyan);" id="meu-nivel-display"></p>
+                    <div id="student-xp-display" style="font-size: 2.5rem; font-weight: 700; color: var(--gold-star); margin: 0.2rem 0;">0 XP</div>
+                    
+                    <div id="meu-impacto-box" style="margin: 0.5rem 0; font-size:0.8rem; color:var(--text-muted);"></div>
+                    <div id="meu-mural-medalhas" style="margin-top: 0.5rem;"></div>
 
-        window.onload = function() {
-            switchUser(1);
-            carregarLoja();
+                    <div class="form-group" style="margin-top:1rem;">
+                        <label>Alterar Foto de Perfil (Link da Imagem):</label>
+                        <input type="text" id="input-avatar-url" class="form-control" placeholder="URL da foto..." onchange="salvarFotoPerfil()">
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Loja de Enfeites e Cosméticos (10 Opções)</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Gaste seu XP validado para desbloquear molduras de prestígio exclusivas para o seu portfólio.</p>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; max-height: 320px; overflow-y:auto; padding-right:4px;" id="box-loja-itens"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-monitores-lista" class="tab-content">
+            <div class="card">
+                <h3>Monitores Oficiais (Filtro Ativo)</h3>
+                <div id="grid-monitores-publicos" class="grid-2"></div>
+            </div>
+        </div>
+
+        <div id="tab-recados-direcao" class="tab-content">
+            <div class="card">
+                <h3>Atendimento Direto com a Direção</h3>
+                <div class="chat-layout" style="grid-template-columns: 1fr;">
+                    <div class="chat-main-window">
+                        <div class="chat-messages-box" id="student-direct-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="student-direct-input" class="form-control" placeholder="Escreva sua resposta...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendDirectMessageFromStudent()">Responder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-links-uteis" class="tab-content">
+            <div class="card">
+                <h3>Referências Recomendadas (OBNE Regulamento)</h3>
+                <div class="grid-2" id="box-links-container"></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-portal-professores" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-prof-homologacoes', this)">Aprovações Pendentes 📝</button>
+            <button class="tab-btn" onclick="switchTabs('tab-prof-alertas', this)">Alertas de Suporte 🚨</button>
+            <button class="tab-btn" onclick="switchTabs('tab-prof-top5', this)">Outorgar Classificações 🏅</button>
+        </div>
+        
+        <div id="tab-prof-homologacoes" class="tab-content active">
+            <div class="card">
+                <h3>Fila de Triagem Pedagógica</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Homologue as monitorias realizadas na sua disciplina para liberar os pontos e envie comentários de feedback.</p>
+                <div id="lista-homologacoes-professor" style="display:flex; flex-direction:column; gap:12px;"></div>
+            </div>
+        </div>
+
+        <div id="tab-prof-alertas" class="tab-content">
+            <div class="card"><h3 id="label-prof-subject">Pedidos Recentes</h3><ul class="scroll-list" id="prof-lista-alertas" style="margin-top:1rem;"></ul></div>
+        </div>
+        
+        <div id="tab-prof-top5" class="tab-content">
+            <div class="card">
+                <h3>Outorgar Medalhas Oficiais da Matéria</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Conceda títulos diretos baseados na tabela de notas de corte do regulamento.</p>
+                <div class="form-group"><label>Nome do Aluno:</label><input type="text" id="prof-medal-student" class="form-control" placeholder="Nome exato"></div>
+                <div class="form-group">
+                    <label>Insignia:</label>
+                    <select id="prof-medal-type" class="form-control">
+                        <option value="Ouro 🥇">Ouro 🥇 (Top 2%)</option>
+                        <option value="Prata 🥈">Prata 🥈 (Top 4% subsequentes)</option>
+                        <option value="Bronze 🥉">Bronze 🥉 (Top 8% subsequentes)</option>
+                        <option value="Honra ao Mérito 🎖️">Honra ao Mérito 🎖️ (Top 16% subsequentes)</option>
+                    </select>
+                </div>
+                <button class="btn btn-success" onclick="salvarMedalhaProfessor()">Enviar Reconhecimento Oficial</button>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-portal-coordenacao" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-coord-risco', this)">Risco Pedagógico 🚨</button>
+            <button class="tab-btn" onclick="switchTabs('tab-coord-termometro', this)">Termômetro Escolar 📈</button>
+        </div>
+
+        <div id="tab-coord-risco" class="tab-content active">
+            <div class="card">
+                <h3>Painel de Inteligência Preventiva</h3>
+                <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">O sistema analisa automaticamente os alunos em risco com base na quantidade de chamados de socorro abertos.</p>
+                <div id="lista-alunos-risco-pedagogico" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
+
+        <div id="tab-coord-termometro" class="tab-content">
+            <div class="card">
+                <h3>Componentes Curriculares Mais Solicitados</h3>
+                <div id="termometro-list-coord" style="margin-top:1rem; display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="view-portal-admin" class="app-view">
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-admin-dashboard', this)">Dashboard Geral 📈</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-ouvidoria', this); carregarListaAlunosOuvidoria();">Ouvidoria de Alunos 💬</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-medalhas', this)">Medalhas Supremas 👑</button>
+        </div>
+
+        <div id="tab-admin-dashboard" class="tab-content active">
+            <div class="card">
+                <h3>Livro de Chamada Eletrônica (Presença Digital)</h3>
+                <ul class="scroll-list" id="admin-livro-chamada" style="margin-top:1rem;"></ul>
+            </div>
+        </div>
+
+        <div id="tab-admin-ouvidoria" class="tab-content">
+            <div class="card">
+                <h3>Comunicação Direta</h3>
+                <div class="form-group">
+                    <label>🔍 Buscar Aluno:</label>
+                    <input type="text" id="admin-search-student" class="form-control" placeholder="Filtrar por nome..." oninput="filtrarAlunosOuvidoria()">
+                </div>
+                <div class="chat-layout">
+                    <div class="chat-channels-list" id="admin-ouvidoria-students-list"></div>
+                    <div class="chat-main-window">
+                        <h5 id="admin-ouvidoria-target-label" style="padding:0.6rem; background:rgba(0,0,0,0.2); font-size:0.85rem;">Selecione um aluno</h5>
+                        <div class="chat-messages-box" id="admin-ouvidoria-messages"></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="admin-ouvidoria-input" class="form-control" placeholder="Escreva o comunicado...">
+                            <button class="btn btn-primary" style="width: auto;" onclick="sendDirectMessageFromAdmin()">Enviar Alerta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-admin-medalhas" class="tab-content">
+            <div class="card">
+                <h3>Certificação de Monitoria Avançada</h3>
+                <div class="form-group"><label>Nome do Aluno Monitor:</label><input type="text" id="adm-medal-student" class="form-control"></div>
+                <div class="form-group"><label>Matéria:</label><select id="adm-medal-subject" class="form-control"></select></div>
+                <div class="form-group">
+                    <label>Categoria:</label>
+                    <select id="adm-medal-type" class="form-control"><option value="Ouro 🥇">Ouro 🥇</option><option value="Prata 🥈">Prata 🥈</option></select>
+                </div>
+                <button class="btn btn-primary" onclick="concederMedalhaAdmin()">Outorgar Medalha Suprema</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
+            authDomain: "avancaescolar.firebaseapp.com",
+            databaseURL: "https://avancaescolar-default-rtdb.firebaseio.com",
+            projectId: "avancaescolar",
+            storageBucket: "avancaescolar.firebasestorage.app",
+            messagingSenderId: "511418032087",
+            appId: "1:511418032087:web:9a43effe7ea1a9e2753592",
+            measurementId: "G-HEN3NWEF6L"
         };
 
-        function registrarLog(nome, acao) {
-            const dataHora = new Date().toLocaleString('pt-BR');
-            logsAcesso.unshift({ usuario: nome, acao: acao, hora: dataHora });
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-        function switchUser(userId) {
-            usuarioLogado = usuarios.find(u => u.id == userId);
-            registrarLog(usuarioLogado.nome, "Navegação/Login");
-            
-            const menu = document.getElementById("menu-items");
-            menu.innerHTML = "";
-            
-            if (usuarioLogado.cargo === 'admin') {
-                menu.innerHTML += `<li onclick="showTab('admin')" id="li-admin">Painel Admin</li>`;
-                menu.innerHTML += `<li onclick="showTab('aluno')">Ver como Aluno</li>`;
-                menu.innerHTML += `<li onclick="showTab('monitor')">Ver como Monitor</li>`;
-                menu.innerHTML += `<li onclick="showTab('professor')">Ver como Professor</li>`;
-                menu.innerHTML += `<li onclick="showTab('direcao')">Ver como Direção</li>`;
-                showTab('admin');
-            } else {
-                menu.innerHTML += `<li onclick="showTab('aluno')" id="li-aluno">Minha Área Aluno</li>`;
-                if (usuarioLogado.isMonitor) {
-                    menu.innerHTML += `<li onclick="showTab('monitor')" id="li-monitor">Painel Monitor</li>`;
+        const disciplinas = ["Despertar Empreendedor", "Ideação e Validação", "Primeiras Vendas", "Product-Market Fit", "Estruturação Profissional", "Pitch de Negócios"];
+        
+        // 10 Opções Modulares de Cosméticos com Preços Variados
+        const itensLoja = [
+            { id: 'gold', nome: 'Moldura Ouro', preco: 30, classe: 'frame-gold' },
+            { id: 'neon', nome: 'Moldura Neon Cyan', preco: 50, classe: 'frame-neon' },
+            { id: 'emerald', nome: 'Aura Esmeralda', preco: 60, classe: 'frame-emerald' },
+            { id: 'ruby', nome: 'Corte Rubi', preco: 70, classe: 'frame-ruby' },
+            { id: 'sapphire', nome: 'Duplo Safira', preco: 80, classe: 'frame-sapphire' },
+            { id: 'cyberpunk', nome: 'Grid Cyberpunk', preco: 100, classe: 'frame-cyberpunk' },
+            { id: 'royal', nome: 'Pontilhado Real', preco: 120, classe: 'frame-royal' },
+            { id: 'obsidian', nome: 'Escudo Obsidiana', preco: 140, classe: 'frame-obsidian' },
+            { id: 'cosmic', nome: 'Vórtice Cósmico', preco: 160, classe: 'frame-cosmic' },
+            { id: 'vintage', nome: 'Borda Rústica', preco: 200, classe: 'frame-vintage' }
+        ];
+
+        let currentUser = null;
+        let activeChatKey = null;
+        let ouvidoriaTargetStudent = null;
+        let listaAlunosCache = [];
+
+        function initAppElements() {
+            const boxes = [
+                document.getElementById('reg-subject'), 
+                document.getElementById('help-subject'), 
+                document.getElementById('login-prof-subject'), 
+                document.getElementById('adm-medal-subject'),
+                document.getElementById('schedule-subject')
+            ];
+            boxes.forEach(box => {
+                if(box) {
+                    box.innerHTML = "";
+                    disciplinas.forEach(d => { box.innerHTML += `<option value="${d}">${d}</option>`; });
                 }
-                if (usuarioLogado.cargo === 'professor') {
-                    menu.innerHTML += `<li onclick="showTab('professor')" id="li-professor">Painel Professor</li>`;
-                }
-                if (usuarioLogado.cargo === 'direcao') {
-                    menu.innerHTML += `<li onclick="showTab('direcao')" id="li-direcao">Painel Direção</li>`;
-                }
-                showTab(usuarioLogado.cargo);
-            }
+            });
 
-            verificarNotificacoesAntifraude();
-            renderizarAluno();
-            renderizarMonitor();
-            renderizarProfessor();
-            renderizarDirecao();
-            renderizarAdmin();
-        }
-
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.sidebar li').forEach(l => l.classList.remove('active'));
-            
-            const targetPanel = document.getElementById(`panel-${tabName}`);
-            if (targetPanel) targetPanel.classList.add('active');
-            
-            const targetLi = document.getElementById(`li-${tabName}`);
-            if (targetLi) targetLi.classList.add('active');
-        }
-
-        // TRAVA ANTIFRAUDE: CONFIRMAÇÃO DO ALUNO ATENDIDO
-        function verificarNotificacoesAntifraude() {
-            const notifArea = document.getElementById("notif-area");
-            const pendente = fichasMonitoria.find(f => f.alunoAtendidoId == usuarioLogado.id && f.status === "Pendente");
-            
-            if (pendente) {
-                const monitor = usuarios.find(u => u.id == pendente.monitorId);
-                notifArea.style.display = "block";
-                notifArea.innerHTML = `
-                    <strong>Validação de Segurança:</strong> O monitor <strong>${monitor.nome}</strong> declarou ter prestado atendimento a você. Confirma a monitoria? 
-                    <button onclick="confirmarFichaAluno(${pendente.id}, true)" style="background:#10b981; margin-left:10px; padding:3px 8px;">Sim, Confirmar</button>
-                    <button onclick="confirmarFichaAluno(${pendente.id}, false)" style="background:#ef4444; margin-left:5px; padding:3px 8px;">Não, Recusar</button>
+            const containerLinks = document.getElementById('box-links-container');
+            if(containerLinks) {
+                containerLinks.innerHTML = `
+                    <div class="utility-card"><h6>A Startup Enxuta (Eric Ries)</h6><a href="#" onclick="alert('Disponível na Seleta Academy')">Ver Referência 🔗</a></div>
+                    <div class="utility-card"><h6>O Mito do Empreendedor</h6><a href="#" onclick="alert('Disponível na Seleta Academy')">Ler Resumo 🔗</a></div>
+                    <div class="utility-card"><h6>Business Model Generation</h6><a href="#" onclick="alert('Modelos de Canvas')">Acessar Canvas 🔗</a></div>
+                    <div class="utility-card"><h6>Unbound Marketing (Kiso)</h6><a href="#" onclick="alert('Estratégias Digitais')">Estudar Canais 🔗</a></div>
                 `;
-            } else {
-                notifArea.style.display = "none";
-            }
-        }
-
-        function confirmarFichaAluno(fichaId, aprovado) {
-            const ficha = fichasMonitoria.find(f => f.id == fichaId);
-            if (ficha) {
-                if (aprovado) {
-                    ficha.status = "Validado Pelo Aluno";
-                    alert("Sua validação foi registrada! Agora o atendimento foi enviado para homologação do professor antes da liberação dos pontos.");
-                } else {
-                    ficha.status = "Recusado pelo Aluno";
-                    alert("Alerta de auditoria enviado para o painel da direção por suspeita de fraude.");
-                }
-                verificarNotificacoesAntifraude();
-                renderizarMonitor();
-                renderizarProfessor();
-                renderizarAdmin();
-                renderizarDirecao();
-            }
-        }
-
-        // HOMOLOGAÇÃO DO PROFESSOR (LIBERAÇÃO FINAL DE PONTOS)
-        function homologarFichaProfessor(fichaId, homologado) {
-            const ficha = fichasMonitoria.find(f => f.id == fichaId);
-            if (ficha) {
-                if (homologado) {
-                    ficha.status = "Homologado";
-                    const monitor = usuarios.find(u => u.id == ficha.monitorId);
-                    monitor.pontos += 25; // Pontos creditados com segurança
-                    alert("Monitoria homologada! 25 pontos injetados com sucesso no saldo do monitor.");
-                } else {
-                    ficha.status = "Cancelado pelo Professor";
-                    alert("Atendimento cancelado e pontos bloqueados.");
-                }
-                renderizarProfessor();
-                renderizarMonitor();
-                renderizarAdmin();
-                renderizarDirecao();
-            }
-        }
-
-        // RENDER ALUNO
-        function renderizarAluno() {
-            if(usuarioLogado.cargo !== 'aluno') return;
-            
-            document.getElementById("aluno-nome").innerText = usuarioLogado.nome;
-            document.getElementById("aluno-avatar").src = usuarioLogado.foto || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
-            document.getElementById("aluno-status-cargo").innerText = usuarioLogado.isMonitor ? `Monitor de ${usuarioLogado.materiaMonitoria}` : "Estudante Regular";
-            
-            const molduraBox = document.getElementById("aluno-moldura-placeholder");
-            molduraBox.className = ""; 
-            if(usuarioLogado.molduraEquipada > 0) {
-                const mData = moldurasLoja.find(m => m.id == usuarioLogado.molduraEquipada);
-                if(mData) molduraBox.classList.add("moldura", mData.classe);
             }
 
-            const mural = document.getElementById("aluno-mural-medalhas");
-            if(usuarioLogado.medalhas && usuarioLogado.medalhas.length > 0) {
-                mural.innerHTML = usuarioLogado.medalhas.map(m => `
-                    <span class="medal-badge med-${m.tipo.toLowerCase().replace(/ /g, '-')}">${m.tipo} (${m.materia})</span>
-                `).join('');
-            } else {
-                mural.innerHTML = "<p style='color:var(--text-light); font-style:italic;'>Ainda sem medalhas vinculadas neste ciclo.</p>";
-            }
-
-            document.getElementById("monitor-candidatura-box").style.display = usuarioLogado.isMonitor ? "none" : "block";
-            filtrarMonitores();
-        }
-
-        function registrarComoMonitor() {
-            const mat = document.getElementById("select-materia-candidata").value;
-            usuarioLogado.isMonitor = true;
-            usuarioLogado.materiaMonitoria = mat;
-            alert(`Parabéns! Sua permissão foi atualizada para Monitor de ${mat}.`);
-            switchUser(usuarioLogado.id);
-        }
-
-        function filtrarMonitores() {
-            const busca = document.getElementById("busca-monitor-input").value.toLowerCase();
-            const container = document.getElementById("lista-monitores-busca");
-            container.innerHTML = "";
-
-            usuarios.filter(u => u.isMonitor).forEach(mon => {
-                if (mon.materiaMonitoria.toLowerCase().includes(busca)) {
-                    const coms = comentariosMonitores.filter(c => c.monitorId == mon.id);
-                    const media = coms.length ? Math.round(coms.reduce((acc, c) => acc + c.estrelas, 0) / coms.length) : 5;
-                    const estrelasTxt = "⭐".repeat(media);
-
-                    let mClass = "";
-                    if(mon.molduraEquipada > 0) {
-                        const mData = moldurasLoja.find(m => m.id == mon.molduraEquipada);
-                        if(mData) mClass = mData.classe;
-                    }
-
-                    container.innerHTML += `
-                        <div class="card" style="text-align:center;">
-                            <div class="avatar-container" style="margin:0 auto 10px auto;">
-                                <img src="${mon.foto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}" class="avatar">
-                                <div class="moldura ${mClass}"></div>
-                            </div>
-                            <strong>${mon.nome}</strong>
-                            <p style="font-size:12px; color:var(--primary); font-weight:bold;">Matéria: ${mon.materiaMonitoria}</p>
-                            <p class="stars">${estrelasTxt}</p>
-                            <button onclick="abrirPerfilPublicoMonitor(${mon.id})" style="margin-top:10px; width:100%; font-size:12px;">Visualizar Perfil / Agendar</button>
+            const boxLoja = document.getElementById('box-loja-itens');
+            if(boxLoja) {
+                boxLoja.innerHTML = "";
+                itensLoja.forEach(it => {
+                    boxLoja.innerHTML += `
+                        <div style="border:1px solid var(--border-color); padding:0.6rem; text-align:center; border-radius:12px;">
+                            <h6>${it.nome}</h6><p style="font-size:0.75rem; color:var(--gold-star);">${it.preco} XP</p>
+                            <button class="btn btn-primary" style="padding:0.3rem; font-size:0.75rem; margin-top:0.4rem;" onclick="comprarItem('${it.id}')">Equipar</button>
                         </div>
-                    `;
-                }
-            });
-        }
-
-        function abrirPerfilPublicoMonitor(monitorId) {
-            monitorSelecionadoParaVer = usuarios.find(u => u.id == monitorId);
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('panel-perfil-publico-monitor').classList.add('active');
-
-            document.getElementById("pub-mon-nome").innerText = monitorSelecionadoParaVer.nome;
-            document.getElementById("pub-mon-materia").innerText = `Monitor de ${monitorSelecionadoParaVer.materiaMonitoria}`;
-            document.getElementById("pub-mon-avatar").src = monitorSelecionadoParaVer.foto || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150";
-
-            const mBox = document.getElementById("pub-mon-moldura");
-            mBox.className = "";
-            if(monitorSelecionadoParaVer.molduraEquipada > 0) {
-                const mData = moldurasLoja.find(m => m.id == monitorSelecionadoParaVer.molduraEquipada);
-                if(mData) mBox.classList.add("moldura", mData.classe);
-            }
-
-            const medBox = document.getElementById("pub-mon-medalhas");
-            if(monitorSelecionadoParaVer.medalhas.length) {
-                medBox.innerHTML = monitorSelecionadoParaVer.medalhas.map(m => `
-                    <span class="medal-badge med-${m.tipo.toLowerCase().replace(/ /g, '-')}">${m.tipo}</span>
-                `).join('');
-            } else {
-                medBox.innerHTML = "<span style='font-size:12px; font-style:italic; color:var(--text-light);'>Sem medalhas arquivadas</span>";
-            }
-
-            atualizarComentariosPublicos();
-        }
-
-        function atualizarComentariosPublicos() {
-            const container = document.getElementById("lista-comentarios-publicos");
-            container.innerHTML = "";
-
-            const filtrados = comentariosMonitores.filter(c => c.monitorId == monitorSelecionadoParaVer.id);
-            if(!filtrados.length) {
-                container.innerHTML = "<p style='font-style:italic; color:var(--text-light); font-size:13px;'>Nenhuma avaliação publicada até o momento.</p>";
-                return;
-            }
-
-            filtrados.forEach(c => {
-                container.innerHTML += `
-                    <div style="background:var(--bg); padding:12px; border-radius:6px; margin-bottom:8px; border-left:4px solid var(--primary);">
-                        <div style="display:flex; justify-content:between; align-items:center;">
-                            <strong>${c.autor}</strong>
-                            <span class="stars" style="margin-left:10px;">${"⭐".repeat(c.estrelas)}</span>
-                        </div>
-                        <p style="font-size:13px; margin-top:5px; color:#334155;">"${c.texto}"</p>
-                    </div>
-                `;
-            });
-        }
-
-        function adicionarComentario() {
-            const estrelas = parseInt(document.getElementById("nota-avaliacao").value);
-            const texto = document.getElementById("comentario-texto").value;
-
-            if(!texto.trim()) return alert("Descreva sua avaliação!");
-
-            comentariosMonitores.push({
-                monitorId: monitorSelecionadoParaVer.id,
-                autor: usuarioLogado.nome,
-                estrelas: estrelas,
-                texto: texto
-            });
-
-            document.getElementById("comentario-texto").value = "";
-            atualizarComentariosPublicos();
-        }
-
-        function voltarParaBusca() {
-            showTab('aluno');
-        }
-
-        function enviarMensagemChat() {
-            const inp = document.getElementById("chat-input");
-            if(!inp.value.trim()) return;
-            const chat = document.getElementById("chat-box");
-            chat.innerHTML += `<p><strong>Você:</strong> ${inp.value}</p>`;
-            inp.value = "";
-            chat.scrollTop = chat.scrollHeight;
-        }
-
-        // RENDER MONITOR
-        function renderizerMonitor() {
-            if(!usuarioLogado.isMonitor) return;
-            document.getElementById("mon-materia-tag").innerText = usuarioLogado.materiaMonitoria;
-            document.getElementById("mon-pontos-tag").innerText = usuarioLogado.pontos;
-
-            const selectAlunos = document.getElementById("ficha-aluno-id");
-            selectAlunos.innerHTML = usuarios.filter(u => u.cargo === 'aluno' && u.id !== usuarioLogado.id).map(u => `
-                <option value="${u.id}">${u.nome}</option>
-            `).join('');
-        }
-
-        function carregarLoja() {
-            const vitrine = document.getElementById("vitrine-loja");
-            vitrine.innerHTML = moldurasLoja.map(m => `
-                <div style="background:white; border:1px solid var(--border); padding:8px; border-radius:6px; text-align:center; font-size:12px;">
-                    <div style="width:30px; height:30px; margin:0 auto 5px auto;" class="moldura ${m.classe}"></div>
-                    <strong>${m.nome}</strong>
-                    <p style="color:var(--text-light); font-weight:bold;">${m.preco} Pts</p>
-                    <button onclick="comprarMoldura(${m.id})" style="padding:3px 6px; font-size:11px; margin-top:5px; background:#10b981;">Adquirir</button>
-                </div>
-            `).join('');
-        }
-
-        function comprarMoldura(molduraId) {
-            const moldura = moldurasLoja.find(m => m.id == molduraId);
-            if (usuarioLogado.pontos >= moldura.preco) {
-                usuarioLogado.pontos -= moldura.preco;
-                usuarioLogado.molduraEquipada = moldura.id;
-                alert(`Sucesso! Moldura "${moldura.nome}" adquirida e equipada no perfil.`);
-                switchUser(usuarioLogado.id);
-            } else {
-                alert("Pontos insuficientes para realizar esta troca.");
-            }
-        }
-
-        function enviarFichaAtendimento() {
-            const alunoId = document.getElementById("ficha-aluno-id").value;
-            const novaFichaId = Date.now();
-            
-            fichasMonitoria.push({
-                id: novaFichaId,
-                monitorId: usuarioLogado.id,
-                alunoAtendidoId: parseInt(alunoId),
-                status: "Pendente",
-                data: new Date().toLocaleDateString('pt-BR'),
-                materia: usuarioLogado.materiaMonitoria
-            });
-
-            alert("Ficha cadastrada com sucesso! Passará pela validação antifraude na tela logada do aluno atendido.");
-        }
-
-        // RENDER PROFESSOR
-        function renderizarProfessor() {
-            if(usuarioLogado.cargo !== 'professor') return;
-            document.getElementById("prof-materia-nome").innerText = usuarioLogado.materia;
-
-            const tbody = document.getElementById("corpo-tabela-prof");
-            tbody.innerHTML = "";
-
-            const alunosEscola = usuarios.filter(u => u.cargo === 'aluno');
-            
-            alunosEscola.forEach(aluno => {
-                const temOuro = aluno.medalhas.some(m => m.tipo === "Ouro" && m.materia === usuarioLogado.materia) ? "checked" : "";
-                const temPrata = aluno.medalhas.some(m => m.tipo === "Prata" && m.materia === usuarioLogado.materia) ? "checked" : "";
-                const temBronze = aluno.medalhas.some(m => m.tipo === "Bronze" && m.materia === usuarioLogado.materia) ? "checked" : "";
-                const temHonra = aluno.medalhas.some(m => m.tipo === "Honra ao Mérito" && m.materia === usuarioLogado.materia) ? "checked" : "";
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${aluno.nome}</strong></td>
-                        <td><input type="checkbox" class="med-check ouro-chk" data-aluno-id="${aluno.id}" ${temOuro}></td>
-                        <td><input type="checkbox" class="med-check prata-chk" data-aluno-id="${aluno.id}" ${temPrata}></td>
-                        <td><input type="checkbox" class="med-check bronze-chk" data-aluno-id="${aluno.id}" ${temBronze}></td>
-                        <td><input type="checkbox" class="med-check honra-chk" data-aluno-id="${aluno.id}" ${temHonra}></td>
-                    </tr>
-                `;
-            });
-
-            // RENDERIZAÇÃO DA TABELA DE HOMOLOGAÇÃO DOCENTE DO PROFESSOR
-            const tbodyHomologacao = document.getElementById("corpo-homologacao-professor");
-            tbodyHomologacao.innerHTML = "";
-
-            const fichasFiltradas = fichasMonitoria.filter(f => f.materia === usuarioLogado.materia);
-            if(fichasFiltradas.length === 0) {
-                tbodyHomologacao.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-light); font-style:italic;">Nenhuma ficha necessitando homologação.</td></tr>`;
-            } else {
-                fichasFiltradas.forEach(f => {
-                    const mon = usuarios.find(u => u.id == f.monitorId);
-                    const alu = usuarios.find(u => u.id == f.alunoAtendidoId);
-                    let acoes = "";
-
-                    if(f.status === "Validado Pelo Aluno") {
-                        acoes = `
-                            <button onclick="homologarFichaProfessor(${f.id}, true)" style="background:var(--success); padding:4px 8px; font-size:12px;">Homologar visto</button>
-                            <button onclick="homologarFichaProfessor(${f.id}, false)" style="background:var(--danger); padding:4px 8px; font-size:12px; margin-left:5px;">Recusar</button>
-                        `;
-                    } else {
-                        acoes = `<span style="font-size:12px; color:var(--text-light); font-style:italic;">Sem ações pendentes</span>`;
-                    }
-
-                    tbodyHomologacao.innerHTML += `
-                        <tr>
-                            <td><strong>${mon.nome}</strong></td>
-                            <td>${alu.nome}</td>
-                            <td>${f.data}</td>
-                            <td><span class="badge ${f.status==='Validado Pelo Aluno'?'badge-orange':f.status==='Homologado'?'badge-green':'badge-red'}">${f.status}</span></td>
-                            <td>${acoes}</td>
-                        </tr>
                     `;
                 });
             }
         }
+        initAppElements();
 
-        function salvarMedalhasProfessor() {
-            const checkboxesMarcados = document.querySelectorAll(".med-check:checked");
-            
-            if (checkboxesMarcados.length > 4) {
-                alert(`Erro Institucional: Você marcou ${checkboxesMarcados.length} indicações. A regra pedagógica determina que você pode selecionar no máximo os 4 melhores alunos por período.`);
-                return;
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('avanca_user');
+            if(saved) {
+                currentUser = JSON.parse(saved);
+                direcionarPortal();
             }
+            if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+        });
 
-            usuarios.filter(u => u.cargo === 'aluno').forEach(aluno => {
-                aluno.medalhas = aluno.medalhas.filter(m => m.materia !== usuarioLogado.materia);
-            });
+        window.toggleTheme = function() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        };
 
-            checkboxesMarcados.forEach(chk => {
-                const alunoId = parseInt(chk.getAttribute("data-aluno-id"));
-                let tipo = "";
-                if(chk.classList.contains("ouro-chk")) tipo = "Ouro";
-                if(chk.classList.contains("prata-chk")) tipo = "Prata";
-                if(chk.classList.contains("bronze-chk")) tipo = "Bronze";
-                if(chk.classList.contains("honra-chk")) tipo = "Honra ao Mérito";
+        window.toggleLoginFields = function() {
+            const p = document.getElementById('login-profile').value;
+            document.getElementById('box-aluno-fields').style.display = p === 'aluno' ? 'block' : 'none';
+            document.getElementById('box-professor-fields').style.display = p === 'professor' ? 'block' : 'none';
+            document.getElementById('box-password-fields').style.display = p !== 'aluno' ? 'block' : 'none';
+        };
 
-                const aluno = usuarios.find(u => u.id == alunoId);
-                aluno.medalhas.push({ tipo: tipo, materia: usuarioLogado.materia });
-            });
+        window.processarAutenticacao = function() {
+            const p = document.getElementById('login-profile').value;
+            const pass = document.getElementById('login-password').value;
 
-            alert("Quadro de honrarias pedagógicas atualizado! As medalhas foram inseridas nos perfis dos alunos.");
-            renderizarDirecao();
-        }
-
-        // RENDER DIREÇÃO & TELA DE ALERTA DE RISCO DE EVASÃO
-        function renderizarDirecao() {
-            const selectFiltro = document.getElementById("select-filtro-direcao");
-            const materiaFiltro = selectFiltro ? selectFiltro.value : "Matemática";
-            
-            const listaDestaques = document.getElementById("dir-lista-destaques");
-            if (listaDestaques) {
-                listaDestaques.innerHTML = "";
-                usuarios.filter(u => u.cargo === 'aluno').forEach(aluno => {
-                    const medDaMateria = aluno.medalhas.filter(m => m.materia === materiaFiltro);
-                    if(medDaMateria.length > 0) {
-                        listaDestaques.innerHTML += `<li><strong>${aluno.nome}</strong> - Condecoração: ${medDaMateria.map(m=>m.tipo).join(', ')}</li>`;
-                    }
-                });
-                if(!listaDestaques.innerHTML) listaDestaques.innerHTML = "<li>Nenhum destaque mapeado nesta disciplina.</li>";
-            }
-
-            const alertasCriticos = document.getElementById("dir-alertas-criticos");
-            if (alertasCriticos) {
-                let materiaCritica = "Física"; 
-                alertasCriticos.innerHTML = `
-                    <p>• <strong>Matéria Crítica:</strong> ${materiaCritica} possui volumetria severa de chamados sem monitores livres.</p>
-                    <p style="margin-top:5px;">• <strong>Auditoria Antifraude:</strong> Nenhuma contestação grave aberta nas últimas 24 horas.</p>
-                `;
-            }
-
-            // NOVA INTEGRAÇÃO: RENDER DA TELA DE ALERTA DE RISCO PEDAGÓGICO
-            const corpoRisco = document.getElementById("corpo-risco-direcao");
-            corpoRisco.innerHTML = "";
-
-            usuarios.filter(u => u.cargo === 'aluno').forEach(aluno => {
-                let statusBadge = "";
-                let planoAcao = "";
-
-                if(aluno.faltasMonitoria >= 3) {
-                    statusBadge = `<span class="badge badge-red">Alto Risco de Retenção/Evasão</span>`;
-                    planoAcao = `<button onclick="alert('Disparando e-mail corporativo automático para os responsáveis de ${aluno.nome} e agendando reunião pedagógica.')" style="background:var(--danger); padding:4px 8px; font-size:11px;">Acionar Plantão Familiar</button>`;
-                } else if(aluno.faltasMonitoria > 0 && aluno.faltasMonitoria < 3) {
-                    statusBadge = `<span class="badge badge-orange">Atenção Crítica</span>`;
-                    planoAcao = `<button onclick="alert('Notificação de alerta enviada ao tutor do aluno.')" style="background:var(--warning); padding:4px 8px; font-size:11px;">Enviar Alerta</button>`;
-                } else {
-                    statusBadge = `<span class="badge badge-green">Frequência Regular</span>`;
-                    planoAcao = `<span style="font-size:11px; color:var(--text-light); font-style:italic;">Monitorado</span>`;
-                }
-
-                corpoRisco.innerHTML += `
-                    <tr>
-                        <td><strong>${aluno.nome}</strong></td>
-                        <td><span style="font-weight:bold; color:${aluno.faltasMonitoria >=3 ? 'var(--danger)' : 'inherit'}">${aluno.faltasMonitoria} faltas</span></td>
-                        <td>${statusBadge}</td>
-                        <td>${planoAcao}</td>
-                    </tr>
-                `;
-            });
-
-            const corpoEvolucao = document.getElementById("corpo-evolucao-direcao");
-            corpoEvolucao.innerHTML = "";
-            usuarios.filter(u => u.cargo === 'aluno').forEach(aluno => {
-                const contagemAtendimentos = fichasMonitoria.filter(f => f.alunoAtendidoId == aluno.id && f.status === "Homologado").length;
-                let statusEvolucao = contagemAtendimentos > 0 ? "📈 Desempenho Progressivo" : "⏸️ Aguardando Homologações";
+            if(p === 'aluno') {
+                const name = document.getElementById('login-student-name').value.trim();
+                const room = document.getElementById('login-student-class').value;
+                const isMonitor = document.getElementById('login-is-monitor').checked;
+                if(!name) return alert("Por favor, digite seu nome!");
                 
-                corpoEvolucao.innerHTML += `
-                    <tr>
-                        <td>${aluno.nome}</td>
-                        <td>${contagemAtendimentos} vezes ajudado</td>
-                        <td><span style="color:green; font-weight:bold;">${statusEvolucao}</span></td>
-                    </tr>
-                `;
+                currentUser = { name, profile: 'aluno', class: room, isMonitor: isMonitor };
+                update(ref(db, `users/${name}`), { nomeCadastro: name, classe: room, isMonitor: isMonitor });
+            } else if(p === 'professor') {
+                if(pass !== 'dia de sol') return alert("Senha incorreta!");
+                currentUser = { name: `Prof. de ${document.getElementById('login-prof-subject').value}`, profile: 'professor', subject: document.getElementById('login-prof-subject').value };
+            } else if(p === 'coordenacao') {
+                if(pass !== 'gestao2026') return alert("Senha de Gestão incorreta!");
+                currentUser = { name: "Coordenação Pedagógica", profile: 'coordenacao' };
+            } else if(p === 'admin') {
+                if(pass !== 'Chernobyl 1986') return alert("Senha de Administrador incorreta!");
+                currentUser = { name: "Eduarda", profile: 'admin' };
+            }
+            localStorage.setItem('avanca_user', JSON.stringify(currentUser));
+            direcionarPortal();
+        };
+
+        function direcionarPortal() {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('app-header').style.display = 'flex';
+            
+            if(currentUser.profile === 'aluno') {
+                document.getElementById('view-portal-alunos').classList.add('active');
+                document.getElementById('user-display-label').innerText = `Aluno: ${currentUser.name} [${currentUser.class}]`;
+                if(currentUser.isMonitor) {
+                    document.getElementById('box-configurar-agenda').style.display = 'block';
+                }
+                ouvirMeusDadosRealtime();
+                ouvirMensagensDiretasAluno();
+                ouvirConfirmacoesPendentesAluno();
+                alimentarFiltroSelecaoAgenda();
+            } else if(currentUser.profile === 'professor') {
+                document.getElementById('view-portal-professores').classList.add('active');
+                document.getElementById('user-display-label').innerText = currentUser.name;
+                document.getElementById('label-prof-subject').innerText = `Pedidos de Suporte: ${currentUser.subject}`;
+                ouvirAlertasProfessor();
+                ouvirHomologacoesPendentesProfessor();
+            } else if(currentUser.profile === 'coordenacao') {
+                document.getElementById('view-portal-coordenacao').classList.add('active');
+                document.getElementById('user-display-label').innerText = "Painel do Gestor 🧭";
+                ouvirDadosCoordenacao();
+            } else if(currentUser.profile === 'admin') {
+                document.getElementById('view-portal-admin').classList.add('active');
+                document.getElementById('user-display-label').innerText = "Administradora Suprema 👑";
+                ouvirDadosAdministrativos();
+            }
+        }
+
+        window.logoutApp = function() {
+            localStorage.removeItem('avanca_user');
+            document.getElementById('app-header').style.display = 'none';
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-login').classList.add('active');
+            currentUser = null;
+        };
+
+        window.switchTabs = function(contentId, btnElement) {
+            const parent = btnElement.parentElement;
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            const container = parent.parentElement;
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const target = document.getElementById(contentId);
+            if(target) target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        /* ======================== NOVO FLUXO ANTIFRAUDE DE DUPLO FATOR ======================== */
+        window.submitMonitoria = function(e) {
+            e.preventDefault();
+            const subject = document.getElementById('reg-subject').value;
+            const target = document.getElementById('reg-target-student').value.trim();
+            
+            // Injeta no nó transacional pendente
+            push(ref(db, 'validacoes_pendentes'), {
+                monitor: currentUser.name,
+                class: currentUser.class,
+                subject,
+                studentAjudado: target,
+                status: 'aguardando_aluno',
+                timestamp: Date.now()
+            });
+
+            alert("Atendimento lançado! Agora seu colega ajudado precisa confirmar na área logada dele.");
+            document.getElementById('reg-target-student').value = "";
+        };
+
+        function ouvirConfirmacoesPendentesAluno() {
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                const container = document.getElementById('lista-confirmacoes-aluno');
+                container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let val = child.val();
+                        if(val.studentAjudado === currentUser.name && val.status === 'aguardando_aluno') {
+                            let div = document.createElement('div');
+                            div.className = "list-item";
+                            div.innerHTML = `
+                                <span>O Monitor <b>${val.monitor}</b> declarou que te deu apoio em <b>${val.subject}</b>.</span>
+                                <button class="btn btn-success" style="padding:0.4rem; font-size:0.8rem; margin-top:0.4rem;" onclick="alunoConfirmaFator('${child.key}')">Confirmar que recebi ajuda ✅</button>
+                            `;
+                            container.appendChild(div);
+                        }
+                    });
+                }
+                if(container.innerHTML === "") {
+                    container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted);">Nenhum lançamento aguardando sua validação.</p>`;
+                }
             });
         }
 
-        // RENDER ADMIN
-        function renderizerAdmin() {
-            document.getElementById("adm-total-acessos").innerText = totalAcessosUnicos;
-            document.getElementById("adm-total-cadastrados").innerText = usuarios.length;
+        window.alunoConfirmaFator = function(key) {
+            update(ref(db, `validacoes_pendentes/${key}`), { status: 'aguardando_professor' })
+            .then(() => alert("Sua validação foi enviada! O professor da matéria dará o veredito final."));
+        };
 
-            const logConsole = document.getElementById("adm-logs-navegacao");
-            logConsole.innerHTML = logsAcesso.map(l => `
-                [AUDIT] ${l.hora} - Usuário: ${l.usuario} -> Ação: ${l.acao}<br>
-            `).join('');
-
-            const tbodyMonitores = document.getElementById("adm-tabela-monitores");
-            tbodyMonitores.innerHTML = "";
-
-            usuarios.filter(u => u.isMonitor).forEach(mon => {
-                const countAtendimentos = fichasMonitoria.filter(f => f.monitorId == mon.id && f.status === "Homologado").length;
-                tbodyMonitores.innerHTML += `
-                    <tr>
-                        <td><strong>${mon.nome}</strong></td>
-                        <td>${mon.materiaMonitoria}</td>
-                        <td>${countAtendimentos} validados</td>
-                        <td><button onclick="concederCertificadoAdmin('${mon.nome}')" style="padding:4px 8px; font-size:12px; background:var(--honra);">Liberar Certificado Honorário</button></td>
-                    </tr>
-                `;
+        function ouvirHomologacoesPendentesProfessor() {
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                const container = document.getElementById('lista-homologacoes-professor');
+                container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let val = child.val();
+                        if(val.subject === currentUser.subject && val.status === 'aguardando_professor') {
+                            let div = document.createElement('div');
+                            div.className = "card";
+                            div.innerHTML = `
+                                <h5>Sessão de ${val.subject}</h5>
+                                <p style="font-size:0.85rem;">Monitor: <b>${val.monitor}</b> ➜ Aluno: <b>${val.studentAjudado}</b></p>
+                                <div class="form-group" style="margin-top:0.5rem;">
+                                    <input type="text" id="feedback-${child.key}" class="form-control" placeholder="Deixe um feedback pedagógico para o monitor...">
+                                </div>
+                                <div style="display:flex; gap:8px;">
+                                    <button class="btn btn-success" style="padding:0.4rem; font-size:0.8rem;" onclick="professorHomologaFinal('${child.key}', true)">Aprovar (+10 XP) 🏅</button>
+                                    <button class="btn btn-danger" style="padding:0.4rem; font-size:0.8rem;" onclick="professorHomologaFinal('${child.key}', false)">Recusar ❌</button>
+                                </div>
+                            `;
+                            container.appendChild(div);
+                        }
+                    });
+                }
+                if(container.innerHTML === "") {
+                    container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted);">Nenhuma monitoria aguardando sua homologação para esta matéria.</p>`;
+                }
             });
         }
 
-        function concederCertificadoAdmin(nomeMonitor) {
-            alert(`Certificado Institucional e Medalha de Excelência outorgados com sucesso para o monitor ${nomeMonitor}!`);
-            registrarLog("Administrador", `Outorga de Certificado Especial para ${nomeMonitor}`);
-            renderizerAdmin();
+        window.professorHomologaFinal = function(key, aprovado) {
+            if(!aprovado) {
+                remove(ref(db, `validacoes_pendentes/${key}`));
+                return alert("Sessão descartada e removida.");
+            }
+
+            const feedbackTxt = document.getElementById(`feedback-${key}`).value.trim();
+
+            onValue(ref(db, `validacoes_pendentes/${key}`), (snap) => {
+                let val = snap.val();
+                if(!val) return;
+
+                // Move para o livro oficial definitivo
+                push(ref(db, 'monitorias'), {
+                    monitor: val.monitor,
+                    class: val.class,
+                    subject: val.subject,
+                    studentAjudado: val.studentAjudado,
+                    feedbackProfessor: feedbackTxt,
+                    timestamp: Date.now()
+                });
+
+                // Concede o XP Real
+                onValue(ref(db, `users/${val.monitor}`), (uSnap) => {
+                    let uData = uSnap.val() || {};
+                    let currentXp = uData.xp || 0;
+                    let atendidos = uData.colegasAtendidos || 0;
+                    
+                    update(ref(db, `users/${val.monitor}`), { 
+                        xp: currentXp + 10,
+                        colegasAtendidos: atendidos + 1
+                    });
+                }, { onlyOnce: true });
+
+                remove(ref(db, `validacoes_pendentes/${key}`));
+                alert("Monitoria homologada com sucesso! Pontuação distribuída.");
+            }, { onlyOnce: true });
+        };
+
+        /* ======================== SISTEMA DE CARDÁPIO E AGENDAMENTOS ======================== */
+        window.salvarSlotAgenda = function() {
+            const day = document.getElementById('schedule-day').value;
+            const time = document.getElementById('schedule-time').value;
+            const sub = document.getElementById('schedule-subject').value;
+
+            push(ref(db, `agendas/${currentUser.name}`), {
+                dia_semana: day,
+                horario: time,
+                materia: sub,
+                status: 'disponivel',
+                aluno_agendado: ''
+            }).then(() => alert("Horário inserido com sucesso no seu cardápio público!"));
+        };
+
+        function alimentarFiltroSelecaoAgenda() {
+            onValue(ref(db, 'users'), (snap) => {
+                const select = document.getElementById('select-filter-monitor-agenda');
+                select.innerHTML = `<option value="">-- Escolha um Monitor --</option>`;
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        if(c.val().isMonitor) select.innerHTML += `<option value="${c.key}">${c.key}</option>`;
+                    });
+                }
+            });
         }
+
+        window.carregarGradeHorariosMonitor = function() {
+            const mName = document.getElementById('select-filter-monitor-agenda').value;
+            const container = document.getElementById('grid-slots-resultado');
+            container.innerHTML = "";
+            if(!mName) return;
+
+            onValue(ref(db, `agendas/${mName}`), (snap) => {
+                container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let slot = child.val();
+                        let div = document.createElement('div');
+                        div.className = `hour-pill ${slot.status === 'reservado' ? 'booked' : ''}`;
+                        div.innerHTML = `<b>${slot.dia_semana}</b><br>${slot.horario}<br><small>${slot.materia}</small>`;
+                        
+                        if(slot.status === 'disponivel') {
+                            div.onclick = () => {
+                                if(confirm(`Confirmar reserva desse horário com ${mName}?`)) {
+                                    update(ref(db, `agendas/${mName}/${child.key}`), {
+                                        status: 'reservado',
+                                        aluno_agendado: currentUser.name
+                                    }).then(() => {
+                                        // Computa falta/presença potencial em nó separado para controle de risco
+                                        push(ref(db, 'agendamentos_gerais'), {
+                                            monitor: mName,
+                                            aluno: currentUser.name,
+                                            status: 'agendado',
+                                            materia: slot.materia
+                                        });
+                                        alert("Agendamento efetuado!");
+                                    });
+                                }
+                            };
+                        }
+                        container.appendChild(div);
+                    });
+                } else {
+                    container.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); grid-column:1/-1;">Este monitor não abriu horários ainda.</p>`;
+                }
+            });
+        };
+
+        /* ======================== PERFIL, LOJA (10 ITENS) E MURAL ======================== */
+        window.comprarItem = function(tipo) {
+            const item = itensLoja.find(i => i.id === tipo);
+            onValue(ref(db, `users/${currentUser.name}/xp`), (snap) => {
+                let xp = snap.val() || 0;
+                if(xp < item.preco) return alert("XP insuficiente para adquirir este enfeite!");
+                update(ref(db, `users/${currentUser.name}`), { xp: xp - item.preco, frame: item.id });
+                alert(`${item.nome} equipado com sucesso!`);
+            }, { onlyOnce: true });
+        };
+
+        window.renderMeuPerfil = function() {
+            document.getElementById('meu-nome-perfil').innerText = currentUser.name;
+            document.getElementById('meu-nivel-display').innerText = `Nível: ${currentUser.class} ${currentUser.isMonitor ? '(Monitor Ativo OBNE)' : ''}`;
+            
+            onValue(ref(db, `users/${currentUser.name}`), (snap) => {
+                const data = snap.val() || {};
+                document.getElementById('meu-avatar-img').src = data.avatar || "https://via.placeholder.com/100";
+                
+                // Mapeia classe de borda da loja
+                let currentFrame = data.frame || 'none';
+                let itemClass = itensLoja.find(i => i.id === currentFrame)?.classe || 'frame-none';
+                document.getElementById('meu-avatar-wrapper').className = "profile-avatar-container " + itemClass;
+                
+                // Exibe Impacto Real
+                document.getElementById('meu-impacto-box').innerHTML = `
+                    🎯 Colegas Impactados: <b>${data.colegasAtendidos || 0}</b><br>
+                    ⏱️ Horas Estreitadas Estimadas: <b>${(data.colegasAtendidos || 0) * 1}h</b>
+                `;
+
+                // Renderiza medalhas
+                const boxMedalhas = document.getElementById('meu-mural-medalhas');
+                boxMedalhas.innerHTML = "";
+                if(data.medalhas) {
+                    Object.keys(data.medalhas).forEach(k => {
+                        let m = data.medalhas[k];
+                        let classeBadge = "badge-honra";
+                        if(m.includes("Ouro")) classeBadge = "badge-gold";
+                        if(m.includes("Prata")) classeBadge = "badge-silver";
+                        if(m.includes("Bronze")) classeBadge = "badge-bronze";
+                        boxMedalhas.innerHTML += `<span class="badge-pill ${classeBadge}">${m}</span>`;
+                    });
+                }
+            });
+        };
+
+        window.salvarFotoPerfil = function() {
+            const url = document.getElementById('input-avatar-url').value.trim();
+            if(url) update(ref(db, `users/${currentUser.name}`), { avatar: url });
+        };
+
+        window.salvarMedalhaProfessor = function() {
+            const student = document.getElementById('prof-medal-student').value.trim();
+            const medal = document.getElementById('prof-medal-type').value;
+            if(!student) return alert("Insira o nome do aluno.");
+
+            push(ref(db, `users/${student}/medalhas`), `${medal} em ${currentUser.subject}`)
+            .then(() => alert("Medalha oficial outorgada!"));
+            document.getElementById('prof-medal-student').value = "";
+        };
+
+        /* ======================== PAINEL DE RISCO PEDAGÓGICO (DIREÇÃO) ======================== */
+        function ouvirDadosCoordenacao() {
+            onValue(ref(db, 'pedidos_ajuda'), (snap) => {
+                const termometroBox = document.getElementById('termometro-list-coord');
+                termometroBox.innerHTML = "";
+                let contagem = {};
+                disciplinas.forEach(d => contagem[d] = 0);
+                
+                if(snap.exists()) {
+                    snap.forEach(c => { if(contagem[c.val().subject] !== undefined) contagem[c.val().subject]++; });
+                }
+                disciplinas.forEach(d => {
+                    termometroBox.innerHTML += `<div style="display:flex; justify-content:between; font-size:0.85rem;"><span>${d}</span> <b style="margin-left:auto;">${contagem[d]} chamados</b></div>`;
+                });
+            });
+
+            // Motor de Alertas de Risco de Aprendizagem
+            onValue(ref(db, 'users'), (uSnap) => {
+                const container = document.getElementById('lista-alunos-risco-pedagogico');
+                container.innerHTML = "";
+                
+                onValue(ref(db, 'pedidos_ajuda'), (pSnap) => {
+                    let pedidosPorAluno = {};
+                    if(pSnap.exists()) {
+                        pSnap.forEach(p => {
+                            let n = p.val().student;
+                            pedidosPorAluno[n] = (pedidosPorAluno[n] || 0) + 1;
+                        });
+                    }
+
+                    if(uSnap.exists()) {
+                        uSnap.forEach(user => {
+                            let totalChamados = pedidosPorAluno[user.key] || 0;
+                            let statusRisco = totalChamados >= 3 ? 'Risco Alto 🚩' : 'Normal';
+                            let classRisco = totalChamados >= 3 ? 'risk-high' : 'risk-normal';
+
+                            let div = document.createElement('div');
+                            div.className = "list-item";
+                            div.innerHTML = `
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <b>${user.key} (${user.val().classe || 'NL'})</b>
+                                    <span class="risk-badge ${classRisco}">${statusRisco}</span>
+                                </div>
+                                <span style="font-size:0.8rem; color:var(--text-muted);">Total de Pedidos de Ajuda Coletados: ${totalChamados}</span>
+                            `;
+                            container.appendChild(div);
+                        });
+                    }
+                });
+            });
+        }
+
+        /* ======================== CÓDIGO CORE ORIGINAL ADAPTADO / SUPORTE CHAT ======================== */
+        window.submitPedidoAjuda = function(e) {
+            e.preventDefault();
+            push(ref(db, 'pedidos_ajuda'), { student: currentUser.name, class: currentUser.class, subject: document.getElementById('help-subject').value, timestamp: Date.now() });
+            alert("Sua solicitação de ajuda foi enviada para o painel dos professores!");
+        };
+
+        function ouvirMeusDadosRealtime() {
+            onValue(ref(db, `users/${currentUser.name}`), (snap) => {
+                const data = snap.val() || {};
+                document.getElementById('student-xp-display').innerText = `${data.xp || 0} XP`;
+            });
+        }
+
+        window.carregarMonitoresPublicos = function() {
+            onValue(ref(db, 'users'), (snap) => {
+                const container = document.getElementById('grid-monitores-publicos');
+                container.innerHTML = "";
+                let encontrouNenhum = true;
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let name = child.key;
+                        let userObj = child.val();
+                        if(userObj.isMonitor === true) {
+                            encontrouNenhum = false;
+                            let div = document.createElement('div'); div.className = "card"; div.style.textAlign = "center";
+                            div.innerHTML = `<h5>${name}</h5><p style="font-size:0.8rem; color:var(--blue-cyan);">Monitor Oficial OBNE</p>`;
+                            container.appendChild(div);
+                        }
+                    });
+                }
+                if(encontrouNenhum) {
+                    container.innerHTML = `<p style="grid-column:1/-1; text-align:center; font-size:0.85rem; color:var(--text-muted);">Nenhum monitor voluntário listado.</p>`;
+                }
+            });
+        };
+
+        window.loadChatHub = function() {
+            const container = document.getElementById('student-chat-channels'); container.innerHTML = "";
+            disciplinas.forEach(d => { container.innerHTML += `<div class="channel-tab" onclick="abrirCanalAluno('${d}', this)">Mural de ${d}</div>`; });
+        };
+
+        window.abrirCanalAluno = function(sub, el) {
+            el.parentElement.querySelectorAll('.channel-tab').forEach(b => b.classList.remove('active'));
+            el.classList.add('active'); activeChatKey = `sala_${sub}`;
+            onValue(ref(db, `chats/${activeChatKey}`), (snap) => {
+                const box = document.getElementById('student-chat-messages'); box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        let m = c.val();
+                        box.innerHTML += `<div class="chat-bubble ${m.sender === currentUser.name ? 'sent' : 'received'}"><strong>${m.sender}:</strong><br>${m.text}</div>`;
+                    });
+                }
+            });
+        };
+
+        window.sendChatMessage = function() {
+            const inp = document.getElementById('student-chat-input'); if(!inp.value.trim() || !activeChatKey) return;
+            push(ref(db, `chats/${activeChatKey}`), { sender: currentUser.name, text: inp.value.trim(), timestamp: Date.now() });
+            inp.value = "";
+        };
+
+        function ouvirMensagensDiretasAluno() {
+            onValue(ref(db, `direcao_chats/${currentUser.name}`), (snap) => {
+                const box = document.getElementById('student-direct-messages');
+                box.innerHTML = "";
+                let dispararAlertaPiscante = false;
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let msg = child.val();
+                        if(msg.sender === "Eduarda") dispararAlertaPiscante = true;
+                        if(msg.sender === currentUser.name) dispararAlertaPiscante = false;
+                        box.innerHTML += `<div class="chat-bubble ${msg.sender === currentUser.name ? 'sent' : 'received'}"><strong>${msg.sender}:</strong><br>${msg.text}</div>`;
+                    });
+                    if(dispararAlertaPiscante && !document.getElementById('tab-recados-direcao').classList.contains('active')) {
+                        document.getElementById('dot-recados').style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        window.limparNotificacaoDirecao = function() {
+            document.getElementById('dot-recados').style.display = 'none';
+        };
+
+        window.sendDirectMessageFromStudent = function() {
+            const inp = document.getElementById('student-direct-input'); if(!inp.value.trim()) return;
+            push(ref(db, `direcao_chats/${currentUser.name}`), { sender: currentUser.name, text: inp.value.trim(), timestamp: Date.now() });
+            inp.value = "";
+        };
+
+        function ouvirAlertasProfessor() {
+            onValue(ref(db, 'pedidos_ajuda'), (snap) => {
+                const container = document.getElementById('prof-lista-alertas'); container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let p = child.val();
+                        if(p.subject === currentUser.subject) {
+                            container.innerHTML += `<li class="list-item">⚠️ O aluno <b>${p.student} [${p.class}]</b> solicitou atendimento nesta disciplina.</li>`;
+                        }
+                    });
+                }
+            });
+        }
+
+        function ouvirDadosAdministrativos() {
+            onValue(ref(db, 'monitorias'), (snap) => {
+                const container = document.getElementById('admin-livro-chamada'); container.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        let m = c.val();
+                        container.innerHTML += `<li class="list-item"><span>🧑‍🎓 Monitor: <b>${m.monitor}</b></span><span>📖 Módulo: ${m.subject} | Destinatário: ${m.studentAjudado} (${m.class})</span></li>`;
+                    });
+                } else {
+                    container.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem;">Nenhum chamado definitivo registrado hoje.</p>`;
+                }
+            });
+        }
+
+        window.carregarListaAlunosOuvidoria = function() {
+            onValue(ref(db, 'users'), (snap) => {
+                listaAlunosCache = [];
+                if(snap.exists()) {
+                    snap.forEach(child => { listaAlunosCache.push(child.key); });
+                }
+                filtrarAlunosOuvidoria(); 
+            });
+        };
+
+        window.filtrarAlunosOuvidoria = function() {
+            const query = document.getElementById('admin-search-student').value.toLowerCase().trim();
+            const container = document.getElementById('admin-ouvidoria-students-list');
+            container.innerHTML = "";
+            const filtrados = listaAlunosCache.filter(nome => nome.toLowerCase().includes(query));
+            if(filtrados.length === 0) {
+                container.innerHTML = `<p style="padding:0.5rem; font-size:0.8rem; color:var(--text-muted);">Nenhum aluno localizado.</p>`;
+                return;
+            }
+            filtrados.forEach(nome => {
+                let div = document.createElement('div'); div.className = "channel-tab";
+                div.innerText = `👤 ${nome}`;
+                if(ouvidoriaTargetStudent === nome) div.classList.add('active');
+                div.onclick = () => {
+                    container.querySelectorAll('.channel-tab').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                    abrirChatOuvidoriaAdmin(nome);
+                };
+                container.appendChild(div);
+            });
+        };
+
+        function abrirChatOuvidoriaAdmin(studentName) {
+            ouvidoriaTargetStudent = studentName;
+            document.getElementById('admin-ouvidoria-target-label').innerText = `Atendimento com: ${studentName}`;
+            onValue(ref(db, `direcao_chats/${studentName}`), (snap) => {
+                const box = document.getElementById('admin-ouvidoria-messages'); box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let msg = child.val();
+                        box.innerHTML += `<div class="chat-bubble ${msg.sender === 'Eduarda' ? 'sent' : 'received'}"><strong>${msg.sender}:</strong><br>${msg.text}</div>`;
+                    });
+                } else {
+                    box.innerHTML = `<p style="text-align:center; color:var(--text-muted); font-size:0.75rem; margin-top:1rem;">Sem histórico registrado.</p>`;
+                }
+            });
+        }
+
+        window.sendDirectMessageFromAdmin = function() {
+            const inp = document.getElementById('admin-ouvidoria-input'); const txt = inp.value.trim();
+            if(!txt || !ouvidoriaTargetStudent) return;
+            push(ref(db, `direcao_chats/${ouvidoriaTargetStudent}`), { sender: "Eduarda", text: txt, timestamp: Date.now() });
+            inp.value = "";
+        };
+
+        window.concederMedalhaAdmin = function() {
+            const student = document.getElementById('adm-medal-student').value.trim();
+            const type = document.getElementById('adm-medal-type').value;
+            const sub = document.getElementById('adm-medal-subject').value;
+            if(!student) return alert("Insira o nome.");
+            push(ref(db, `users/${student}/medalhas`), `Suprema ${type} de ${sub}`)
+            .then(() => alert("Medalha Suprema Injetada."));
+        };
     </script>
 </body>
 </html>
