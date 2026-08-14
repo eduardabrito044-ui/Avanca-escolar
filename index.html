@@ -1,15 +1,9 @@
-O código apresenta alguns erros de sintaxe no JavaScript que impedem a execução da aplicação (especialmente no painel administrativo).
-📌 Principais Erros Corrigidos:
- * Palavra-chave e Nome de Função Incorretos:
-   * Incorreto: funciona ativar Painel()
-   * Correção: function ativarPainel()
- * Chamada de Função Inválida:
-   * Incorreto: ativar painel();
-   * Correção: ativarPainel();
- * Comentários de Código Inválidos:
-   * Textos como Logos de Acesso em Tempo Real e admin: APAGAR COMENTÁRIOS... estavam soltos no script sem as barras de comentário (//), o que gerava erro de sintaxe.
-💻 Código Corrigido
-Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
+Aqui está o código ajustado com todas as alterações que você pediu:
+📌 O que foi modificado/melhorado:
+ * Remoção do Texto Explicativo: O texto e os resumos de explicação do topo foram completamente removidos da tela.
+ * Botão de Exibir/Ocultar Senha (👁️): Adicionado o campo com o ícone do olho para que o usuário possa visualizar ou ocultar a senha digitada durante o login.
+ * Persistência de Sessão (Permanecer Logado): Agora, ao atualizar a página (F5 ou refresh do navegador), a aplicação verifica a sessão salva no localStorage e mantém o usuário na tela em que ele estava, sem deslogar ou voltar para a tela inicial.
+💻 Código Corrigido e Atualizado
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -164,6 +158,27 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             outline: none;
         }
 
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper .form-control {
+            padding-right: 2.8rem;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+        }
+
         .btn {
             width: 100%;
             padding: 0.9rem;
@@ -234,7 +249,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* --- SISTEMA DE MOLDURAS (LOJA) --- */
         .f-star { border: 4px dashed #ffb800 !important; box-shadow: 0 0 15px #ffb800 !important; }
         .f-fire { border: 4px solid #ff4a4a !important; box-shadow: 0 0 15px #ff4a4a !important; animation: pulse 1.5s infinite; }
         .f-lightning { border: 4px cubic-bezier(0.1, 0.9, 0.2, 1) solid #0073ff !important; box-shadow: 0 0 15px #0073ff !important; }
@@ -252,7 +266,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             100% { transform: scale(1); }
         }
 
-        /* --- PERFIL E MEDALHAS --- */
         .profile-header-card {
             background: linear-gradient(180deg, rgba(138, 79, 255, 0.15) 0%, var(--bg-card) 100%);
             border-radius: 20px;
@@ -318,7 +331,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
         .medal-honra { background: rgba(0, 223, 162, 0.2); border: 1px solid #00dfa2; color: #00dfa2; }
         .medal-cert { background: rgba(138, 79, 255, 0.2); border: 1px solid #8a4fff; color: #c499ff; }
 
-        /* --- SITES IMPORTANTES CARDS --- */
         .site-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-color);
@@ -335,7 +347,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             background: rgba(0, 223, 162, 0.05);
         }
 
-        /* --- SIMULAÇÃO DE CHAT --- */
         .chat-container {
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -436,7 +447,10 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             <div id="box-password-fields" style="display: none;">
                 <div class="form-group">
                     <label>Senha de Acesso:</label>
-                    <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()">👁️</button>
+                    </div>
                 </div>
             </div>
 
@@ -609,7 +623,7 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
     </main>
 
     <main id="view-portal-admin" class="app-view">
-        <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle - </h2>
+        <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle</h2>
 
         <div class="card" style="border: 1px solid var(--admin-gold);">
             <h3>Publicar Comunicado Geral (Mural da administração)</h3>
@@ -663,7 +677,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, update, remove, runTransaction } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
 
-        // CONFIGURAÇÃO OFICIAL DO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
             authDomain: "avancaescolar.firebaseapp.com",
@@ -680,7 +693,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
 
         const disciplinas = ["Português", "Matemática", "Geografia", "História", "Ciências", "Química", "Física", "Biologia"];
 
-        // 10 OPÇÕES DE MOLDURAS EXCLUSIVAS DA LOJA
         const itensLoja = [
             { id: "f-star", nome: "Moldura Estelar Dourada", preco: 100, classe: "f-star" },
             { id: "f-fire", nome: "Moldura Aura de Fogo", preco: 150, classe: "f-fire" },
@@ -694,7 +706,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             { id: "f-rainbow", nome: "Moldura Arco-Íris Místico", preco: 700, classe: "f-rainbow" }
         ];
 
-        // 10 SITES IMPORTANTES
         const sitesImportantes = [
             { nome: "Ministério da Educação (MEC)", url: "https://www.gov.br/mec/pt-br", desc: "Portal oficial de toda a rede de educação do país." },
             { nome: "G1 Educação", url: "https://g1.globo.com/educacao/", desc: "Acompanhe todas as novidades e notícias sobre educação em tempo real." },
@@ -711,7 +722,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
         let currentUser = null;
         let selectedRatingStars = 5;
 
-        // INICIALIZADORES DO SISTEMA
         function initApp() {
             const dropdowns = [
                 document.getElementById('reg-subject'), 
@@ -728,7 +738,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
                 }
             });
 
-            // Renderizar Sites Importantes
             const boxSites = document.getElementById('box-sites-importantes');
             if(boxSites) {
                 boxSites.innerHTML = "";
@@ -745,7 +754,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
                 });
             }
 
-            // Renderizar Loja de Molduras
             const gridLoja = document.getElementById('grid-loja-molduras');
             if(gridLoja) {
                 gridLoja.innerHTML = "";
@@ -760,10 +768,29 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
                     `;
                 });
             }
+
+            // AUTO-LOGIN AO ATUALIZAR A PÁGINA (F5)
+            const savedUser = localStorage.getItem('avanca_user');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    direcionarPortal();
+                } catch(e) {
+                    localStorage.removeItem('avanca_user');
+                }
+            }
         }
         initApp();
 
-        // LOGOUT DA PLATAFORMA
+        window.togglePasswordVisibility = function() {
+            const passInput = document.getElementById('login-password');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+            } else {
+                passInput.type = 'password';
+            }
+        };
+
         window.logoutApp = function() {
             if(currentUser && currentUser.name) {
                 push(ref(db, 'logs_trafego'), {
@@ -780,7 +807,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             currentUser = null;
         };
 
-        // ALTERNADOR DO INPUT DE DISCIPLINA DO MONITOR NO CADASTRO
         window.toggleMonitorSubjectField = function() {
             const isMonitor = document.getElementById('login-is-monitor').value;
             document.getElementById('box-monitor-subject').style.display = isMonitor === 'sim' ? 'block' : 'none';
@@ -805,7 +831,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             if(target) target.classList.add('active');
         };
 
-        // PROCESSAMENTO DE AUTENTICAÇÃO
         window.processarAutenticacao = function() {
             const p = document.getElementById('login-profile').value;
             const pass = document.getElementById('login-password').value;
@@ -896,7 +921,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             }
         }
 
-        // FLUXO DO ALUNO
         function ouvirMeusDadosRealtime() {
             onValue(ref(db, `users/${currentUser.name}`), (snap) => {
                 if(snap.exists()) {
@@ -1209,7 +1233,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             document.getElementById('monitor-profile-modal').style.display = "none";
         };
 
-        // FLUXO DO PROFESSOR
         function ouvirAlertasMateriaProfessor() {
             onValue(ref(db, 'validacoes_pendentes'), (snap) => {
                 const box = document.getElementById('lista-alertas-materia-professor');
@@ -1267,7 +1290,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             document.getElementById('prof-m-honra').value = "";
         };
 
-        // FLUXO DA DIREÇÃO E COORDENAÇÃO
         window.carregarDestaquesMateriaCoord = function() {
             const mat = document.getElementById('coord-subject-select').value;
             const display = document.getElementById('coord-display-destaques');
@@ -1352,9 +1374,7 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             });
         }
 
-        // PAINEL DE CONTROLE ADMIN
         function ativarPainel() {
-            // Logs de Acesso em Tempo Real
             onValue(ref(db, 'logs_trafego'), (snap) => {
                 const logBox = document.getElementById('admin-logs-acesso');
                 logBox.innerHTML = "";
@@ -1433,7 +1453,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             });
         }
 
-        // ADMIN: APAGAR COMENTÁRIOS
         window.removerFeedbackInadequado = function(alunoKey, feedbackKey) {
             if(confirm("Deseja deletar permanentemente esta avaliação da rede?")) {
                 remove(ref(db, `users/${alunoKey}/feedbacks/${feedbackKey}`))
@@ -1441,7 +1460,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             }
         };
 
-        // ADMIN: POSTAR NO MURAL DE AVISOS GLOBAIS
         window.postarAvisoMural = function() {
             const txt = document.getElementById('admin-mural-texto').value.trim();
             if(!txt) return alert("Digite o comunicado primeiro!");
@@ -1452,7 +1470,6 @@ Aqui está a estrutura HTML/JS completa e ajustada pronta para uso:
             });
         };
 
-        // ADMIN: CONCEDER CERTIFICADO E MEDALHA ESPECIAL
         window.concederCertificadoAdmin = function() {
             const monitor = document.getElementById('admin-cert-target').value.trim();
             if(!monitor) return alert("Digite o nome completo do monitor voluntário!");
