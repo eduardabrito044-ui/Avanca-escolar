@@ -377,7 +377,7 @@
                     <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
                     <option value="professor">Professor por Matéria 👨‍🏫</option>
                     <option value="coordenacao">Direção e Coordenação 🧭</option>
-                    <option value="admin">Administradora Suprema (Eduarda) 👑</option>
+                    <option value="admin">Administração 👑</option>
                 </select>
             </div>
 
@@ -394,6 +394,8 @@
                         <option value="2º A">2º Ano A</option>
                         <option value="2º B">2º Ano B</option>
                         <option value="3º A">3º Ano A</option>
+                        <option value="3º B">3º
+Ano B</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -596,10 +598,10 @@
     </main>
 
     <main id="view-portal-admin" class="app-view">
-        <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle Supremo - Eduarda</h2>
+        <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle - </h2>
         
         <div class="card" style="border: 1px solid var(--admin-gold);">
-            <h3>Publicar Comunicado Geral (Mural da Eduarda)</h3>
+            <h3>Publicar Comunicado Geral (Mural da administração)</h3>
             <div class="form-group" style="margin-top:0.8rem;">
                 <textarea id="admin-mural-texto" class="form-control" rows="2" placeholder="Escreva uma mensagem importante para todos os usuários..."></textarea>
             </div>
@@ -854,7 +856,7 @@
             onValue(ref(db, 'mural_avisos'), (snap) => {
                 if(snap.exists() && snap.val().texto) {
                     let aviso = snap.val().texto;
-                    alert(`📢 COMUNICADO DA SUPREMA (EDUARDA):\n\n"${aviso}"`);
+                    alert(`📢 COMUNICADO DA ADMINISTRAÇÃO:\n\n"${aviso}"`);
                 }
             });
 
@@ -881,8 +883,8 @@
 
             } else if(currentUser.profile === 'admin') {
                 document.getElementById('view-portal-admin').classList.add('active');
-                document.getElementById('user-display-label').innerText = "👑 Admin Suprema";
-                ativarPainelSupremoEduarda();
+                document.getElementById('user-display-label').innerText = "👑 Admin";
+                ativar painel();
             }
         }
 
@@ -1365,10 +1367,7 @@
         }
 
 
-        // PAINEL DE CONTROLE SUPREMO DA EDUARDA (ADMINISTRADORA)
-        function ativarPainelSupremoEduarda() {
-            // Logs de Acesso em Tempo Real
-            onValue(ref(db, 'logs_trafego'), (snap) => {
+        // PAINEL DE CONTROLE nelSusCONue(ref(db, 'logs_trafego'), (snap) => {
                 const logBox = document.getElementById('admin-logs-acesso');
                 logBox.innerHTML = "";
                 if(snap.exists()) {
@@ -1448,7 +1447,7 @@
             });
         }
 
-        // SUPREMA: APAGAR COMENTÁRIOS COM UM CLIQUE
+        // admin: APAGAR COMENTÁRIOS COM UM CLIQUE
         window.removerFeedbackInadequado = function(alunoKey, feedbackKey) {
             if(confirm("Deseja deletar permanentemente esta avaliação da rede?")) {
                 remove(ref(db, `users/${alunoKey}/feedbacks/${feedbackKey}`))
@@ -1456,7 +1455,7 @@
             }
         };
 
-        // SUPREMA: POSTAR NO MURAL DE AVISOS GLOBAIS
+        //admin: POSTAR NO MURAL DE AVISOS GLOBAIS
         window.postarAvisoMural = function() {
             const txt = document.getElementById('admin-mural-texto').value.trim();
             if(!txt) return alert("Digite o comunicado primeiro!");
@@ -1467,7 +1466,7 @@
             });
         };
 
-        // SUPREMA: CONCEDER CERTIFICADO E MEDALHA ESPECIAL ADMIN
+        // admin: CONCEDER CERTIFICADO E MEDALHA ESPECIAL ADMIN
         window.concederCertificadoAdmin = function() {
             const monitor = document.getElementById('admin-cert-target').value.trim();
             if(!monitor) return alert("Digite o nome completo do monitor voluntário!");
