@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avança Escolar - Sistema Unificado de Monitoria</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Biblioteca Chart.js para os Gráficos Interativos da Gestão -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -16,11 +17,13 @@
             --blue-cyan: #00dfa2;
             --green-success: #00dfa2;
             --gold-star: #ffb800;
+            --silver: #d1d1d1;
             --text-main: #ffffff;
             --text-muted: #b3a4cd;
             --border-color: rgba(255, 255, 255, 0.08);
             --shadow: rgba(0, 0, 0, 0.5);
             --danger: #ff4a4a;
+            --admin-gold: #ffb800;
         }
 
         .light-mode {
@@ -62,8 +65,8 @@
         }
 
         .circular-logo {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--purple-light);
@@ -89,7 +92,9 @@
             flex: 1;
         }
 
-        .app-view.active { display: block; }
+        .app-view.active {
+            display: block;
+        }
 
         .auth-container {
             max-width: 450px;
@@ -109,6 +114,20 @@
             margin-bottom: 1.5rem;
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 15px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-badge {
+            background: rgba(138, 79, 255, 0.15);
+            border: 1px solid var(--purple-light);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            margin-top: 0.5rem;
         }
 
         .form-group {
@@ -133,6 +152,27 @@
             color: var(--text-main);
             font-size: 0.95rem;
             outline: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper .form-control {
+            padding-right: 2.8rem;
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
         }
 
         .btn {
@@ -160,7 +200,9 @@
             margin-bottom: 1.5rem;
             overflow-x: auto;
             padding-bottom: 8px;
+            scrollbar-width: none;
         }
+        .tab-bar::-webkit-scrollbar { display: none; }
 
         .tab-btn {
             padding: 0.6rem 1.2rem;
@@ -186,6 +228,12 @@
             gap: 1.2rem;
         }
 
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
         .list-item {
             background: rgba(128,128,128,0.08);
             padding: 0.8rem 1rem;
@@ -197,31 +245,133 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
+        .f-star { border: 4px dashed #ffb800 !important; box-shadow: 0 0 15px #ffb800 !important; }
+        .f-fire { border: 4px solid #ff4a4a !important; box-shadow: 0 0 15px #ff4a4a !important; animation: pulse 1.5s infinite; }
+        .f-lightning { border: 4px cubic-bezier(0.1, 0.9, 0.2, 1) solid #0073ff !important; box-shadow: 0 0 15px #0073ff !important; }
+        .f-ice { border: 4px solid #00dfa2 !important; box-shadow: 0 0 15px #00dfa2 !important; }
+        .f-galaxy { border: 4px dotted #8a4fff !important; box-shadow: 0 0 20px #8a4fff !important; }
+        .f-bio { border: 4px double #00b884 !important; box-shadow: 0 0 12px #00b884 !important; }
+        .f-cyber { border: 4px ridge #ff00ff !important; box-shadow: 0 0 18px #ff00ff !important; }
+        .f-king { border: 4px solid #ffb800 !important; box-shadow: 0 0 25px rgba(255,184,0,0.8) !important; }
+        .f-diamond { border: 4px solid #d1d1d1 !important; box-shadow: 0 0 20px #ffffff !important; }
+        .f-rainbow { border: 4px solid linear-gradient(45deg, red, blue) !important; border-image: linear-gradient(to right, red, orange, yellow, green, blue, purple) 1 !important; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .profile-header-card {
+            background: linear-gradient(180deg, rgba(138, 79, 255, 0.15) 0%, var(--bg-card) 100%);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .profile-avatar-container { 
+            width: 110px; 
+            height: 110px; 
+            border-radius: 50%; 
+            margin: 0 auto 1rem auto; 
+            position: relative;
+            border: 4px solid var(--purple-light);
+        }
+
+        .profile-avatar { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 50%;
+        }
+
+        .edit-avatar-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--blue-electric);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-card);
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .medal-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .badge-medal {
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .medal-gold { background: rgba(255, 184, 0, 0.2); border: 1px solid #ffb800; color: #ffb800; }
+        .medal-silver { background: rgba(209, 209, 209, 0.2); border: 1px solid #d1d1d1; color: #d1d1d1; }
+        .medal-bronze { background: rgba(20cd, 127, 50, 0.2); border: 1px solid #cd7f32; color: #ff9f43; }
+        .medal-honra { background: rgba(0, 223, 162, 0.2); border: 1px solid #00dfa2; color: #00dfa2; }
+        .medal-cert { background: rgba(138, 79, 255, 0.2); border: 1px solid #8a4fff; color: #c499ff; }
+
+        .site-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        .site-card:hover {
+            border-color: var(--blue-cyan);
+            background: rgba(0, 223, 162, 0.05);
+        }
+
         .chat-container {
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            height: 250px;
+            height: 200px;
             overflow-y: auto;
-            padding: 0.8rem;
+            padding: 0.5rem;
             background: rgba(0,0,0,0.2);
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         .chat-msg {
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            max-width: 85%;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            max-width: 80%;
         }
         .chat-msg.env { background: var(--purple-light); align-self: flex-end; }
         .chat-msg.rec { background: rgba(255,255,255,0.1); align-self: flex-start; }
 
+        .star-rating span { font-size: 1.5rem; cursor: pointer; color: #ccc; }
+        .star-rating span.active { color: var(--gold-star); }
+
+        /* Estilos dos Gráficos */
         .chart-wrapper {
             position: relative;
             max-width: 100%;
-            height: 280px;
+            height: 260px;
             margin-top: 1rem;
         }
     </style>
@@ -232,7 +382,7 @@
         <div style="display: flex; align-items: center; gap: 8px;">
             <img src="Logo.png" alt="Logo" class="mini-logo">
             <div>
-                <h4 style="font-size: 0.9rem;">Avança Escolar</h4>
+                <h4 style="font-size: 0.9rem; line-height: 1.1;">Avança Escolar</h4>
                 <span id="user-display-label" style="font-size: 0.75rem; color: var(--blue-cyan);"></span>
             </div>
         </div>
@@ -249,11 +399,12 @@
             <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1.5rem;">Gerenciamento de Monitorias e Desempenho Escolar 🚀</p>
 
             <div class="form-group">
-                <label>Selecione seu Perfil:</label>
+                <label>Selecione seu Perfil de Acesso:</label>
                 <select id="login-profile" class="form-control" onchange="toggleLoginFields()">
                     <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
                     <option value="professor">Professor por Matéria 👨‍🏫</option>
-                    <option value="coordenacao">Administração e Coordenação 🧭</option>
+                    <option value="coordenacao">Direção e Coordenação 🧭</option>
+                    <option value="admin">Administração 👑</option>
                 </select>
             </div>
 
@@ -276,12 +427,12 @@
                 <div class="form-group">
                     <label>Deseja atuar como Monitor Voluntário?</label>
                     <select id="login-is-monitor" class="form-control" onchange="toggleMonitorSubjectField()">
-                        <option value="nao">Não, apenas Aluno</option>
-                        <option value="sim">Sim, quero ser Monitor</option>
+                        <option value="nao">Não, quero apenas ser Aluno</option>
+                        <option value="sim">Sim, quero ser Monitor Voluntário</option>
                     </select>
                 </div>
                 <div class="form-group" id="box-monitor-subject" style="display: none;">
-                    <label>Matéria da Monitoria:</label>
+                    <label>Em qual Matéria você deseja dar Monitoria?</label>
                     <select id="login-monitor-subject" class="form-control"></select>
                 </div>
             </div>
@@ -292,7 +443,7 @@
                     <input type="text" id="login-prof-name" class="form-control" placeholder="Ex: Prof. Carlos">
                 </div>
                 <div class="form-group">
-                    <label>Sua Disciplina:</label>
+                    <label>Sua Disciplina de Atuação:</label>
                     <select id="login-prof-subject" class="form-control"></select>
                 </div>
             </div>
@@ -300,7 +451,10 @@
             <div id="box-password-fields" style="display: none;">
                 <div class="form-group">
                     <label>Senha de Acesso:</label>
-                    <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••">
+                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()">👁️</button>
+                    </div>
                 </div>
             </div>
 
@@ -308,149 +462,296 @@
         </div>
     </section>
 
+    <!-- PORTAL ALUNOS -->
     <main id="view-portal-alunos" class="app-view">
         <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTabs('tab-reg-monitoria', this)">Ficha de Monitoria 📝</button>
-            <button class="tab-btn" id="btn-tab-chat-prof" style="display:none;" onclick="switchTabs('tab-chat-prof-monitor', this); carregarChatProfMonitor();">Canal do Professor 👨‍🏫</button>
+            <button class="tab-btn active" onclick="switchTabs('tab-busca-monitores', this)">Buscar Monitores 🔍</button>
+            <button class="tab-btn" onclick="switchTabs('tab-reg-monitoria', this)">Ficha de Monitoria 📝</button>
+            <button class="tab-btn" onclick="switchTabs('tab-ranking-geral-publico', this); carregarRankingGeralPublico();">Ranking Geral 🏆</button>
+            <button class="tab-btn" onclick="switchTabs('tab-loja-recompensas', this)">Loja de Customização 🛒</button>
+            <button class="tab-btn" onclick="switchTabs('tab-sites-importantes', this)">Sites Importantes 🌐</button>
+            <button class="tab-btn" onclick="switchTabs('tab-perfil-aluno', this); renderMeuPerfil();">Meu Perfil 🏅</button>
         </div>
 
-        <div id="tab-reg-monitoria" class="tab-content active">
+        <div id="tab-busca-monitores" class="tab-content active">
             <div class="card">
-                <h3>Ficha de Atendimento (Exclusivo Monitor)</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Preencha os dados do aluno atendido para que o professor e a gestão possam acompanhar.</p>
-                <form onsubmit="submitMonitoriaFicha(event)">
-                    <div class="form-group">
-                        <label>Nome Completo do Aluno Atendido:</label>
-                        <input type="text" id="reg-target-student" class="form-control" required placeholder="Ex: João Souza">
-                    </div>
-                    <div class="form-group">
-                        <label>Avaliação / Desempenho Percebido no Atendimento:</label>
-                        <select id="reg-student-feedback-level" class="form-control">
-                            <option value="Excelente">🟢 Excelente (Aprendeu rápido)</option>
-                            <option value="Em Progresso">🟡 Em Progresso (Precisa treinar mais)</option>
-                            <option value="Com Dificuldade">🔴 Com Dificuldade (Apresenta lacunas sérias)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Relatório Explicativo do Atendimento:</label>
-                        <textarea id="reg-student-obs" class="form-control" placeholder="Ex: O aluno teve dúvidas em equações. Resolvemos 3 exercícios."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-success">Registrar Atendimento no Banco de Dados 🚀</button>
-                </form>
+                <h3>Encontrar Monitores Disponíveis</h3>
+                <div class="form-group" style="margin-top:1rem;">
+                    <label>Selecione a Matéria com Dúvida:</label>
+                    <select id="search-subject-select" class="form-control" onchange="buscarMonitoresPorMateria()"></select>
+                </div>
+                <div id="resultados-busca-monitores" class="grid-3" style="margin-top:1.5rem;"></div>
+            </div>
+
+            <div id="monitor-profile-modal" class="card" style="display:none; border-top: 3px solid var(--purple-light);">
+                <button class="btn btn-secondary" style="width:auto; float:right; padding:4px 10px;" onclick="fecharModalMonitor()">Fechar X</button>
+                <div id="conteudo-modal-monitor"></div>
             </div>
         </div>
 
-        <div id="tab-chat-prof-monitor" class="tab-content">
-            <div class="card">
-                <h3>👨‍🏫 Canal Direto com o Professor da Matéria</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Tire dúvidas de conteúdo, receba orientações e acesse os PDFs disponibilizados pelo professor.</p>
-
-                <div class="chat-container" id="chat-monitor-prof-box"></div>
-
-                <div style="display:flex; gap:6px;">
-                    <input type="text" id="input-chat-monitor-msg" class="form-control" placeholder="Digite sua dúvida ou mensagem para o professor...">
-                    <button class="btn btn-primary" style="width:auto;" onclick="enviarMsgMonitorParaProf()">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-portal-professores" class="app-view">
-        <h2 id="label-prof-welcome" style="margin-bottom:1rem;">Espaço do Professor</h2>
-
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTabs('tab-prof-ranqueamento', this)">Avaliação dos Alunos 📊</button>
-            <button class="tab-btn" onclick="switchTabs('tab-prof-chat-monitores', this); carregarChatProfMonitores();">Canal com Monitores & Materiais (PDFs) 💬</button>
-        </div>
-
-        <div id="tab-prof-ranqueamento" class="tab-content active">
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
-                    <div>
-                        <h3 style="margin:0;">📊 Avaliação Pedagógica da Turma</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Veja os relatórios dos monitores e atribua o nível do aluno em sala de aula.</p>
-                    </div>
-                    <button class="btn btn-secondary" style="width:auto; padding:0.5rem 1rem; font-size:0.8rem;" onclick="voltarSeletorTurmaProf()">
-                        ⬅️ Trocar de Turma
-                    </button>
-                </div>
-
-                <div class="form-group" id="container-seletor-turma-prof">
-                    <label>Selecione a Turma para Avaliar:</label>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
-                        <button class="tab-btn" onclick="selecionarTurmaProf('1º A')">1º Ano A</button>
-                        <button class="tab-btn" onclick="selecionarTurmaProf('1º B')">1º Ano B</button>
-                        <button class="tab-btn" onclick="selecionarTurmaProf('2º A')">2º Ano A</button>
-                        <button class="tab-btn" onclick="selecionarTurmaProf('2º B')">2º Ano B</button>
-                        <button class="tab-btn" onclick="selecionarTurmaProf('3º A')">3º Ano A</button>
-                        <button class="tab-btn" onclick="selecionarTurmaProf('3º B')">3º Ano B</button>
-                    </div>
-                </div>
-
-                <div id="painel-turma-ativa" style="display:none; margin-top:1rem;">
-                    <h4 id="label-turma-selecionada" style="color:var(--blue-cyan); margin-bottom:0.8rem;">Turma: --</h4>
-                    <div id="lista-alunos-turma-prof" style="display: flex; flex-direction: column; gap: 10px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-prof-chat-monitores" class="tab-content">
-            <div class="card">
-                <h3>💬 Central de Orientação dos Monitores de <span id="label-materia-chat-prof"></span></h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Envie instruções, links de PDFs e conteúdos para direcionar os estudos da monitoria.</p>
-
-                <div class="chat-container" id="chat-prof-monitores-box"></div>
-
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <div style="display:flex; gap:6px;">
-                        <input type="text" id="input-chat-prof-msg" class="form-control" placeholder="Escreva uma orientação ou tire dúvidas dos monitores...">
-                        <button class="btn btn-primary" style="width:auto;" onclick="enviarMsgProfParaMonitores()">Enviar Mensagem 💬</button>
-                    </div>
-
-                    <div style="background:rgba(0,0,0,0.15); padding:0.8rem; border-radius:10px; display:flex; gap:6px; align-items:center;">
-                        <input type="text" id="input-prof-pdf-link" class="form-control" placeholder="Cole aqui o link do PDF/Material (Google Drive, Canva, Dropbox)...">
-                        <button class="btn btn-success" style="width:auto; white-space:nowrap;" onclick="enviarMaterialPdfProf()">Enviar Material 📄</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-portal-coordenacao" class="app-view">
-        <h2 style="margin-bottom: 1rem;">⚙️ Painel de Administração e Coordenação Escolar</h2>
-
-        <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTabs('tab-admin-dash', this)">Visão Geral & Gráficos 📊</button>
-            <button class="tab-btn" onclick="switchTabs('tab-admin-users', this); carregarListaUsuariosAdmin();">Gestão de Alunos / Monitores 👥</button>
-        </div>
-
-        <div id="tab-admin-dash" class="tab-content active">
+        <div id="tab-reg-monitoria" class="tab-content">
             <div class="grid-2">
                 <div class="card">
-                    <h3>📊 Atendimentos de Monitoria por Matéria</h3>
-                    <p style="font-size:0.75rem; color:var(--text-muted);">Mede a demanda real registrada no banco de dados.</p>
-                    <div class="chart-wrapper">
-                        <canvas id="chartAtendimentosReal"></canvas>
-                    </div>
+                    <h3>Ficha de Atendimento (Exclusivo Monitor)</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Preencha para quem você deu aula. O aluno precisará validar no painel dele para liberar seus pontos.</p>
+                    <form onsubmit="submitMonitoriaFicha(event)">
+                        <div class="form-group">
+                            <label>Sua Disciplina Cadastrada:</label>
+                            <input type="text" id="reg-subject" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome Completo do Aluno Ajudado:</label>
+                            <input type="text" id="reg-target-student" class="form-control" placeholder="Digite o nome exato cadastrado" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nível de Comprometimento/Progresso do Aluno:</label>
+                            <select id="reg-student-feedback-level" class="form-control">
+                                <option value="Excelente">🟢 Excelente (Entendeu rápido)</option>
+                                <option value="Em Progresso">🟡 Em Progresso (Precisa treinar mais)</option>
+                                <option value="Com Dificuldade">🔴 Com Dificuldade (Necessita apoio contínuo)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Observação/Nota do Monitor para o Aluno e Professor:</label>
+                            <input type="text" id="reg-student-obs" class="form-control" placeholder="Ex: Demonstrou boa vontade em equações">
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar para Confirmação do Aluno 🚀</button>
+                    </form>
                 </div>
-
                 <div class="card">
-                    <h3>📈 Distribuição dos Níveis da Turma</h3>
-                    <p style="font-size:0.75rem; color:var(--text-muted);">Proporção de níveis definidos pelos professores em tempo real.</p>
-                    <div class="chart-wrapper">
-                        <canvas id="chartNiveisReal"></canvas>
-                    </div>
+                    <h3>Confirmar Ajuda que Recebi</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Se algum monitor te ajudou, confirme abaixo para liberar os pontos dele legitimamente.</p>
+                    <div id="lista-confirmacoes-aluno"></div>
                 </div>
             </div>
         </div>
 
-        <div id="tab-admin-users" class="tab-content">
+        <div id="tab-ranking-geral-publico" class="tab-content">
             <div class="card">
-                <h3>👥 Cadastro de Alunos e Monitores</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Gerencie a lista de estudantes cadastrados e promova ou remova o status de monitor.</p>
+                <h3>🏆 Ranking Geral de Desenvolvimento e Pontuação</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">
+                    Acompanhe a classificação global de todos os alunos do sistema ordenados do mais ao menos desenvolvido!
+                </p>
+                <div id="box-ranking-geral-publico" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
 
-                <div id="lista-usuarios-admin" style="display:flex; flex-direction:column; gap:8px;">
-                    <em>Carregando registros de alunos...</em>
+        <div id="tab-loja-recompensas" class="tab-content">
+            <div class="card">
+                <h3>Loja de Enfeites e Molduras de Perfil</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Use seus pontos acumulados em monitorias para personalizar sua foto!</p>
+                <div id="grid-loja-molduras" class="grid-3"></div>
+            </div>
+        </div>
+
+        <div id="tab-sites-importantes" class="tab-content">
+            <div class="card">
+                <h3>Central de Conhecimento e Sites Importantes</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Acesse portais de estudo confiáveis e oficiais selecionados pela coordenação:</p>
+                <div id="box-sites-importantes" class="grid-2"></div>
+            </div>
+        </div>
+
+        <div id="tab-perfil-aluno" class="tab-content">
+            <div style="max-width: 650px; margin: 0 auto;">
+                <div class="profile-header-card">
+                    <div class="profile-avatar-container" id="meu-avatar-wrapper">
+                        <img src="https://via.placeholder.com/110" id="meu-avatar-img" class="profile-avatar" alt="Avatar">
+                        <label class="edit-avatar-badge" for="input-avatar-file">✏️</label>
+                        <input type="file" id="input-avatar-file" accept="image/*" style="display:none;" onchange="uploadFotoPerfil(this)">
+                    </div>
+                    <h2 id="meu-nome-perfil">Nome</h2>
+                    <p id="meu-tag-perfil" style="font-size:0.85rem; color:var(--purple-light); font-weight:600; margin-bottom:0.3rem;"></p>
+                    <p id="student-xp-display" style="color: var(--blue-cyan); font-weight:600; margin-bottom:0.5rem;">0 Pontos / XP</p>
+
+                    <div class="form-group" style="max-width:300px; margin: 0 auto 1rem auto;">
+                        <label style="text-align:center;">Seu WhatsApp (Opcional - para contato rápido):</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="text" id="meu-whatsapp-input" class="form-control" placeholder="Ex: 11999999999">
+                            <button class="btn btn-primary" style="width:auto; padding:0.5rem 1rem;" onclick="salvarWhatsPerfil()">Salvar</button>
+                        </div>
+                    </div>
+
+                    <div class="medal-box" id="minhas-medalhas-box"></div>
+
+                    <div class="profile-rating-display">
+                        <span class="profile-stars-gold" id="perfil-media-estrelas">★★★★★</span>
+                        <span class="profile-rating-text" id="perfil-total-avaliacoes">5.0 (0 avaliações)</span>
+                    </div>
+                    <div class="comments-section" style="margin-top:1.5rem; text-align:left;">
+                        <h4>💬 Avaliações e Comentários Comunitários:</h4>
+                        <div id="box-feedbacks-comunidade" style="display: flex; flex-direction: column; gap: 8px; margin-top:0.5rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PORTAL PROFESSORES (ATUALIZADO COM BOTÃO DE VOLTAR E TROCA RÁPIDA DE TURMA) -->
+    <main id="view-portal-professores" class="app-view">
+        <h2 id="label-prof-welcome" style="margin-bottom:1rem;">Bem-vindo</h2>
+        
+        <div class="card" style="margin-bottom:1.5rem; border:1px solid var(--purple-light);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
+                <div>
+                    <h3 style="margin:0;">📊 Ranqueamento Rápido por Turma</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">
+                        Classifique os alunos da sua matéria sem complicações.
+                    </p>
+                </div>
+                <button class="btn btn-secondary" style="width:auto; padding:0.5rem 1rem; font-size:0.8rem;" onclick="voltarSeletorTurmaProf()">
+                    ⬅️ Trocar de Turma / Voltar
+                </button>
+            </div>
+
+            <!-- Seleção de Turmas de Acesso Rápido -->
+            <div class="form-group" id="container-seletor-turma-prof">
+                <label>Selecione a Turma que deseja ranquear agora:</label>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                    <button class="tab-btn" onclick="selecionarTurmaProf('1º A')">1º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('1º B')">1º Ano B</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('2º A')">2º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('2º B')">2º Ano B</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('3º A')">3º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('3º B')">3º Ano B</button>
+                </div>
+            </div>
+
+            <div id="painel-turma-ativa" style="display:none; margin-top:1rem;">
+                <h4 id="label-turma-selecionada" style="color:var(--blue-cyan); margin-bottom:0.8rem;">Turma Atual: --</h4>
+                <div id="lista-alunos-turma-prof" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3>Indicar os 4 Melhores Alunos (Medalhas Oficiais)</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Insira o nome completo do aluno para destinar a conquista para a matéria corrente.</p>
+
+                <div class="form-group">
+                    <label>🥇 Medalha de Ouro:</label>
+                    <input type="text" id="prof-m-ouro" class="form-control" placeholder="Nome completo do aluno">
+                </div>
+                <div class="form-group">
+                    <label>🥈 Medalha de Prata:</label>
+                    <input type="text" id="prof-m-prata" class="form-control" placeholder="Nome completo do aluno">
+                </div>
+                <div class="form-group">
+                    <label>🥉 Medalha de Bronze:</label>
+                    <input type="text" id="prof-m-bronze" class="form-control" placeholder="Nome completo do aluno">
+                </div>
+                <div class="form-group">
+                    <label>🎖️ Medalha de Honra ao Mérito:</label>
+                    <input type="text" id="prof-m-honra" class="form-control" placeholder="Nome completo do aluno">
+                </div>
+                <button class="btn btn-primary" onclick="enviarMedalhasProfessor()">Homologar e Enviar Condecorações 🏆</button>
+            </div>
+
+            <div class="card">
+                <h3>Alertas e Solicitações de Atenção da Matéria</h3>
+                <div id="lista-alertas-materia-professor" style="display:flex; flex-direction:column; gap:8px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PORTAL COORDENAÇÃO (ATUALIZADO COM GRÁFICOS VISUAIS) -->
+    <main id="view-portal-coordenacao" class="app-view">
+        <h2>🧭 Central Analítica de Direção & Gestão Escolar</h2>
+        <br>
+
+        <!-- SEÇÃO DE GRÁFICOS DA GESTÃO -->
+        <div class="grid-2" style="margin-bottom:1.5rem;">
+            <div class="card">
+                <h3>📊 Gráfico: Distribuição Geral do Desempenho</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Visualização da quantidade de alunos nos níveis Alto, Médio, Baixo e Muito Baixo.</p>
+                <div class="chart-wrapper">
+                    <canvas id="chartDesempenhoGeral"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Gráfico: Atendimentos por Disciplina</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Volume total de suporte e monitorias solicitadas pelos alunos.</p>
+                <div class="chart-wrapper">
+                    <canvas id="chartAtendimentosMateria"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3>Consultar Destaques por Matéria</h3>
+                <div class="form-group">
+                    <label>Selecione a Disciplina para Auditar:</label>
+                    <select id="coord-subject-select" class="form-control" onchange="carregarDestaquesMateriaCoord()"></select>
+                </div>
+                <div id="coord-display-destaques" style="background:rgba(0,0,0,0.2); padding:1rem; border-radius:12px;"></div>
+            </div>
+
+            <div class="card">
+                <h3>Métricas de Atenção Pedagógica</h3>
+                <div style="margin-bottom:1rem;">
+                    <h5>🚨 Matéria Mais Solicitada (Foco Urgente):</h5>
+                    <div id="coord-materia-critica" class="stat-badge" style="background:rgba(255,74,74,0.15); border-color:var(--danger);">Calculando...</div>
+                </div>
+                <h5>Alunos que Mais Requerem Suporte:</h5>
+                <div id="coord-alunos-atencao" style="display:flex; flex-direction:column; gap:6px; margin-top:0.5rem;"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:1.5rem;">
+            <h3>Evolução Global e Atendimentos de Monitores</h3>
+            <div id="coord-ranking-monitores-atendimentos" style="display:flex; flex-direction:column; gap:6px; margin-top:1rem;"></div>
+        </div>
+    </main>
+
+    <!-- PORTAL ADMIN -->
+    <main id="view-portal-admin" class="app-view">
+        <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle</h2>
+
+        <div class="card" style="border: 1px solid var(--admin-gold);">
+            <h3>Publicar Comunicado Geral (Mural da administração)</h3>
+            <div class="form-group" style="margin-top:0.8rem;">
+                <textarea id="admin-mural-texto" class="form-control" rows="2" placeholder="Escreva uma mensagem importante para todos os usuários..."></textarea>
+            </div>
+            <button class="btn btn-primary" style="background:var(--admin-gold); color:#000;" onclick="postarAvisoMural()">Disparar Comunicado na Rede 📣</button>
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h4>Total de Usuários Cadastrados</h4>
+                    <div class="stat-badge" id="admin-total-alunos">0 Alunos</div>
+                    <h5 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Lista Nominal e Controle Geral:</h5>
+                    <div id="admin-lista-geral-usuarios" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
+                </div>
+
+                <div class="card">
+                    <h4>Ranking Geral de Liderança (XP / Pontos) 🏆</h4>
+                    <div id="admin-ranking-xp" style="display: flex; flex-direction: column; gap: 6px; margin-top: 1rem;"></div>
+                </div>
+
+                <div class="card">
+                    <h4>Prêmios de Mentores Mais Requisitados</h4>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Libere Certificados Avançados para os melhores monitores do sistema.</p>
+                    <div class="form-group">
+                        <label>Nome do Monitor de Destaque:</label>
+                        <input type="text" id="admin-cert-target" class="form-control" placeholder="Nome completo do monitor">
+                    </div>
+                    <button class="btn btn-success" onclick="concederCertificadoAdmin()">Emitir Certificado Oficial de Excelência 🎖️</button>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h4>Logs de Tráfego e Auditoria de Acessos 🕒</h4>
+                    <div id="admin-logs-acesso" style="max-height: 200px; overflow-y: auto; background:rgba(0,0,0,0.3); padding:0.5rem; border-radius:8px; font-family:monospace; font-size:0.75rem; display:flex; flex-direction:column; gap:4px;"></div>
+                </div>
+
+                <div class="card" style="margin-top:1.5rem;">
+                    <h4>Moderação e Auditoria Global de Feedbacks 💬</h4>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Exclua comentários inadequados ou ofensivos instantaneamente em um clique:</p>
+                    <div id="admin-feed-comentarios" style="max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
                 </div>
             </div>
         </div>
@@ -458,7 +759,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue, update, remove, runTransaction } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
@@ -476,15 +777,45 @@
 
         const disciplinas = ["Português", "Matemática", "Geografia", "História", "Ciências", "Química", "Física", "Biologia"];
 
+        const itensLoja = [
+            { id: "f-star", nome: "Moldura Estelar Dourada", preco: 100, classe: "f-star" },
+            { id: "f-fire", nome: "Moldura Aura de Fogo", preco: 150, classe: "f-fire" },
+            { id: "f-lightning", nome: "Moldura Raio Elétrico", preco: 200, classe: "f-lightning" },
+            { id: "f-ice", nome: "Moldura Escudo de Gelo", preco: 250, classe: "f-ice" },
+            { id: "f-galaxy", nome: "Moldura Galáxia Roxa", preco: 300, classe: "f-galaxy" },
+            { id: "f-bio", nome: "Moldura Cientista Verde", preco: 350, classe: "f-bio" },
+            { id: "f-cyber", nome: "Moldura Cyberpunk Neon", preco: 400, classe: "f-cyber" },
+            { id: "f-king", nome: "Moldura Coroa Suprema", preco: 500, classe: "f-king" },
+            { id: "f-diamond", nome: "Moldura Diamante Avançado", preco: 600, classe: "f-diamond" },
+            { id: "f-rainbow", nome: "Moldura Arco-Íris Místico", preco: 700, classe: "f-rainbow" }
+        ];
+
+        const sitesImportantes = [
+            { nome: "Ministério da Educação (MEC)", url: "https://www.gov.br/mec/pt-br", desc: "Portal oficial de toda a rede de educação do país." },
+            { nome: "G1 Educação", url: "https://g1.globo.com/educacao/", desc: "Acompanhe todas as novidades e notícias sobre educação em tempo real." },
+            { nome: "Todos Pela Educação", url: "https://todospelaeducacao.org.br/", desc: "Análises, pesquisas e dados confiáveis sobre o ensino básico." },
+            { nome: "INEP - Página do Participante", url: "https://enem.inep.gov.br/participante/", desc: "O site oficial para inscrições, gabaritos e notas do Enem." },
+            { nome: "Guia do Estudante", url: "https://guiadoestudante.abril.com.br/", desc: "Dicas de estudo, simulados, critérios de redação e orientação." },
+            { nome: "Brasil Escola", url: "https://brasilescola.uol.com.br/", desc: "Um dos maiores portais de pesquisas escolares e resumos." },
+            { nome: "Khan Academy", url: "https://pt.khanacademy.org/", desc: "Plataforma gratuita para aprender exatas com medalhas e gamificação." },
+            { nome: "Google Acadêmico", url: "https://scholar.google.com.br/", desc: "Buscador focado em artigos científicos e pesquisas profundas." },
+            { nome: "Duolingo", url: "https://pt.duolingo.com/", desc: "Prática diária de idiomas de um jeito divertido e gamificado." },
+            { nome: "Google Arts & Culture", url: "https://artsandculture.google.com/", desc: "Visitas virtuais imersivas pelos maiores museus e pontos históricos." }
+        ];
+
         let currentUser = null;
+        let selectedRatingStars = 5;
         let turmaSelecionadaProf = null;
+        let chartDesempenhoInstance = null;
         let chartAtendimentosInstance = null;
-        let chartNiveisInstance = null;
 
         function initApp() {
             const dropdowns = [
+                document.getElementById('reg-subject'), 
                 document.getElementById('login-prof-subject'), 
-                document.getElementById('login-monitor-subject')
+                document.getElementById('login-monitor-subject'),
+                document.getElementById('search-subject-select'),
+                document.getElementById('coord-subject-select')
             ];
 
             dropdowns.forEach(box => {
@@ -493,6 +824,37 @@
                     disciplinas.forEach(d => { box.innerHTML += `<option value="${d}">${d}</option>`; });
                 }
             });
+
+            const boxSites = document.getElementById('box-sites-importantes');
+            if(boxSites) {
+                boxSites.innerHTML = "";
+                sitesImportantes.forEach(s => {
+                    boxSites.innerHTML += `
+                        <a href="${s.url}" target="_blank" class="site-card">
+                            <div>
+                                <h4 style="color:var(--blue-cyan); font-size:0.95rem; margin-bottom:4px;">${s.nome} 🔗</h4>
+                                <p style="font-size:0.75rem; color:var(--text-muted);">${s.desc}</p>
+                            </div>
+                            <span style="font-size:0.75rem; text-align:right; color:var(--purple-light); margin-top:8px; font-weight:600;">Visitar portal →</span>
+                        </a>
+                    `;
+                });
+            }
+
+            const gridLoja = document.getElementById('grid-loja-molduras');
+            if(gridLoja) {
+                gridLoja.innerHTML = "";
+                itensLoja.forEach(item => {
+                    gridLoja.innerHTML += `
+                        <div class="card" style="text-align:center; border: 1px solid var(--border-color);">
+                            <div style="width:60px; height:60px; border-radius:50%; margin:0 auto 0.5rem auto; background:#aaa;" class="${item.classe}"></div>
+                            <h5 style="font-size:0.85rem; margin-bottom:4px;">${item.nome}</h5>
+                            <span style="font-size:0.8rem; color:var(--gold-star); font-weight:600; display:block; margin-bottom:8px;">${item.preco} XP</span>
+                            <button class="btn btn-primary" style="padding:4px 8px; font-size:0.75rem;" onclick="comprarMoldura('${item.id}', ${item.preco})">Comprar 🛍️</button>
+                        </div>
+                    `;
+                });
+            }
 
             const savedUser = localStorage.getItem('avanca_user');
             if (savedUser) {
@@ -506,7 +868,20 @@
         }
         initApp();
 
+        window.togglePasswordVisibility = function() {
+            const passInput = document.getElementById('login-password');
+            passInput.type = passInput.type === 'password' ? 'text' : 'password';
+        };
+
         window.logoutApp = function() {
+            if(currentUser && currentUser.name) {
+                push(ref(db, 'logs_trafego'), {
+                    usuario: currentUser.name,
+                    perfil: currentUser.profile,
+                    evento: "Saída (Logout)",
+                    horario: new Date().toLocaleTimeString() + " - " + new Date().toLocaleDateString()
+                });
+            }
             localStorage.removeItem('avanca_user');
             document.getElementById('app-header').style.display = 'none';
             document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
@@ -541,6 +916,7 @@
         window.processarAutenticacao = function() {
             const p = document.getElementById('login-profile').value;
             const pass = document.getElementById('login-password').value;
+            const horarioAtual = new Date().toLocaleTimeString() + " - " + new Date().toLocaleDateString();
 
             if(p === 'aluno') {
                 const name = document.getElementById('login-student-name').value.trim();
@@ -562,17 +938,29 @@
             } else if(p === 'professor') {
                 const profName = document.getElementById('login-prof-name').value.trim();
                 const subject = document.getElementById('login-prof-subject').value;
-                if(!profName) return alert("Por favor, preencha o seu nome de professor!");
-                if(pass !== 'professor2026') return alert("Senha de Professor incorreta!");
+                if(!profName) return alert("Por favor, preencha o seu nome completo de professor!");
+                if(pass !== 'professor2026') return alert("Senha da categoria Professor incorreta!");
 
                 currentUser = { name: profName, profile: 'professor', subject: subject };
 
             } else if(p === 'coordenacao') {
-                if(pass !== 'gestao2026') return alert("Senha da Administração incorreta!");
+                if(pass !== 'gestao2026') return alert("Senha da Coordenação incorreta!");
                 currentUser = { name: "Coordenação Escolar", profile: 'coordenacao' };
+
+            } else if(p === 'admin') {
+                if(pass !== 'eduarda2026') return alert("Senha Suprema de Administradora incorreta!");
+                currentUser = { name: "Eduarda (Admin Suprema)", profile: 'admin' };
             }
 
             localStorage.setItem('avanca_user', JSON.stringify(currentUser));
+
+            push(ref(db, 'logs_trafego'), {
+                usuario: currentUser.name,
+                perfil: currentUser.profile,
+                evento: "Entrada (Login)",
+                horario: horarioAtual
+            });
+
             direcionarPortal();
         };
 
@@ -580,59 +968,50 @@
             document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
             document.getElementById('app-header').style.display = 'flex';
 
+            onValue(ref(db, 'mural_avisos'), (snap) => {
+                if(snap.exists() && snap.val().texto) {
+                    let aviso = snap.val().texto;
+                    alert(`📢 COMUNICADO DA ADMINISTRAÇÃO:\n\n"${aviso}"`);
+                }
+            });
+
             if(currentUser.profile === 'aluno') {
                 document.getElementById('view-portal-alunos').classList.add('active');
                 document.getElementById('user-display-label').innerText = `Aluno: ${currentUser.name} (${currentUser.class})`;
-                
-                if(currentUser.isMonitor) {
-                    document.getElementById('btn-tab-chat-prof').style.display = 'inline-block';
-                }
+                document.getElementById('reg-subject').value = currentUser.monitorSubject;
+
+                ouvirMeusDadosRealtime();
+                ouvirConfirmacoesPendentesAluno();
+                buscarMonitoresPorMateria();
 
             } else if(currentUser.profile === 'professor') {
                 document.getElementById('view-portal-professores').classList.add('active');
                 document.getElementById('user-display-label').innerText = `Prof: ${currentUser.name} [${currentUser.subject}]`;
-                document.getElementById('label-prof-welcome').innerText = `👨‍🏫 Painel do Professor - ${currentUser.name} (${currentUser.subject})`;
-                document.getElementById('label-materia-chat-prof').innerText = currentUser.subject;
+                document.getElementById('label-prof-welcome').innerText = `👨‍🏫 Espaço do Professor - ${currentUser.name} (${currentUser.subject})`;
+                
+                ouvirAlertasMateriaProfessor();
 
             } else if(currentUser.profile === 'coordenacao') {
                 document.getElementById('view-portal-coordenacao').classList.add('active');
-                document.getElementById('user-display-label').innerText = "Painel de Administração 🧭";
-                ouvirEGerarGraficosRealtime();
+                document.getElementById('user-display-label').innerText = "Painel Coordenador 🧭";
+                carregarDestaquesMateriaCoord();
+                carregarMetricasGestao();
+                renderizarGraficosGestao();
+
+            } else if(currentUser.profile === 'admin') {
+                document.getElementById('view-portal-admin').classList.add('active');
+                document.getElementById('user-display-label').innerText = "👑 Admin";
+                ativarPainel();
             }
         }
 
-        // ==================== MONITORIA & REGISTROS ====================
-        window.submitMonitoriaFicha = function(e) {
-            e.preventDefault();
-            if(!currentUser.isMonitor) return alert("Apenas monitores cadastrados podem registrar fichas!");
-
-            const target = document.getElementById('reg-target-student').value.trim();
-            const avalNivel = document.getElementById('reg-student-feedback-level').value;
-            const avalObs = document.getElementById('reg-student-obs').value.trim();
-
-            if(!target) return alert("Digite o nome do aluno!");
-
-            push(ref(db, 'atendimentos_monitoria'), {
-                monitor: currentUser.name,
-                materia: currentUser.monitorSubject,
-                alunoAtendido: target,
-                nivelPercebido: avalNivel,
-                observacao: avalObs,
-                timestamp: Date.now()
-            }).then(() => {
-                alert("Atendimento registrado! O professor da disciplina poderá analisar esta ficha.");
-                document.getElementById('reg-target-student').value = "";
-                document.getElementById('reg-student-obs').value = "";
-            });
-        };
-
-        // ==================== PAINEL PROFESSOR ====================
+        // ==================== LÓGICA DE RANQUEAMENTO FACILITADA PARA PROFESSOR ====================
         window.selecionarTurmaProf = function(turma) {
             turmaSelecionadaProf = turma;
             document.getElementById('container-seletor-turma-prof').style.display = 'none';
             document.getElementById('painel-turma-ativa').style.display = 'block';
             document.getElementById('label-turma-selecionada').innerText = `Turma Selecionada: ${turma}`;
-            carregarAlunosEAtendimentosProf();
+            carregarAlunosPorTurmaProf();
         };
 
         window.voltarSeletorTurmaProf = function() {
@@ -641,221 +1020,115 @@
             document.getElementById('painel-turma-ativa').style.display = 'none';
         };
 
-        window.carregarAlunosEAtendimentosProf = function() {
+        window.carregarAlunosPorTurmaProf = function() {
             if(!turmaSelecionadaProf) return;
             const container = document.getElementById('lista-alunos-turma-prof');
-            container.innerHTML = "Carregando registros...";
+            container.innerHTML = "";
 
-            onValue(ref(db, 'atendimentos_monitoria'), (snapAtend) => {
-                let relatoriosPorAluno = {};
-                if(snapAtend.exists()) {
-                    snapAtend.forEach(c => {
-                        let a = c.val();
-                        if(a.materia === currentUser.subject) {
-                            relatoriosPorAluno[a.alunoAtendido] = a;
+            onValue(ref(db, 'users'), (snap) => {
+                container.innerHTML = "";
+                let lista = [];
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let user = child.val();
+                        if(user.classe === turmaSelecionadaProf && user.nomeCadastro) {
+                            let nivel = (user.desempenho && user.desempenho[currentUser.subject]) || 'Medio';
+                            lista.push({ nome: child.key, nivel: nivel });
                         }
                     });
-                }
 
-                onValue(ref(db, 'users'), (snapUsers) => {
-                    container.innerHTML = "";
-                    if(snapUsers.exists()) {
-                        snapUsers.forEach(child => {
-                            let user = child.val();
-                            if(user.classe === turmaSelecionadaProf && user.nomeCadastro) {
-                                let nomeAluno = child.key;
-                                let relatorio = relatoriosPorAluno[nomeAluno];
-                                let nivelAtualSala = (user.desempenho && user.desempenho[currentUser.subject]) || 'Medio';
+                    const pesoNivel = { 'Alto': 4, 'Medio': 3, 'Baixo': 2, 'Muito Baixo': 1 };
+                    lista.sort((a, b) => pesoNivel[b.nivel] - pesoNivel[a.nivel]);
 
-                                let boxRelatorioMonitor = relatorio ? `
-                                    <div style="background:rgba(138, 79, 255, 0.15); border:1px solid var(--purple-light); padding:8px; border-radius:8px; margin-top:6px; font-size:0.75rem;">
-                                        <strong>📊 Relatório do Monitor (${relatorio.monitor}):</strong><br>
-                                        • Desempenho na Monitoria: <span style="color:var(--blue-cyan);">${relatorio.nivelPercebido}</span><br>
-                                        ${relatorio.observacao ? `• Observação: <em>"${relatorio.observacao}"</em>` : ''}
-                                    </div>
-                                ` : `
-                                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
-                                        <em>Sem registro de monitoria para este aluno nesta matéria.</em>
-                                    </div>
-                                `;
-
-                                container.innerHTML += `
-                                    <div class="list-item" style="background:rgba(255,255,255,0.03);">
-                                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                            <div>
-                                                <strong style="font-size:0.95rem;">👤 ${nomeAluno}</strong>
-                                            </div>
-                                            <div style="display:flex; align-items:center; gap:6px;">
-                                                <label style="font-size:0.75rem; margin:0;">Nível em Sala de Aula:</label>
-                                                <select class="form-control" style="width:auto; padding:4px 8px; font-size:0.8rem;" onchange="definirNivelAlunoProf('${nomeAluno}', this.value)">
-                                                    <option value="Alto" ${nivelAtualSala === 'Alto' ? 'selected' : ''}>🌟 Alto</option>
-                                                    <option value="Medio" ${nivelAtualSala === 'Medio' ? 'selected' : ''}>📈 Médio</option>
-                                                    <option value="Baixo" ${nivelAtualSala === 'Baixo' ? 'selected' : ''}>⚠️ Baixo</option>
-                                                    <option value="Muito Baixo" ${nivelAtualSala === 'Muito Baixo' ? 'selected' : ''}>🚨 Muito Baixo</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        ${boxRelatorioMonitor}
-                                    </div>
-                                `;
-                            }
-                        });
-                    }
-                    if(container.innerHTML === "") {
-                        container.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum aluno cadastrado nesta turma.</p>";
-                    }
-                });
-            });
-        };
-
-        window.definirNivelAlunoProf = function(nomeAluno, novoNivel) {
-            update(ref(db, `users/${nomeAluno}/desempenho`), {
-                [currentUser.subject]: novoNivel
-            }).then(() => alert(`Nível de ${nomeAluno} em ${currentUser.subject} foi atualizado para ${novoNivel}!`));
-        };
-
-        // ==================== CHAT PROFESSOR <-> MONITORES ====================
-        window.carregarChatProfMonitores = function() {
-            onValue(ref(db, `chats_prof_monitores/${currentUser.subject}`), (snap) => {
-                const box = document.getElementById('chat-prof-monitores-box');
-                box.innerHTML = "";
-                if(snap.exists()) {
-                    snap.forEach(c => {
-                        let m = c.val();
-                        let isProf = m.remetente === currentUser.name ? "env" : "rec";
-                        
-                        let msgConteudo = m.isPdf ? `
-                            📄 <b>Material/PDF Compartilhado:</b><br>
-                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Abrir Documento 🔗</a>
-                        ` : m.texto;
-
-                        box.innerHTML += `<div class="chat-msg ${isProf}"><b>${m.remetente}:</b> ${msgConteudo}</div>`;
-                    });
-                }
-                box.scrollTop = box.scrollHeight;
-            });
-        };
-
-        window.carregarChatProfMonitor = function() {
-            onValue(ref(db, `chats_prof_monitores/${currentUser.monitorSubject}`), (snap) => {
-                const box = document.getElementById('chat-monitor-prof-box');
-                box.innerHTML = "";
-                if(snap.exists()) {
-                    snap.forEach(c => {
-                        let m = c.val();
-                        let isMe = m.remetente === currentUser.name ? "env" : "rec";
-
-                        let msgConteudo = m.isPdf ? `
-                            📄 <b>Material do Professor:</b><br>
-                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Abrir PDF / Link 🔗</a>
-                        ` : m.texto;
-
-                        box.innerHTML += `<div class="chat-msg ${isMe}"><b>${m.remetente}:</b> ${msgConteudo}</div>`;
-                    });
-                }
-                box.scrollTop = box.scrollHeight;
-            });
-        };
-
-        window.enviarMsgProfParaMonitores = function() {
-            const txt = document.getElementById('input-chat-prof-msg').value.trim();
-            if(!txt) return;
-            push(ref(db, `chats_prof_monitores/${currentUser.subject}`), {
-                remetente: currentUser.name,
-                texto: txt,
-                isPdf: false,
-                timestamp: Date.now()
-            }).then(() => document.getElementById('input-chat-prof-msg').value = "");
-        };
-
-        window.enviarMaterialPdfProf = function() {
-            const link = document.getElementById('input-prof-pdf-link').value.trim();
-            if(!link) return alert("Cole o link do PDF/Material!");
-            push(ref(db, `chats_prof_monitores/${currentUser.subject}`), {
-                remetente: currentUser.name,
-                texto: link,
-                isPdf: true,
-                timestamp: Date.now()
-            }).then(() => {
-                alert("Material/PDF disponibilizado para os monitores!");
-                document.getElementById('input-prof-pdf-link').value = "";
-            });
-        };
-
-        window.enviarMsgMonitorParaProf = function() {
-            const txt = document.getElementById('input-chat-monitor-msg').value.trim();
-            if(!txt) return;
-            push(ref(db, `chats_prof_monitores/${currentUser.monitorSubject}`), {
-                remetente: currentUser.name,
-                texto: txt,
-                isPdf: false,
-                timestamp: Date.now()
-            }).then(() => document.getElementById('input-chat-monitor-msg').value = "");
-        };
-
-        // ==================== PAINEL ADMIN / COORDENAÇÃO ====================
-        window.carregarListaUsuariosAdmin = function() {
-            const box = document.getElementById('lista-usuarios-admin');
-            onValue(ref(db, 'users'), (snap) => {
-                box.innerHTML = "";
-                if(snap.exists()) {
-                    snap.forEach(c => {
-                        let u = c.val();
-                        let nomeKey = c.key;
-                        box.innerHTML += `
-                            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
-                                <div>
-                                    <strong>👤 ${nomeKey}</strong> <small style="color:var(--text-muted);">(${u.classe || 'S/ Turma'})</small><br>
-                                    <small style="color:var(--blue-cyan);">${u.isMonitor ? `Monitor de ${u.materiaMonitoria}` : 'Aluno Regular'}</small>
-                                </div>
-                                <div style="display:flex; gap:6px;">
-                                    <button class="btn btn-secondary" style="width:auto; padding:4px 8px; font-size:0.75rem;" onclick="alternarStatusMonitorAdmin('${nomeKey}', ${!u.isMonitor})">
-                                        ${u.isMonitor ? 'Remover Monitor' : 'Tornar Monitor'}
-                                    </button>
+                    lista.forEach(aluno => {
+                        container.innerHTML += `
+                            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03);">
+                                <span>👤 <b>${aluno.nome}</b></span>
+                                <div style="display:flex; gap:6px; align-items:center;">
+                                    <label style="font-size:0.75rem; margin:0;">Nível:</label>
+                                    <select class="form-control" style="width:auto; padding:4px 8px; font-size:0.8rem;" onchange="atualizarNivelAluno('${aluno.nome}', this.value)">
+                                        <option value="Alto" ${aluno.nivel === 'Alto' ? 'selected' : ''}>🌟 Alto</option>
+                                        <option value="Medio" ${aluno.nivel === 'Medio' ? 'selected' : ''}>📈 Médio</option>
+                                        <option value="Baixo" ${aluno.nivel === 'Baixo' ? 'selected' : ''}>⚠️ Baixo</option>
+                                        <option value="Muito Baixo" ${aluno.nivel === 'Muito Baixo' ? 'selected' : ''}>🚨 Muito Baixo</option>
+                                    </select>
                                 </div>
                             </div>
                         `;
                     });
-                } else {
-                    box.innerHTML = "<em>Nenhum aluno registrado no banco de dados.</em>";
+                }
+                if(container.innerHTML === "") {
+                    container.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum aluno cadastrado nesta turma ainda.</p>";
                 }
             });
         };
 
-        window.alternarStatusMonitorAdmin = function(nomeUser, novoStatus) {
-            let materia = "Matemática";
-            if(novoStatus) {
-                materia = prompt("Qual matéria este monitor irá atender?", "Matemática") || "Matemática";
-            }
-            update(ref(db, `users/${nomeUser}`), {
-                isMonitor: novoStatus,
-                materiaMonitoria: novoStatus ? materia : "Nenhuma"
-            }).then(() => carregarListaUsuariosAdmin());
+        window.atualizarNivelAluno = function(nomeAluno, novoNivel) {
+            update(ref(db, `users/${nomeAluno}/desempenho`), {
+                [currentUser.subject]: novoNivel
+            }).then(() => alert(`Nível de ${nomeAluno} atualizado para ${novoNivel} em ${currentUser.subject}!`));
         };
 
-        function ouvirEGerarGraficosRealtime() {
-            // Gráfico 1: Atendimentos Reais por Matéria
-            onValue(ref(db, 'atendimentos_monitoria'), (snap) => {
-                let contagem = {};
-                disciplinas.forEach(d => contagem[d] = 0);
+        // ==================== GRÁFICOS VISUAIS PARA A DIREÇÃO E GESTÃO ====================
+        function renderizarGraficosGestao() {
+            onValue(ref(db, 'users'), (snap) => {
+                let totaisNivel = { Alto: 0, Medio: 0, Baixo: 0, MuitoBaixo: 0 };
 
                 if(snap.exists()) {
-                    snap.forEach(c => {
-                        let a = c.val();
-                        if(contagem[a.materia] !== undefined) contagem[a.materia]++;
+                    snap.forEach(child => {
+                        let u = child.val();
+                        if(u.desempenho) {
+                            Object.keys(u.desempenho).forEach(materia => {
+                                let n = u.desempenho[materia];
+                                if(n === 'Alto') totaisNivel.Alto++;
+                                else if(n === 'Medio') totaisNivel.Medio++;
+                                else if(n === 'Baixo') totaisNivel.Baixo++;
+                                else if(n === 'Muito Baixo') totaisNivel.MuitoBaixo++;
+                            });
+                        }
                     });
                 }
 
-                const ctx1 = document.getElementById('chartAtendimentosReal').getContext('2d');
+                const ctx1 = document.getElementById('chartDesempenhoGeral').getContext('2d');
+                if(chartDesempenhoInstance) chartDesempenhoInstance.destroy();
+
+                chartDesempenhoInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['🌟 Alto', '📈 Médio', '⚠️ Baixo', '🚨 Muito Baixo'],
+                        datasets: [{
+                            data: [totaisNivel.Alto, totaisNivel.Medio, totaisNivel.Baixo, totaisNivel.MuitoBaixo],
+                            backgroundColor: ['#00dfa2', '#ffb800', '#ff7800', '#ff4a4a']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#ffffff' } } } }
+                });
+            });
+
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                let matCounts = {};
+                disciplinas.forEach(d => matCounts[d] = 0);
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let v = child.val();
+                        if(v.subject && matCounts[v.subject] !== undefined) {
+                            matCounts[v.subject]++;
+                        }
+                    });
+                }
+
+                const ctx2 = document.getElementById('chartAtendimentosMateria').getContext('2d');
                 if(chartAtendimentosInstance) chartAtendimentosInstance.destroy();
 
-                chartAtendimentosInstance = new Chart(ctx1, {
+                chartAtendimentosInstance = new Chart(ctx2, {
                     type: 'bar',
                     data: {
-                        labels: Object.keys(contagem),
+                        labels: Object.keys(matCounts),
                         datasets: [{
-                            label: 'Atendimentos Registrados',
-                            data: Object.values(contagem),
+                            label: 'Atendimentos Solicitados',
+                            data: Object.values(matCounts),
                             backgroundColor: '#8a4fff'
                         }]
                     },
@@ -864,48 +1137,634 @@
                         maintainAspectRatio: false,
                         scales: {
                             x: { ticks: { color: '#b3a4cd' } },
-                            y: { ticks: { color: '#b3a4cd' }, beginAtZero: true }
+                            y: { ticks: { color: '#b3a4cd' } }
                         },
                         plugins: { legend: { labels: { color: '#ffffff' } } }
                     }
                 });
             });
+        }
 
-            // Gráfico 2: Distribuição de Níveis de Aprendizado
+        window.carregarRankingGeralPublico = function() {
+            const container = document.getElementById('box-ranking-geral-publico');
+            
             onValue(ref(db, 'users'), (snap) => {
-                let niveis = { 'Alto': 0, 'Medio': 0, 'Baixo': 0, 'Muito Baixo': 0 };
+                container.innerHTML = "";
+                let alunos = [];
 
                 if(snap.exists()) {
-                    snap.forEach(c => {
-                        let u = c.val();
-                        if(u.desempenho) {
-                            Object.values(u.desempenho).forEach(n => {
-                                if(niveis[n] !== undefined) niveis[n]++;
+                    snap.forEach(child => {
+                        let u = child.val();
+                        if(u.nomeCadastro) {
+                            alunos.push({
+                                nome: child.key,
+                                xp: u.xp || 0,
+                                classe: u.classe || 'N/A',
+                                avatar: u.avatar || 'https://via.placeholder.com/110',
+                                moldura: u.molduraAtiva || ''
                             });
                         }
                     });
+
+                    alunos.sort((a, b) => b.xp - a.xp);
+
+                    alunos.forEach((aluno, index) => {
+                        let medalha = "";
+                        if (index === 0) medalha = "🥇 ";
+                        else if (index === 1) medalha = "🥈 ";
+                        else if (index === 2) medalha = "🥉 ";
+
+                        container.innerHTML += `
+                            <div class="list-item" style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03);">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <span style="font-weight:700; font-size:1.1rem; width:30px; text-align:center;">#${index + 1}</span>
+                                    <div class="profile-avatar-container ${aluno.moldura}" style="width:45px; height:45px; margin:0;">
+                                        <img src="${aluno.avatar}" class="profile-avatar" alt="Foto">
+                                    </div>
+                                    <div>
+                                        <h5 style="font-size:0.9rem;">${medalha}${aluno.nome}</h5>
+                                        <small style="color:var(--text-muted); font-size:0.75rem;">Turma: ${aluno.classe}</small>
+                                    </div>
+                                </div>
+                                <span class="stat-badge" style="font-size:0.9rem; margin:0;">${aluno.xp} XP</span>
+                            </div>
+                        `;
+                    });
                 }
+                if(container.innerHTML === "") {
+                    container.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted); text-align:center;'>Nenhum aluno cadastrado no ranking ainda.</p>";
+                }
+            });
+        };
 
-                const ctx2 = document.getElementById('chartNiveisReal').getContext('2d');
-                if(chartNiveisInstance) chartNiveisInstance.destroy();
+        function ouvirMeusDadosRealtime() {
+            onValue(ref(db, `users/${currentUser.name}`), (snap) => {
+                if(snap.exists()) {
+                    let dados = snap.val();
+                    document.getElementById('student-xp-display').innerText = `${dados.xp || 0} Pontos / XP`;
 
-                chartNiveisInstance = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['🌟 Alto', '📈 Médio', '⚠️ Baixo', '🚨 Muito Baixo'],
-                        datasets: [{
-                            data: [niveis['Alto'], niveis['Medio'], niveis['Baixo'], niveis['Muito Baixo']],
-                            backgroundColor: ['#00dfa2', '#ffb800', '#ff7800', '#ff4a4a']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#ffffff' } } }
+                    const avatarWrapper = document.getElementById('meu-avatar-wrapper');
+                    avatarWrapper.className = "profile-avatar-container"; 
+                    if(dados.molduraAtiva) {
+                        avatarWrapper.classList.add(dados.molduraAtiva);
                     }
-                });
+
+                    if(dados.avatar) {
+                        document.getElementById('meu-avatar-img').src = dados.avatar;
+                    }
+                    if(dados.whatsapp) {
+                        document.getElementById('meu-whatsapp-input').value = dados.whatsapp;
+                    }
+                    if(dados.tituloAtivo) {
+                        document.getElementById('meu-tag-perfil').innerText = `[${dados.tituloAtivo}]`;
+                    } else {
+                        document.getElementById('meu-tag-perfil').innerText = dados.isMonitor ? "[Monitor Voluntário]" : "[Estudante]";
+                    }
+
+                    const boxMedalhas = document.getElementById('minhas-medalhas-box');
+                    boxMedalhas.innerHTML = "";
+                    if(dados.conquistas) {
+                        Object.keys(dados.conquistas).forEach(k => {
+                            let m = dados.conquistas[k];
+                            let cMedal = "medal-honra";
+                            if(m.tipo.includes("Ouro")) cMedal = "medal-gold";
+                            if(m.tipo.includes("Prata")) cMedal = "medal-silver";
+                            if(m.tipo.includes("Bronze")) cMedal = "medal-bronze";
+                            if(m.tipo.includes("Certificado")) cMedal = "medal-cert";
+
+                            boxMedalhas.innerHTML += `<span class="badge-medal ${cMedal}">${m.icon} ${m.tipo} (${m.materia})</span>`;
+                        });
+                    }
+
+                    const boxFeedbacks = document.getElementById('box-feedbacks-comunidade');
+                    boxFeedbacks.innerHTML = "";
+                    let somaEstrelas = 0;
+                    let qtdFeedbacks = 0;
+
+                    if(dados.feedbacks) {
+                        Object.keys(dados.feedbacks).forEach(k => {
+                            let f = dados.feedbacks[k];
+                            somaEstrelas += f.estrelas;
+                            qtdFeedbacks++;
+
+                            boxFeedbacks.innerHTML += `
+                                <div class="comment-item">
+                                    <div style="display:flex; justify-content:space-between;">
+                                        <strong style="font-size:0.85rem; color:var(--blue-cyan);">${f.autor}</strong>
+                                        <span style="color:var(--gold-star); font-size:0.8rem;">${"★".repeat(f.estrelas)}</span>
+                                    </div>
+                                    <p style="font-size:0.8rem; margin:2px 0;">"${f.texto}"</p>
+                                    <small style="color:var(--text-muted); font-size:0.7rem;">Matéria estudada: ${f.materia}</small>
+                                </div>
+                            `;
+                        });
+                    }
+
+                    if(qtdFeedbacks > 0) {
+                        let media = (somaEstrelas / qtdFeedbacks).toFixed(1);
+                        document.getElementById('perfil-media-estrelas').innerText = "★".repeat(Math.round(media));
+                        document.getElementById('perfil-total-avaliacoes').innerText = `${media} (${qtdFeedbacks} avaliações)`;
+                    } else {
+                        document.getElementById('perfil-media-estrelas').innerText = "★★★★★";
+                        document.getElementById('perfil-total-avaliacoes').innerText = "5.0 (0 avaliações)";
+                    }
+                }
             });
         }
+
+        window.renderMeuPerfil = function() {
+            document.getElementById('meu-nome-perfil').innerText = currentUser.name;
+        };
+
+        window.salvarWhatsPerfil = function() {
+            const num = document.getElementById('meu-whatsapp-input').value.trim();
+            update(ref(db, `users/${currentUser.name}`), { whatsapp: num })
+            .then(() => alert("WhatsApp atualizado no perfil público!"));
+        };
+
+        window.uploadFotoPerfil = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Image = e.target.result;
+                    update(ref(db, `users/${currentUser.name}`), { avatar: base64Image })
+                    .then(() => alert("Foto de perfil enviada com sucesso!"));
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        window.submitMonitoriaFicha = function(e) {
+            e.preventDefault();
+            if(!currentUser.isMonitor) return alert("Apenas monitores voluntários registrados podem enviar fichas de atendimento!");
+
+            const target = document.getElementById('reg-target-student').value.trim();
+            const avalNivel = document.getElementById('reg-student-feedback-level').value;
+            const avalObs = document.getElementById('reg-student-obs').value.trim();
+
+            if(target === currentUser.name) return alert("Você não pode registrar uma monitoria para si mesmo!");
+
+            push(ref(db, 'validacoes_pendentes'), {
+                monitor: currentUser.name,
+                subject: currentUser.monitorSubject,
+                studentAjudado: target,
+                avaliacaoMonitorNivel: avalNivel,
+                observacaoMonitor: avalObs,
+                status: 'aguardando_aluno'
+            });
+
+            alert(`Ficha lançada com avaliação! Uma notificação foi enviada para o painel de ${target} realizar a confirmação.`);
+            document.getElementById('reg-target-student').value = "";
+            document.getElementById('reg-student-obs').value = "";
+        };
+
+        function ouvirConfirmacoesPendentesAluno() {
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                const box = document.getElementById('lista-confirmacoes-aluno');
+                box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let item = child.val();
+                        if(item.studentAjudado === currentUser.name && item.status === 'aguardando_aluno') {
+                            box.innerHTML += `
+                                <div class="list-item" style="border-left: 3px solid var(--blue-electric);">
+                                    <p style="font-size:0.85rem;"><b>${item.monitor}</b> registrou que te ajudou em <b>${item.subject}</b>.</p>
+                                    <small style="color:var(--blue-cyan); font-size:0.75rem;">Avaliação do Monitor: ${item.avaliacaoMonitorNivel}</small>
+                                    ${item.observacaoMonitor ? `<p style="font-size:0.75rem; color:var(--text-muted); italic;">"${item.observacaoMonitor}"</p>` : ''}
+                                    <div style="display:flex; gap:6px; margin-top:8px;">
+                                        <button class="btn btn-success" style="padding:4px 8px; font-size:0.75rem;" onclick="confirmarAjudaLegitima('${child.key}', '${item.monitor}', '${item.subject}')">Confirmar, Procede! ✅</button>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                if(box.innerHTML === "") {
+                    box.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum pedido de validação pendente.</p>";
+                }
+            });
+        }
+
+        window.confirmarAjudaLegitima = function(key, monitorName, subject) {
+            update(ref(db, `validacoes_pendentes/${key}`), { status: 'confirmado_pelo_aluno' });
+
+            const monitorRef = ref(db, `users/${monitorName}/xp`);
+            runTransaction(monitorRef, (currentXp) => (currentXp || 0) + 50);
+
+            const atendimentosRef = ref(db, `users/${monitorName}/totalAtendimentos`);
+            runTransaction(atendimentosRef, (currentCount) => (currentCount || 0) + 1);
+
+            alert("Ajuda validada! Os pontos de meritocracia foram creditados ao monitor.");
+        };
+
+        window.comprarMoldura = function(idMoldura, preco) {
+            const userRef = ref(db, `users/${currentUser.name}`);
+            onValue(userRef, (snap) => {
+                if(snap.exists()) {
+                    let dados = snap.val();
+                    let saldo = dados.xp || 0;
+                    if(saldo >= preco) {
+                        update(ref(db, `users/${currentUser.name}`), {
+                            xp: saldo - preco,
+                            molduraAtiva: idMoldura
+                        });
+                        alert("Moldura adquirida e equipada com sucesso na sua foto de perfil! 🛒");
+                    } else {
+                        alert("Saldo de Pontos / XP insuficiente. Realize mais atendimentos como monitor!");
+                    }
+                }
+            }, { onlyOnce: true });
+        };
+
+        window.buscarMonitoresPorMateria = function() {
+            const mat = document.getElementById('search-subject-select').value;
+            const boxResultados = document.getElementById('resultados-busca-monitores');
+            boxResultados.innerHTML = "";
+
+            onValue(ref(db, 'users'), (snap) => {
+                boxResultados.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let u = child.val();
+                        if(u.isMonitor && u.materiaMonitoria === mat) {
+                            let imgUrl = u.avatar || 'https://via.placeholder.com/110';
+                            boxResultados.innerHTML += `
+                                <div class="card" style="text-align:center; cursor:pointer; border:1px solid var(--purple-light);" onclick="abrirPerfilPublicoMonitor('${child.key}')">
+                                    <div class="profile-avatar-container ${u.molduraAtiva || ''}" style="width:70px; height:70px; margin:0 auto 0.5rem auto;">
+                                        <img src="${imgUrl}" class="profile-avatar" alt="Foto Monitor">
+                                    </div>
+                                    <h5 style="font-size:0.85rem;">${child.key}</h5>
+                                    <small style="color:var(--blue-cyan); font-size:0.75rem;">Classe: ${u.classe || 'N/A'}</small>
+                                    <span style="display:block; color:var(--gold-star); font-size:0.8rem; margin-top:4px;">Ver Perfil & Chat ⭐</span>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                if(boxResultados.innerHTML === "") {
+                    boxResultados.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted); grid-column:1/-1; text-align:center;'>Nenhum monitor voluntário disponível para esta matéria no momento.</p>";
+                }
+            });
+        };
+
+        window.abrirPerfilPublicoMonitor = function(nomeMonitor) {
+            onValue(ref(db, `users/${nomeMonitor}`), (snap) => {
+                if(snap.exists()) {
+                    let m = snap.val();
+                    const containerModal = document.getElementById('monitor-profile-modal');
+                    const conteudo = document.getElementById('conteudo-modal-monitor');
+
+                    containerModal.style.display = "block";
+
+                    let whatsBotao = m.whatsapp ? `
+                        <a href="https://api.whatsapp.com/send?phone=${m.whatsapp}&text=Olá%20${nomeMonitor},%20vi%20seu%20perfil%20no%20Avança%20Escolar%20e%20preciso%20de%20ajuda!" target="_blank" class="btn btn-success" style="margin-top:0.5rem; background:#25d366; color:#fff;">
+                            Chamar no WhatsApp Direto 💬
+                        </a>
+                    ` : `<p style='font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem;'>WhatsApp privado não listado pelo monitor.</p>`;
+
+                    let msgsHtml = "";
+                    if(m.chat_simulado && m.chat_simulado[currentUser.name]) {
+                        Object.keys(m.chat_simulado[currentUser.name]).forEach(k => {
+                            let msg = m.chat_simulado[currentUser.name][k];
+                            let cMsg = msg.remetente === currentUser.name ? "env" : "rec";
+                            msgsHtml += `<div class="chat-msg ${cMsg}"><b>${msg.remetente}:</b> ${msg.texto}</div>`;
+                        });
+                    }
+
+                    conteudo.innerHTML = `
+                        <div style="text-align:center; margin-bottom:1rem;">
+                            <div class="profile-avatar-container ${m.molduraAtiva || ''}" style="width:90px; height:90px; margin:0 auto 0.5rem auto;">
+                                <img src="${m.avatar || 'https://via.placeholder.com/110'}" class="profile-avatar" alt="Monitor">
+                            </div>
+                            <h4>${nomeMonitor}</h4>
+                            <p style="font-size:0.8rem; color:var(--text-muted);">Especialista em: ${m.materiaMonitoria}</p>
+                            ${whatsBotao}
+                        </div>
+                        <hr style="border:0; border-top:1px solid var(--border-color); margin:1rem 0;">
+                        
+                        <h5>💬 Chat Direto com o Monitor:</h5>
+                        <div class="chat-container" id="chat-box-window">${msgsHtml}</div>
+                        <div style="display:flex; gap:6px; margin-bottom:1rem;">
+                            <input type="text" id="chat-input-text" class="form-control" placeholder="Combine o local e horário da ajuda...">
+                            <button class="btn btn-primary" style="width:auto; padding:0 1rem;" onclick="enviarMensagemChatMonitor('${nomeMonitor}')">Enviar</button>
+                        </div>
+
+                        <div style="background:rgba(0,0,0,0.15); padding:1rem; border-radius:12px;">
+                            <h5>⭐ Deixe sua Avaliação e Comentário (Estilo Loja)</h5>
+                            <div class="star-rating" style="display:flex; gap:4px; margin:0.5rem 0;">
+                                <span onclick="setRatingStar(1)" class="active">★</span>
+                                <span onclick="setRatingStar(2)" class="active">★</span>
+                                <span onclick="setRatingStar(3)" class="active">★</span>
+                                <span onclick="setRatingStar(4)" class="active">★</span>
+                                <span onclick="setRatingStar(5)" class="active">★</span>
+                            </div>
+                            <input type="text" id="feedback-comment-text" class="form-control" placeholder="O que você achou da monitoria deste aluno?" style="margin-bottom:8px;">
+                            <button class="btn btn-success" style="font-size:0.8rem; padding:6px 12px;" onclick="enviarFeedbackLojaMonitor('${nomeMonitor}', '${m.materiaMonitoria}')">Publicar Avaliação Oficial 📝</button>
+                        </div>
+                    `;
+
+                    setTimeout(() => {
+                        let cBox = document.getElementById('chat-box-window');
+                        if(cBox) cBox.scrollTop = cBox.scrollHeight;
+                    }, 100);
+                }
+            });
+        };
+
+        window.setRatingStar = function(num) {
+            selectedRatingStars = num;
+            const stars = document.querySelectorAll('.star-rating span');
+            stars.forEach((s, idx) => {
+                if(idx < num) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+        };
+
+        window.enviarMensagemChatMonitor = function(monitorName) {
+            const txt = document.getElementById('chat-input-text').value.trim();
+            if(!txt) return;
+            push(ref(db, `users/${monitorName}/chat_simulado/${currentUser.name}`), {
+                remetente: currentUser.name,
+                texto: txt,
+                timestamp: Date.now()
+            }).then(() => {
+                document.getElementById('chat-input-text').value = "";
+                abrirPerfilPublicoMonitor(monitorName);
+            });
+        };
+
+        window.enviarFeedbackLojaMonitor = function(monitorName, materia) {
+            const txt = document.getElementById('feedback-comment-text').value.trim();
+            if(!txt) return alert("Por favor, digite um comentário explicativo sobre o suporte!");
+
+            push(ref(db, `users/${monitorName}/feedbacks`), {
+                autor: currentUser.name,
+                texto: txt,
+                estrelas: selectedRatingStars,
+                materia: materia
+            }).then(() => {
+                alert("Sua avaliação foi catalogada com sucesso no perfil público do monitor!");
+                document.getElementById('feedback-comment-text').value = "";
+                abrirPerfilPublicoMonitor(monitorName);
+            });
+        };
+
+        window.fecharModalMonitor = function() {
+            document.getElementById('monitor-profile-modal').style.display = "none";
+        };
+
+        function ouvirAlertasMateriaProfessor() {
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                const box = document.getElementById('lista-alertas-materia-professor');
+                box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let item = child.val();
+                        if(item.subject === currentUser.subject) {
+                            let statusTxt = item.status === 'aguardando_aluno' ? "⏳ Aguardando Aluno Confirmar" : "✅ Atendimento Homologado";
+                            box.innerHTML += `
+                                <div class="list-item">
+                                    <p style="font-size:0.85rem;">Monitor: <b>${item.monitor}</b> ➔ Aluno: <b>${item.studentAjudado}</b></p>
+                                    <small style="color:var(--text-muted); font-size:0.75rem;">Status: ${statusTxt}</small>
+                                    ${item.avaliacaoMonitorNivel ? `<br><small style="color:var(--blue-cyan); font-size:0.75rem;">Comprometimento: ${item.avaliacaoMonitorNivel}</small>` : ''}
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                if(box.innerHTML === "") {
+                    box.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum log recente para a matéria de estudo corrente.</p>";
+                }
+            });
+        }
+
+        window.enviarMedalhasProfessor = function() {
+            const ouro = document.getElementById('prof-m-ouro').value.trim();
+            const prata = document.getElementById('prof-m-prata').value.trim();
+            const bronze = document.getElementById('prof-m-bronze').value.trim();
+            const honra = document.getElementById('prof-m-honra').value.trim();
+
+            const medalhas = [
+                { nome: ouro, tipo: "Medalha de Ouro", icon: "🥇" },
+                { nome: prata, tipo: "Medalha de Prata", icon: "🥈" },
+                { nome: bronze, tipo: "Medalha de Bronze", icon: "🥉" },
+                { nome: honra, tipo: "Medalha de Honra ao Mérito", icon: "🎖️" }
+            ];
+
+            medalhas.forEach(m => {
+                if(m.nome) {
+                    push(ref(db, `users/${m.nome}/conquistas`), {
+                        tipo: m.tipo,
+                        icon: m.icon,
+                        materia: currentUser.subject,
+                        atribuidoPor: currentUser.name
+                    });
+
+                    set(ref(db, `destaques_materias/${currentUser.subject}/${m.tipo}`), m.nome);
+                }
+            });
+
+            alert("Condecorações e Medalhas oficiais enviadas instantaneamente para os perfis!");
+            document.getElementById('prof-m-ouro').value = "";
+            document.getElementById('prof-m-prata').value = "";
+            document.getElementById('prof-m-bronze').value = "";
+            document.getElementById('prof-m-honra').value = "";
+        };
+
+        window.carregarDestaquesMateriaCoord = function() {
+            const mat = document.getElementById('coord-subject-select').value;
+            const display = document.getElementById('coord-display-destaques');
+            display.innerHTML = "";
+
+            onValue(ref(db, `destaques_materias/${mat}`), (snap) => {
+                display.innerHTML = "";
+                if(snap.exists()) {
+                    let d = snap.val();
+                    display.innerHTML = `
+                        <p style="font-size:0.85rem; margin-bottom:4px;">🥇 <b>Ouro:</b> ${d['Medalha de Ouro'] || 'Não preenchido'}</p>
+                        <p style="font-size:0.85rem; margin-bottom:4px;">🥈 <b>Prata:</b> ${d['Medalha de Prata'] || 'Não preenchido'}</p>
+                        <p style="font-size:0.85rem; margin-bottom:4px;">🥉 <b>Bronze:</b> ${d['Medalha de Bronze'] || 'Não preenchido'}</p>
+                        <p style="font-size:0.85rem;">🎖️ <b>Honra ao Mérito:</b> ${d['Medalha de Honra ao Mérito'] || 'Não preenchido'}</p>
+                    `;
+                } else {
+                    display.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum aluno de destaque laureado pelo professor nesta matéria.</p>";
+                }
+            });
+        };
+
+        function carregarMetricasGestao() {
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                const boxAlunos = document.getElementById('coord-alunos-atencao');
+                const boxCritica = document.getElementById('coord-materia-critica');
+
+                boxAlunos.innerHTML = "";
+                let materiasContador = {};
+                let alunosContador = {};
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let item = child.val();
+                        materiasContador[item.subject] = (materiasContador[item.subject] || 0) + 1;
+                        alunosContador[item.studentAjudado] = (alunosContador[item.studentAjudado] || 0) + 1;
+                    });
+
+                    let maiorMat = "";
+                    let maxMatVal = -1;
+                    Object.keys(materiasContador).forEach(m => {
+                        if(materiasContador[m] > maxMatVal) {
+                            maxMatVal = materiasContador[m];
+                            maiorMat = m;
+                        }
+                    });
+                    boxCritica.innerText = maiorMat ? `${maiorMat} (${maxMatVal} chamados)` : "Nenhuma";
+
+                    Object.keys(alunosContador).forEach(aluno => {
+                        boxAlunos.innerHTML += `
+                            <div style="background:rgba(255,255,255,0.04); padding:6px; border-radius:6px; font-size:0.8rem; display:flex; justify-content:space-between;">
+                                <span>👤 <b>${aluno}</b></span>
+                                <span style="color:var(--danger);">${alunosContador[aluno]} intervenções</span>
+                            </div>
+                        `;
+                    });
+                }
+                if(boxAlunos.innerHTML === "") boxAlunos.innerHTML = "Sem dados computados.";
+            });
+
+            onValue(ref(db, 'users'), (snap) => {
+                const boxRanking = document.getElementById('coord-ranking-monitores-atendimentos');
+                boxRanking.innerHTML = "";
+                let monitores = [];
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let u = child.val();
+                        if(u.isMonitor) {
+                            monitores.push({ nome: child.key, qtd: u.totalAtendimentos || 0, materia: u.materiaMonitoria });
+                        }
+                    });
+                    monitores.sort((a,b) => b.qtd - a.qtd);
+                    monitores.forEach((m, idx) => {
+                        boxRanking.innerHTML += `
+                            <div style="background:rgba(138, 79, 255, 0.08); padding:8px; border-radius:8px; font-size:0.85rem; display:flex; justify-content:space-between;">
+                                <span><b>#${idx+1}</b> ${m.nome} <small style="color:var(--text-muted);">(${m.materia})</small></span>
+                                <strong style="color:var(--blue-cyan);">${m.qtd} monitorias realizadas</strong>
+                            </div>
+                        `;
+                    });
+                }
+            });
+        }
+
+        function ativarPainel() {
+            onValue(ref(db, 'logs_trafego'), (snap) => {
+                const logBox = document.getElementById('admin-logs-acesso');
+                logBox.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let log = child.val();
+                        logBox.innerHTML += `<div>[${log.horario}] <b>${log.usuario}</b> (${log.perfil}): ${log.evento}</div>`;
+                    });
+                }
+            });
+
+            onValue(ref(db, 'users'), (snap) => {
+                const listUsersBox = document.getElementById('admin-lista-geral-usuarios');
+                const rankingBox = document.getElementById('admin-ranking-xp');
+                const feedBox = document.getElementById('admin-feed-comentarios');
+
+                listUsersBox.innerHTML = "";
+                rankingBox.innerHTML = "";
+                feedBox.innerHTML = "";
+
+                let totalAlunos = 0;
+                let listaAlunosArr = [];
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let user = child.val();
+                        totalAlunos++;
+
+                        let nome = user.nomeCadastro || child.key;
+                        let xp = user.xp || 0;
+                        let statusMonitor = user.isMonitor ? `⚡ Monitor [${user.materiaMonitoria}]` : "Estudante";
+
+                        listaAlunosArr.push({ nome, xp, classe: user.classe || '---', statusMonitor });
+
+                        listUsersBox.innerHTML += `
+                            <div style="background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius:8px; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;">
+                                <span>👤 <b>${nome}</b> (${user.classe || 'N/A'})</span>
+                                <span style="color:var(--blue-cyan); font-size:0.75rem;">${statusMonitor}</span>
+                            </div>
+                        `;
+
+                        if(user.feedbacks) {
+                            Object.keys(user.feedbacks).forEach(k => {
+                                let f = user.feedbacks[k];
+                                feedBox.innerHTML += `
+                                    <div class="comment-item" style="border-left: 3px solid var(--admin-gold);">
+                                        <button class="btn btn-danger" style="width:auto; float:right; padding:2px 6px; font-size:0.7rem;" onclick="removerFeedbackInadequado('${nome}', '${k}')">Excluir 🗑️</button>
+                                        <div style="display:flex; justify-content:space-between;">
+                                            <small style="color:var(--blue-cyan);">Para: <b>${nome}</b></small>
+                                            <span style="color:var(--gold-star); font-size:0.75rem;">${"★".repeat(f.estrelas)}</span>
+                                        </div>
+                                        <p style="font-size:0.8rem; margin: 4px 0;">"${f.texto}"</p>
+                                        <small style="color:var(--text-muted); font-size:0.7rem;">Enviado por: <b>${f.autor}</b> em ${f.materia}</small>
+                                    </div>
+                                `;
+                            });
+                        }
+                    });
+
+                    document.getElementById('admin-total-alunos').innerText = `${totalAlunos} Usuários na Base`;
+
+                    listaAlunosArr.sort((a, b) => b.xp - a.xp);
+                    listaAlunosArr.forEach((item, index) => {
+                        rankingBox.innerHTML += `
+                            <div style="display:flex; justify-content:space-between; background: rgba(138, 79, 255, 0.08); padding: 8px; border-radius: 10px; font-size:0.85rem;">
+                                <span><b>#${index + 1}</b> ${item.nome} <small style="color:var(--text-muted);">(${item.classe})</small></span>
+                                <strong style="color: var(--admin-gold);">${item.xp} XP</strong>
+                            </div>
+                        `;
+                    });
+
+                    if(feedBox.innerHTML === "") {
+                        feedBox.innerHTML = "<p style='font-size:0.85rem; color:var(--text-muted); text-align:center;'>Nenhum feedback catalogado na rede para auditoria.</p>";
+                    }
+                }
+            });
+        }
+
+        window.removerFeedbackInadequado = function(alunoKey, feedbackKey) {
+            if(confirm("Deseja deletar permanentemente esta avaliação da rede?")) {
+                remove(ref(db, `users/${alunoKey}/feedbacks/${feedbackKey}`))
+                .then(() => alert("Mensagem expurgada da base do Firebase!"));
+            }
+        };
+
+        window.postarAvisoMural = function() {
+            const txt = document.getElementById('admin-mural-texto').value.trim();
+            if(!txt) return alert("Digite o comunicado primeiro!");
+            set(ref(db, 'mural_avisos'), { texto: txt })
+            .then(() => {
+                alert("Comunicado Global disparado no topo da rede!");
+                document.getElementById('admin-mural-texto').value = "";
+            });
+        };
+
+        window.concederCertificadoAdmin = function() {
+            const monitor = document.getElementById('admin-cert-target').value.trim();
+            if(!monitor) return alert("Digite o nome completo do monitor voluntário!");
+
+            push(ref(db, `users/${monitor}/conquistas`), {
+                tipo: "Certificado de Excelência",
+                icon: "📜",
+                materia: "Geral (Liderança)",
+                atribuidoPor: "Eduarda Admin"
+            }).then(() => {
+                alert(`Certificado e Condecoração de Honra despachados para o perfil de ${monitor}!`);
+                document.getElementById('admin-cert-target').value = "";
+            });
+        };
     </script>
 </body>
 </html>
