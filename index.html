@@ -21,7 +21,6 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --shadow: rgba(0, 0, 0, 0.5);
             --danger: #ff4a4a;
-            --admin-gold: #ffb800;
         }
 
         .light-mode {
@@ -63,8 +62,8 @@
         }
 
         .circular-logo {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--purple-light);
@@ -153,6 +152,7 @@
         .btn-primary { background: linear-gradient(90deg, var(--purple-light), #6c2eff); color: white; }
         .btn-secondary { background: rgba(128,128,128,0.15); color: var(--text-main); border: 1px solid var(--border-color); }
         .btn-success { background: linear-gradient(90deg, #00b884, var(--green-success)); color: #130924; }
+        .btn-danger { background: var(--danger); color: white; }
 
         .tab-bar {
             display: flex;
@@ -253,7 +253,7 @@
                 <select id="login-profile" class="form-control" onchange="toggleLoginFields()">
                     <option value="aluno">Aluno / Monitor 🧑‍🎓</option>
                     <option value="professor">Professor por Matéria 👨‍🏫</option>
-                    <option value="coordenacao">Direção e Coordenação 🧭</option>
+                    <option value="coordenacao">Administração e Coordenação 🧭</option>
                 </select>
             </div>
 
@@ -333,7 +333,7 @@
                     </div>
                     <div class="form-group">
                         <label>Relatório Explicativo do Atendimento:</label>
-                        <textarea id="reg-student-obs" class="form-control" placeholder="Ex: O aluno teve dúvidas em divisão de frações. Resolvemos 3 exercícios."></textarea>
+                        <textarea id="reg-student-obs" class="form-control" placeholder="Ex: O aluno teve dúvidas em equações. Resolvemos 3 exercícios."></textarea>
                     </div>
                     <button type="submit" class="btn btn-success">Registrar Atendimento no Banco de Dados 🚀</button>
                 </form>
@@ -344,7 +344,7 @@
             <div class="card">
                 <h3>👨‍🏫 Canal Direto com o Professor da Matéria</h3>
                 <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Tire dúvidas de conteúdo, receba orientações e acesse os PDFs disponibilizados pelo professor.</p>
-                
+
                 <div class="chat-container" id="chat-monitor-prof-box"></div>
 
                 <div style="display:flex; gap:6px;">
@@ -359,7 +359,7 @@
         <h2 id="label-prof-welcome" style="margin-bottom:1rem;">Espaço do Professor</h2>
 
         <div class="tab-bar">
-            <button class="tab-btn active" onclick="switchTabs('tab-prof-ranqueamento', this)">Avaliação de Alunos 📊</button>
+            <button class="tab-btn active" onclick="switchTabs('tab-prof-ranqueamento', this)">Avaliação dos Alunos 📊</button>
             <button class="tab-btn" onclick="switchTabs('tab-prof-chat-monitores', this); carregarChatProfMonitores();">Canal com Monitores & Materiais (PDFs) 💬</button>
         </div>
 
@@ -368,7 +368,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
                     <div>
                         <h3 style="margin:0;">📊 Avaliação Pedagógica da Turma</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted);">Veja os relatórios dos monitores e atribua o nível do aluno associando à sala de aula.</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Veja os relatórios dos monitores e atribua o nível do aluno em sala de aula.</p>
                     </div>
                     <button class="btn btn-secondary" style="width:auto; padding:0.5rem 1rem; font-size:0.8rem;" onclick="voltarSeletorTurmaProf()">
                         ⬅️ Trocar de Turma
@@ -408,7 +408,7 @@
                     </div>
 
                     <div style="background:rgba(0,0,0,0.15); padding:0.8rem; border-radius:10px; display:flex; gap:6px; align-items:center;">
-                        <input type="text" id="input-prof-pdf-link" class="form-control" placeholder="Cole aqui o link do PDF/Material (Google Drive, Canva, Dropbox, etc)...">
+                        <input type="text" id="input-prof-pdf-link" class="form-control" placeholder="Cole aqui o link do PDF/Material (Google Drive, Canva, Dropbox)...">
                         <button class="btn btn-success" style="width:auto; white-space:nowrap;" onclick="enviarMaterialPdfProf()">Enviar Material 📄</button>
                     </div>
                 </div>
@@ -417,23 +417,40 @@
     </main>
 
     <main id="view-portal-coordenacao" class="app-view">
-        <h2>🧭 Central Analítica da Direção (Gráficos em Tempo Real)</h2>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Os dados exibidos refletem em tempo real as fichas dos monitores e as atribuições dos professores.</p>
+        <h2 style="margin-bottom: 1rem;">⚙️ Painel de Administração e Coordenação Escolar</h2>
 
-        <div class="grid-2">
-            <div class="card">
-                <h3>📊 Atendimentos por Disciplina</h3>
-                <p style="font-size:0.75rem; color:var(--text-muted);">Mede a demanda real de monitoria registrada no sistema.</p>
-                <div class="chart-wrapper">
-                    <canvas id="chartAtendimentosReal"></canvas>
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTabs('tab-admin-dash', this)">Visão Geral & Gráficos 📊</button>
+            <button class="tab-btn" onclick="switchTabs('tab-admin-users', this); carregarListaUsuariosAdmin();">Gestão de Alunos / Monitores 👥</button>
+        </div>
+
+        <div id="tab-admin-dash" class="tab-content active">
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📊 Atendimentos de Monitoria por Matéria</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted);">Mede a demanda real registrada no banco de dados.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="chartAtendimentosReal"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Distribuição dos Níveis da Turma</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted);">Proporção de níveis definidos pelos professores em tempo real.</p>
+                    <div class="chart-wrapper">
+                        <canvas id="chartNiveisReal"></canvas>
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <div id="tab-admin-users" class="tab-content">
             <div class="card">
-                <h3>📈 Distribuição de Níveis de Aprendizado</h3>
-                <p style="font-size:0.75rem; color:var(--text-muted);">Proporção de alunos classificados pelos professores (Muito Baixo até Alto).</p>
-                <div class="chart-wrapper">
-                    <canvas id="chartNiveisReal"></canvas>
+                <h3>👥 Cadastro de Alunos e Monitores</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Gerencie a lista de estudantes cadastrados e promova ou remova o status de monitor.</p>
+
+                <div id="lista-usuarios-admin" style="display:flex; flex-direction:column; gap:8px;">
+                    <em>Carregando registros de alunos...</em>
                 </div>
             </div>
         </div>
@@ -441,7 +458,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBTLQwsWFKU13ZOZlvo1k6Bnnj38OK6xig",
@@ -551,7 +568,7 @@
                 currentUser = { name: profName, profile: 'professor', subject: subject };
 
             } else if(p === 'coordenacao') {
-                if(pass !== 'gestao2026') return alert("Senha da Coordenação incorreta!");
+                if(pass !== 'gestao2026') return alert("Senha da Administração incorreta!");
                 currentUser = { name: "Coordenação Escolar", profile: 'coordenacao' };
             }
 
@@ -579,7 +596,7 @@
 
             } else if(currentUser.profile === 'coordenacao') {
                 document.getElementById('view-portal-coordenacao').classList.add('active');
-                document.getElementById('user-display-label').innerText = "Painel Coordenador 🧭";
+                document.getElementById('user-display-label').innerText = "Painel de Administração 🧭";
                 ouvirEGerarGraficosRealtime();
             }
         }
@@ -603,13 +620,13 @@
                 observacao: avalObs,
                 timestamp: Date.now()
             }).then(() => {
-                alert("Atendimento registrado no banco de dados! O professor da matéria já pode consultar seu relatório.");
+                alert("Atendimento registrado! O professor da disciplina poderá analisar esta ficha.");
                 document.getElementById('reg-target-student').value = "";
                 document.getElementById('reg-student-obs').value = "";
             });
         };
 
-        // ==================== PAINEL PROFESSOR (CRUZAMENTO DE DADOS) ====================
+        // ==================== PAINEL PROFESSOR ====================
         window.selecionarTurmaProf = function(turma) {
             turmaSelecionadaProf = turma;
             document.getElementById('container-seletor-turma-prof').style.display = 'none';
@@ -627,9 +644,8 @@
         window.carregarAlunosEAtendimentosProf = function() {
             if(!turmaSelecionadaProf) return;
             const container = document.getElementById('lista-alunos-turma-prof');
-            container.innerHTML = "Carregando alunos e fichas dos monitores...";
+            container.innerHTML = "Carregando registros...";
 
-            // Buscar fichas de monitoria para esta matéria
             onValue(ref(db, 'atendimentos_monitoria'), (snapAtend) => {
                 let relatoriosPorAluno = {};
                 if(snapAtend.exists()) {
@@ -641,7 +657,6 @@
                     });
                 }
 
-                // Buscar lista de alunos da turma
                 onValue(ref(db, 'users'), (snapUsers) => {
                     container.innerHTML = "";
                     if(snapUsers.exists()) {
@@ -655,12 +670,12 @@
                                 let boxRelatorioMonitor = relatorio ? `
                                     <div style="background:rgba(138, 79, 255, 0.15); border:1px solid var(--purple-light); padding:8px; border-radius:8px; margin-top:6px; font-size:0.75rem;">
                                         <strong>📊 Relatório do Monitor (${relatorio.monitor}):</strong><br>
-                                        • Avaliação: <span style="color:var(--blue-cyan);">${relatorio.nivelPercebido}</span><br>
-                                        ${relatorio.observacao ? `• Obs: <em>"${relatorio.observacao}"</em>` : ''}
+                                        • Desempenho na Monitoria: <span style="color:var(--blue-cyan);">${relatorio.nivelPercebido}</span><br>
+                                        ${relatorio.observacao ? `• Observação: <em>"${relatorio.observacao}"</em>` : ''}
                                     </div>
                                 ` : `
                                     <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
-                                        <em>Nenhum atendimento de monitoria registrado para este aluno em ${currentUser.subject}.</em>
+                                        <em>Sem registro de monitoria para este aluno nesta matéria.</em>
                                     </div>
                                 `;
 
@@ -671,7 +686,7 @@
                                                 <strong style="font-size:0.95rem;">👤 ${nomeAluno}</strong>
                                             </div>
                                             <div style="display:flex; align-items:center; gap:6px;">
-                                                <label style="font-size:0.75rem; margin:0;">Nível em Sala/Consolidado:</label>
+                                                <label style="font-size:0.75rem; margin:0;">Nível em Sala de Aula:</label>
                                                 <select class="form-control" style="width:auto; padding:4px 8px; font-size:0.8rem;" onchange="definirNivelAlunoProf('${nomeAluno}', this.value)">
                                                     <option value="Alto" ${nivelAtualSala === 'Alto' ? 'selected' : ''}>🌟 Alto</option>
                                                     <option value="Medio" ${nivelAtualSala === 'Medio' ? 'selected' : ''}>📈 Médio</option>
@@ -687,7 +702,7 @@
                         });
                     }
                     if(container.innerHTML === "") {
-                        container.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum aluno encontrado nesta turma.</p>";
+                        container.innerHTML = "<p style='font-size:0.8rem; color:var(--text-muted); text-align:center;'>Nenhum aluno cadastrado nesta turma.</p>";
                     }
                 });
             });
@@ -696,10 +711,10 @@
         window.definirNivelAlunoProf = function(nomeAluno, novoNivel) {
             update(ref(db, `users/${nomeAluno}/desempenho`), {
                 [currentUser.subject]: novoNivel
-            }).then(() => alert(`Nível de ${nomeAluno} atualizado para ${novoNivel} em ${currentUser.subject}!`));
+            }).then(() => alert(`Nível de ${nomeAluno} em ${currentUser.subject} foi atualizado para ${novoNivel}!`));
         };
 
-        // ==================== CHAT PROFESSOR <-> MONITORES & PDFS ====================
+        // ==================== CHAT PROFESSOR <-> MONITORES ====================
         window.carregarChatProfMonitores = function() {
             onValue(ref(db, `chats_prof_monitores/${currentUser.subject}`), (snap) => {
                 const box = document.getElementById('chat-prof-monitores-box');
@@ -711,7 +726,7 @@
                         
                         let msgConteudo = m.isPdf ? `
                             📄 <b>Material/PDF Compartilhado:</b><br>
-                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Acessar Documento de Apoio 🔗</a>
+                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Abrir Documento 🔗</a>
                         ` : m.texto;
 
                         box.innerHTML += `<div class="chat-msg ${isProf}"><b>${m.remetente}:</b> ${msgConteudo}</div>`;
@@ -731,8 +746,8 @@
                         let isMe = m.remetente === currentUser.name ? "env" : "rec";
 
                         let msgConteudo = m.isPdf ? `
-                            📄 <b>Material enviado pelo Professor:</b><br>
-                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Clique aqui para abrir o PDF/Link 🔗</a>
+                            📄 <b>Material do Professor:</b><br>
+                            <a href="${m.texto}" target="_blank" style="color:var(--blue-cyan); font-weight:600; text-decoration:underline;">Abrir PDF / Link 🔗</a>
                         ` : m.texto;
 
                         box.innerHTML += `<div class="chat-msg ${isMe}"><b>${m.remetente}:</b> ${msgConteudo}</div>`;
@@ -755,14 +770,14 @@
 
         window.enviarMaterialPdfProf = function() {
             const link = document.getElementById('input-prof-pdf-link').value.trim();
-            if(!link) return alert("Cole o link do material/PDF!");
+            if(!link) return alert("Cole o link do PDF/Material!");
             push(ref(db, `chats_prof_monitores/${currentUser.subject}`), {
                 remetente: currentUser.name,
                 texto: link,
                 isPdf: true,
                 timestamp: Date.now()
             }).then(() => {
-                alert("PDF/Material compartilhado no grupo de monitores!");
+                alert("Material/PDF disponibilizado para os monitores!");
                 document.getElementById('input-prof-pdf-link').value = "";
             });
         };
@@ -778,7 +793,46 @@
             }).then(() => document.getElementById('input-chat-monitor-msg').value = "");
         };
 
-        // ==================== GRÁFICOS EM TEMPO REAL (GESTAO) ====================
+        // ==================== PAINEL ADMIN / COORDENAÇÃO ====================
+        window.carregarListaUsuariosAdmin = function() {
+            const box = document.getElementById('lista-usuarios-admin');
+            onValue(ref(db, 'users'), (snap) => {
+                box.innerHTML = "";
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        let u = c.val();
+                        let nomeKey = c.key;
+                        box.innerHTML += `
+                            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <strong>👤 ${nomeKey}</strong> <small style="color:var(--text-muted);">(${u.classe || 'S/ Turma'})</small><br>
+                                    <small style="color:var(--blue-cyan);">${u.isMonitor ? `Monitor de ${u.materiaMonitoria}` : 'Aluno Regular'}</small>
+                                </div>
+                                <div style="display:flex; gap:6px;">
+                                    <button class="btn btn-secondary" style="width:auto; padding:4px 8px; font-size:0.75rem;" onclick="alternarStatusMonitorAdmin('${nomeKey}', ${!u.isMonitor})">
+                                        ${u.isMonitor ? 'Remover Monitor' : 'Tornar Monitor'}
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    box.innerHTML = "<em>Nenhum aluno registrado no banco de dados.</em>";
+                }
+            });
+        };
+
+        window.alternarStatusMonitorAdmin = function(nomeUser, novoStatus) {
+            let materia = "Matemática";
+            if(novoStatus) {
+                materia = prompt("Qual matéria este monitor irá atender?", "Matemática") || "Matemática";
+            }
+            update(ref(db, `users/${nomeUser}`), {
+                isMonitor: novoStatus,
+                materiaMonitoria: novoStatus ? materia : "Nenhuma"
+            }).then(() => carregarListaUsuariosAdmin());
+        };
+
         function ouvirEGerarGraficosRealtime() {
             // Gráfico 1: Atendimentos Reais por Matéria
             onValue(ref(db, 'atendimentos_monitoria'), (snap) => {
@@ -788,9 +842,7 @@
                 if(snap.exists()) {
                     snap.forEach(c => {
                         let a = c.val();
-                        if(contagem[a.materia] !== undefined) {
-                            contagem[a.materia]++;
-                        }
+                        if(contagem[a.materia] !== undefined) contagem[a.materia]++;
                     });
                 }
 
@@ -802,7 +854,7 @@
                     data: {
                         labels: Object.keys(contagem),
                         datasets: [{
-                            label: 'Atendimentos Realizados',
+                            label: 'Atendimentos Registrados',
                             data: Object.values(contagem),
                             backgroundColor: '#8a4fff'
                         }]
