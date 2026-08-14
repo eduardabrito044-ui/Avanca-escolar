@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avança Escolar - Sistema Unificado de Monitoria</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Biblioteca Chart.js para os Gráficos Interativos da Gestão -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -365,17 +367,13 @@
         .star-rating span { font-size: 1.5rem; cursor: pointer; color: #ccc; }
         .star-rating span.active { color: var(--gold-star); }
 
-        .badge-level {
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
+        /* Estilos dos Gráficos */
+        .chart-wrapper {
+            position: relative;
+            max-width: 100%;
+            height: 260px;
+            margin-top: 1rem;
         }
-        .level-alto { background: rgba(0, 223, 162, 0.2); color: #00dfa2; border: 1px solid #00dfa2; }
-        .level-medio { background: rgba(255, 184, 0, 0.2); color: #ffb800; border: 1px solid #ffb800; }
-        .level-baixo { background: rgba(255, 120, 0, 0.2); color: #ff7800; border: 1px solid #ff7800; }
-        .level-muito-baixo { background: rgba(255, 74, 74, 0.2); color: #ff4a4a; border: 1px solid #ff4a4a; }
     </style>
 </head>
 <body>
@@ -464,6 +462,7 @@
         </div>
     </section>
 
+    <!-- PORTAL ALUNOS -->
     <main id="view-portal-alunos" class="app-view">
         <div class="tab-bar">
             <button class="tab-btn active" onclick="switchTabs('tab-busca-monitores', this)">Buscar Monitores 🔍</button>
@@ -588,26 +587,40 @@
         </div>
     </main>
 
+    <!-- PORTAL PROFESSORES (ATUALIZADO COM BOTÃO DE VOLTAR E TROCA RÁPIDA DE TURMA) -->
     <main id="view-portal-professores" class="app-view">
         <h2 id="label-prof-welcome" style="margin-bottom:1rem;">Bem-vindo</h2>
         
         <div class="card" style="margin-bottom:1.5rem; border:1px solid var(--purple-light);">
-            <h3>📊 Ranqueamento por Níveis de Desenvolvimento (Por Turma)</h3>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-                Classifique seus alunos da turma por níveis (Alto, Médio, Baixo e Muito Baixo) na sua matéria para compor o acompanhamento pedagógico.
-            </p>
-            <div class="form-group">
-                <label>Selecione a Turma para Ranquear:</label>
-                <select id="prof-turma-select" class="form-control" onchange="carregarAlunosPorTurmaProf()">
-                    <option value="1º A">1º Ano A</option>
-                    <option value="1º B">1º Ano B</option>
-                    <option value="2º A">2º Ano A</option>
-                    <option value="2º B">2º Ano B</option>
-                    <option value="3º A">3º Ano A</option>
-                    <option value="3º B">3º Ano B</option>
-                </select>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:1rem;">
+                <div>
+                    <h3 style="margin:0;">📊 Ranqueamento Rápido por Turma</h3>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin:0;">
+                        Classifique os alunos da sua matéria sem complicações.
+                    </p>
+                </div>
+                <button class="btn btn-secondary" style="width:auto; padding:0.5rem 1rem; font-size:0.8rem;" onclick="voltarSeletorTurmaProf()">
+                    ⬅️ Trocar de Turma / Voltar
+                </button>
             </div>
-            <div id="lista-alunos-turma-prof" style="display: flex; flex-direction: column; gap: 8px; margin-top: 1rem;"></div>
+
+            <!-- Seleção de Turmas de Acesso Rápido -->
+            <div class="form-group" id="container-seletor-turma-prof">
+                <label>Selecione a Turma que deseja ranquear agora:</label>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+                    <button class="tab-btn" onclick="selecionarTurmaProf('1º A')">1º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('1º B')">1º Ano B</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('2º A')">2º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('2º B')">2º Ano B</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('3º A')">3º Ano A</button>
+                    <button class="tab-btn" onclick="selecionarTurmaProf('3º B')">3º Ano B</button>
+                </div>
+            </div>
+
+            <div id="painel-turma-ativa" style="display:none; margin-top:1rem;">
+                <h4 id="label-turma-selecionada" style="color:var(--blue-cyan); margin-bottom:0.8rem;">Turma Atual: --</h4>
+                <div id="lista-alunos-turma-prof" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
         </div>
 
         <div class="grid-2">
@@ -641,9 +654,30 @@
         </div>
     </main>
 
+    <!-- PORTAL COORDENAÇÃO (ATUALIZADO COM GRÁFICOS VISUAIS) -->
     <main id="view-portal-coordenacao" class="app-view">
         <h2>🧭 Central Analítica de Direção & Gestão Escolar</h2>
         <br>
+
+        <!-- SEÇÃO DE GRÁFICOS DA GESTÃO -->
+        <div class="grid-2" style="margin-bottom:1.5rem;">
+            <div class="card">
+                <h3>📊 Gráfico: Distribuição Geral do Desempenho</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Visualização da quantidade de alunos nos níveis Alto, Médio, Baixo e Muito Baixo.</p>
+                <div class="chart-wrapper">
+                    <canvas id="chartDesempenhoGeral"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Gráfico: Atendimentos por Disciplina</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted);">Volume total de suporte e monitorias solicitadas pelos alunos.</p>
+                <div class="chart-wrapper">
+                    <canvas id="chartAtendimentosMateria"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="grid-2">
             <div class="card">
                 <h3>Consultar Destaques por Matéria</h3>
@@ -671,6 +705,7 @@
         </div>
     </main>
 
+    <!-- PORTAL ADMIN -->
     <main id="view-portal-admin" class="app-view">
         <h2 style="color: var(--admin-gold); margin-bottom: 1rem; border-bottom: 2px solid var(--admin-gold); padding-bottom: 0.5rem;">⚙️ Central de Controle</h2>
 
@@ -770,6 +805,9 @@
 
         let currentUser = null;
         let selectedRatingStars = 5;
+        let turmaSelecionadaProf = null;
+        let chartDesempenhoInstance = null;
+        let chartAtendimentosInstance = null;
 
         function initApp() {
             const dropdowns = [
@@ -951,7 +989,6 @@
                 document.getElementById('user-display-label').innerText = `Prof: ${currentUser.name} [${currentUser.subject}]`;
                 document.getElementById('label-prof-welcome').innerText = `👨‍🏫 Espaço do Professor - ${currentUser.name} (${currentUser.subject})`;
                 
-                carregarAlunosPorTurmaProf();
                 ouvirAlertasMateriaProfessor();
 
             } else if(currentUser.profile === 'coordenacao') {
@@ -959,6 +996,7 @@
                 document.getElementById('user-display-label').innerText = "Painel Coordenador 🧭";
                 carregarDestaquesMateriaCoord();
                 carregarMetricasGestao();
+                renderizarGraficosGestao();
 
             } else if(currentUser.profile === 'admin') {
                 document.getElementById('view-portal-admin').classList.add('active');
@@ -967,8 +1005,23 @@
             }
         }
 
+        // ==================== LÓGICA DE RANQUEAMENTO FACILITADA PARA PROFESSOR ====================
+        window.selecionarTurmaProf = function(turma) {
+            turmaSelecionadaProf = turma;
+            document.getElementById('container-seletor-turma-prof').style.display = 'none';
+            document.getElementById('painel-turma-ativa').style.display = 'block';
+            document.getElementById('label-turma-selecionada').innerText = `Turma Selecionada: ${turma}`;
+            carregarAlunosPorTurmaProf();
+        };
+
+        window.voltarSeletorTurmaProf = function() {
+            turmaSelecionadaProf = null;
+            document.getElementById('container-seletor-turma-prof').style.display = 'block';
+            document.getElementById('painel-turma-ativa').style.display = 'none';
+        };
+
         window.carregarAlunosPorTurmaProf = function() {
-            const turma = document.getElementById('prof-turma-select').value;
+            if(!turmaSelecionadaProf) return;
             const container = document.getElementById('lista-alunos-turma-prof');
             container.innerHTML = "";
 
@@ -979,7 +1032,7 @@
                 if(snap.exists()) {
                     snap.forEach(child => {
                         let user = child.val();
-                        if(user.classe === turma && user.nomeCadastro) {
+                        if(user.classe === turmaSelecionadaProf && user.nomeCadastro) {
                             let nivel = (user.desempenho && user.desempenho[currentUser.subject]) || 'Medio';
                             lista.push({ nome: child.key, nivel: nivel });
                         }
@@ -990,11 +1043,11 @@
 
                     lista.forEach(aluno => {
                         container.innerHTML += `
-                            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="list-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03);">
                                 <span>👤 <b>${aluno.nome}</b></span>
                                 <div style="display:flex; gap:6px; align-items:center;">
                                     <label style="font-size:0.75rem; margin:0;">Nível:</label>
-                                    <select class="form-control" style="width:auto; padding:2px 8px; font-size:0.8rem;" onchange="atualizarNivelAluno('${aluno.nome}', this.value)">
+                                    <select class="form-control" style="width:auto; padding:4px 8px; font-size:0.8rem;" onchange="atualizarNivelAluno('${aluno.nome}', this.value)">
                                         <option value="Alto" ${aluno.nivel === 'Alto' ? 'selected' : ''}>🌟 Alto</option>
                                         <option value="Medio" ${aluno.nivel === 'Medio' ? 'selected' : ''}>📈 Médio</option>
                                         <option value="Baixo" ${aluno.nivel === 'Baixo' ? 'selected' : ''}>⚠️ Baixo</option>
@@ -1016,6 +1069,81 @@
                 [currentUser.subject]: novoNivel
             }).then(() => alert(`Nível de ${nomeAluno} atualizado para ${novoNivel} em ${currentUser.subject}!`));
         };
+
+        // ==================== GRÁFICOS VISUAIS PARA A DIREÇÃO E GESTÃO ====================
+        function renderizarGraficosGestao() {
+            onValue(ref(db, 'users'), (snap) => {
+                let totaisNivel = { Alto: 0, Medio: 0, Baixo: 0, MuitoBaixo: 0 };
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let u = child.val();
+                        if(u.desempenho) {
+                            Object.keys(u.desempenho).forEach(materia => {
+                                let n = u.desempenho[materia];
+                                if(n === 'Alto') totaisNivel.Alto++;
+                                else if(n === 'Medio') totaisNivel.Medio++;
+                                else if(n === 'Baixo') totaisNivel.Baixo++;
+                                else if(n === 'Muito Baixo') totaisNivel.MuitoBaixo++;
+                            });
+                        }
+                    });
+                }
+
+                const ctx1 = document.getElementById('chartDesempenhoGeral').getContext('2d');
+                if(chartDesempenhoInstance) chartDesempenhoInstance.destroy();
+
+                chartDesempenhoInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['🌟 Alto', '📈 Médio', '⚠️ Baixo', '🚨 Muito Baixo'],
+                        datasets: [{
+                            data: [totaisNivel.Alto, totaisNivel.Medio, totaisNivel.Baixo, totaisNivel.MuitoBaixo],
+                            backgroundColor: ['#00dfa2', '#ffb800', '#ff7800', '#ff4a4a']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#ffffff' } } } }
+                });
+            });
+
+            onValue(ref(db, 'validacoes_pendentes'), (snap) => {
+                let matCounts = {};
+                disciplinas.forEach(d => matCounts[d] = 0);
+
+                if(snap.exists()) {
+                    snap.forEach(child => {
+                        let v = child.val();
+                        if(v.subject && matCounts[v.subject] !== undefined) {
+                            matCounts[v.subject]++;
+                        }
+                    });
+                }
+
+                const ctx2 = document.getElementById('chartAtendimentosMateria').getContext('2d');
+                if(chartAtendimentosInstance) chartAtendimentosInstance.destroy();
+
+                chartAtendimentosInstance = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(matCounts),
+                        datasets: [{
+                            label: 'Atendimentos Solicitados',
+                            data: Object.values(matCounts),
+                            backgroundColor: '#8a4fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { ticks: { color: '#b3a4cd' } },
+                            y: { ticks: { color: '#b3a4cd' } }
+                        },
+                        plugins: { legend: { labels: { color: '#ffffff' } } }
+                    }
+                });
+            });
+        }
 
         window.carregarRankingGeralPublico = function() {
             const container = document.getElementById('box-ranking-geral-publico');
