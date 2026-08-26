@@ -1766,5 +1766,132 @@
             });
         };
     </script>
+<!-- BOTÃO FLUTUANTE DE ACESSIBILIDADE -->
+<div id="widgetAcessibilidade" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+  <button onclick="toggleMenuAcessibilidade()" style="background-color: #6366f1; color: white; border: none; border-radius: 50px; width: 60px; height: 60px; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;" title="Menu de Acessibilidade">
+    ♿
+  </button>
+  
+  <!-- MENU SUSPENSO -->
+  <div id="menuAcessibilidade" style="display: none; position: absolute; bottom: 70px; right: 0; background: white; width: 260px; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: sans-serif; text-align: left;">
+    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Painel de Acessibilidade</h4>
+    
+    <button onclick="aumentarFonte()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔠 Aumentar Fonte</button>
+    
+    <button onclick="diminuirFonte()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔡 Diminuir Fonte</button>
+    
+    <button id="btnLer" onclick="toggleLeitura()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🔊 Ouvir Página (Áudio)</button>
+    
+    <button onclick="toggleModoAutismo()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #e6fffa; color: #00796b; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🧩 Modo Autismo (Calmo)</button>
+    
+    <button id="btnSom" onclick="toggleSomRelaxante()" style="width: 100%; padding: 8px; background: #fef3c7; color: #92400e; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎧 Som Relaxante</button>
+  </div>
+</div>
+
+<!-- SCRIPT DE FUNCIONALIDADES -->
+<script>
+  let tamanhoAtual = 16;
+  let sintetizador = window.speechSynthesis;
+  let audioContext = null;
+  let oscilador = null;
+  let ganhoNode = null;
+  let tocandoSom = false;
+
+  function toggleMenuAcessibilidade() {
+    let menu = document.getElementById('menuAcessibilidade');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function aumentarFonte() {
+    tamanhoAtual += 2;
+    document.body.style.fontSize = tamanhoAtual + 'px';
+  }
+
+  function diminuirFonte() {
+    if (tamanhoAtual > 10) {
+      tamanhoAtual -= 2;
+      document.body.style.fontSize = tamanhoAtual + 'px';
+    }
+  }
+
+  function toggleLeitura() {
+    if (sintetizador.speaking) {
+      sintetizador.cancel();
+      document.getElementById("btnLer").innerText = "🔊 Ouvir Página (Áudio)";
+      return;
+    }
+    let texto = document.body.innerText;
+    if (texto) {
+      let fala = new SpeechSynthesisUtterance(texto);
+      fala.lang = 'pt-BR';
+      fala.onend = () => { document.getElementById("btnLer").innerText = "🔊 Ouvir Página (Áudio)"; };
+      sintetizador.speak(fala);
+      document.getElementById("btnLer").innerText = "⏹️ Parar Áudio";
+    }
+  }
+
+  function toggleModoAutismo() {
+    let body = document.body;
+    // Se já estiver no modo autismo, desliga. Se não, aplica cores suaves e fonte limpa
+    if (body.style.backgroundColor === 'rgb(244, 246, 248)') {
+      body.style.backgroundColor = '';
+      body.style.color = '';
+      body.style.letterSpacing = '';
+      alert("Modo padrão restaurado.");
+    } else {
+      body.style.backgroundColor = '#f4f6f8'; // Fundo cinza claro/pastel bem suave (evita telas brancas agressivas)
+      body.style.color = '#2d3748'; // Texto em tom escuro suave (não puro preto)
+      body.style.letterSpacing = '0.5px'; // Melhora a legibilidade para neurodivergentes
+      alert("Modo para Autismo/Sensorial ativado: cores suaves e espaçamento otimizados.");
+    }
+  }
+
+  function toggleSomRelaxante() {
+    if (!tocandoSom) {
+      // Cria um som ambiente suave (ruído rosa/branco sintetizado via navegador para relaxar)
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Cria um buffer de ruído rosa suave para foco/calma
+      let bufferSize = audioContext.sampleRate * 2;
+      let buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      let output = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      
+      for (let i = 0; i < bufferSize; i++) {
+        let white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        output[i] *= 0.03; // volume bem baixo e relaxante
+        b6 = white * 0.115926;
+      }
+
+      let whiteNoise = audioContext.createBufferSource();
+      whiteNoise.buffer = buffer;
+      whiteNoise.loop = true;
+
+      ganhoNode = audioContext.createGain();
+      ganhoNode.gain.value = 0.5;
+
+      whiteNoise.connect(ganhoNode);
+      ganhoNode.connect(audioContext.destination);
+      whiteNoise.start();
+      
+      tocandoSom = true;
+      document.getElementById("btnSom").innerText = "🔇 Desligar Som";
+    } else {
+      if (audioContext) {
+        audioContext.close();
+      }
+      tocandoSom = false;
+      document.getElementById("btnSom").innerText = "🎧 Som Relaxante";
+    }
+  }
+</script>
+
 </body>
 </html>
