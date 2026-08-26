@@ -1765,37 +1765,109 @@
                 document.getElementById('admin-cert-target').value = "";
             });
         };
-    </script>
-<!-- BOTÃO FLUTUANTE DE ACESSIBILIDADE -->
+    </sscript
+<!-- BOTÃO FLUTUANTE DE ACESSIBILIDADE E MENU (MÃOZINHA) -->
 <div id="widgetAcessibilidade" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-  <button onclick="toggleMenuAcessibilidade()" style="background-color: #6366f1; color: white; border: none; border-radius: 50px; width: 60px; height: 60px; font-size: 24px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;" title="Menu de Acessibilidade">
-    ♿
+  <button onclick="toggleMenuAcessibilidade()" style="background-color: #4f46e5; color: white; border: none; border-radius: 50px; width: 60px; height: 60px; font-size: 26px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;" title="Menu e Recursos">
+    ✋
   </button>
   
-  <!-- MENU SUSPENSO -->
-  <div id="menuAcessibilidade" style="display: none; position: absolute; bottom: 70px; right: 0; background: white; width: 260px; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: sans-serif; text-align: left;">
-    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Painel de Acessibilidade</h4>
+  <!-- MENU SUSPENSO EXPANDIDO -->
+  <div id="menuAcessibilidade" style="display: none; position: absolute; bottom: 70px; right: 0; background: white; width: 290px; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: sans-serif; text-align: left; max-height: 400px; overflow-y: auto;">
+    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Recursos & Central do Aluno</h4>
     
-    <button onclick="aumentarFonte()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔠 Aumentar Fonte</button>
+    <button onclick="aumentarFonte()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔠 Aumentar Fonte</button>
+    <button onclick="diminuirFonte()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔡 Diminuir Fonte</button>
     
-    <button onclick="diminuirFonte()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔡 Diminuir Fonte</button>
+    <button onclick="toggleModoLeituraPonto()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">👆 Ouvir texto clicado</button>
+    <button onclick="toggleLeituraTudo()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🔊 Ouvir Página Inteira</button>
+
+    <button onclick="abrirBiblioteca()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #d1fae5; color: #065f46; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">📚 Biblioteca & Livros Recomendados</button>
+
+    <button onclick="abrirPersonalizacao()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #fce7f3; color: #9d174d; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎨 Personalizar Meu Perfil & Cores</button>
+
+    <button onclick="abrirLeitorLivros()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #ede9fe; color: #6d28d9; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">📖 Leitor de Textos</button>
     
-    <button id="btnLer" onclick="toggleLeitura()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🔊 Ouvir Página (Áudio)</button>
+    <button onclick="toggleModoCalmo()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e6fffa; color: #00796b; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🍃 Modo Calmo (Sem Estímulos)</button>
     
-    <button onclick="toggleModoAutismo()" style="width: 100%; margin-bottom: 8px; padding: 8px; background: #e6fffa; color: #00796b; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🧩 Modo Autismo (Calmo)</button>
-    
-    <button id="btnSom" onclick="toggleSomRelaxante()" style="width: 100%; padding: 8px; background: #fef3c7; color: #92400e; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎧 Som Relaxante</button>
+    <button onclick="toggleMusicaFundo()" style="width: 100%; padding: 7px; background: #fef3c7; color: #92400e; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎧 Música Relaxante</button>
   </div>
 </div>
 
-<!-- SCRIPT DE FUNCIONALIDADES -->
+<!-- MODAL: BIBLIOTECA DE CONTEÚDOS E LIVROS -->
+<div id="modalBiblioteca" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:550px; max-height:80vh; overflow-y:auto; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <h3 style="color: #065f46; margin-top:0;">📚 Biblioteca & Obras Recomendadas</h3>
+    <p style="font-size: 13px; color: #555;">Conteúdos curados por professores e indicações de livros fundamentais para o desenvolvimento dos estudantes:</p>
+    
+    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
+      <strong>1. Matemática Básica e Raciocínio</strong>
+      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"O Homem que Calculava"</em> (Malba Tahan) — Lógica aplicada e diversão matemática.<br>• Resumos interativos de Álgebra e Geometria criados pelos monitores.</p>
+    </div>
+
+    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
+      <strong>2. Língua Portuguesa e Redação</strong>
+      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"Minha Vida de Menina"</em> (Helena Morley) — Estudo de crônicas e literatura brasileira.<br>• Guias práticos de coesão, coerência e estrutura dissertativa.</p>
+    </div>
+
+    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
+      <strong>3. Ciências da Natureza</strong>
+      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"Cosmos"</em> (Carl Sagan) — Divulgação científica inspiradora.<br>• Mapas mentais de Biologia Celular e Leis de Newton.</p>
+    </div>
+
+    <button onclick="fecharBiblioteca()" style="background:#6b7280; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-top: 10px;">✕ Fechar Biblioteca</button>
+  </div>
+</div>
+
+<!-- MODAL: PERSONALIZAR MEU PERFIL E CORES -->
+<div id="modalPersonalizacao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:450px; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <h3 style="color: #9d174d; margin-top:0;">🎨 Personalizar Meu Perfil</h3>
+    <p style="font-size: 13px; color: #555;">Deixe o seu espaço com a sua cara escolhendo suas cores e efeitos favoritos:</p>
+    
+    <label style="font-size: 14px; font-weight: bold; display: block; margin-top: 10px;">Cor do Tema / Fundo da Página:</label>
+    <div style="display: flex; gap: 10px; margin-top: 8px;">
+      <button onclick="mudarCorFundo('#ffffff')" style="width: 35px; height: 35px; background: #ffffff; border: 2px solid #ccc; border-radius: 50%; cursor: pointer;" title="Padrão Limpo"></button>
+      <button onclick="mudarCorFundo('#eff6ff')" style="width: 35px; height: 35px; background: #eff6ff; border: 2px solid #93c5fd; border-radius: 50%; cursor: pointer;" title="Azul Suave"></button>
+      <button onclick="mudarCorFundo('#fdf2f8')" style="width: 35px; height: 35px; background: #fdf2f8; border: 2px solid #f472b6; border-radius: 50%; cursor: pointer;" title="Rosa Delicado"></button>
+      <button onclick="mudarCorFundo('#f0fdf4')" style="width: 35px; height: 35px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 50%; cursor: pointer;" title="Verde Calmo"></button>
+      <button onclick="mudarCorFundo('#1e293b')" style="width: 35px; height: 35px; background: #1e293b; border: 2px solid #475569; border-radius: 50%; cursor: pointer;" title="Modo Escuro"></button>
+    </div>
+
+    <label style="font-size: 14px; font-weight: bold; display: block; margin-top: 15px;">Efeitos e Decoração na Tela:</label>
+    <div style="display: flex; gap: 10px; margin-top: 8px;">
+      <button onclick="ativarEfeito('🌸')" style="padding: 8px 12px; background: #fce7f3; border: none; border-radius: 6px; cursor: pointer;">🌸 Flores</button>
+      <button onclick="ativarEfeito('⭐')" style="padding: 8px 12px; background: #fef9c3; border: none; border-radius: 6px; cursor: pointer;">⭐ Estrelas</button>
+      <button onclick="ativarEfeito('💖')" style="padding: 8px 12px; background: #fee2e2; border: none; border-radius: 6px; cursor: pointer;">💖 Corações</button>
+      <button onclick="removerEfeitos()" style="padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer;">Remover Efeitos</button>
+    </div>
+
+    <button onclick="fecharPersonalizacao()" style="background:#6b7280; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-top: 20px; float:right;">Salvar & Fechar</button>
+  </div>
+</div>
+
+<!-- MODAL: LEITOR DE TEXTOS -->
+<div id="modalLeitorLivros" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+  <div style="background:white; width:90%; max-width:500px; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <h3>📖 Leitor de Textos em Voz Alta</h3>
+    <textarea id="textoParaLerLivro" rows="6" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom: 10px;" placeholder="Cole qualquer texto ou resumo aqui..."></textarea>
+    <br>
+    <button onclick="lerTextoDigitado()" style="background:#4f46e5; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">▶️ Ouvir</button>
+    <button onclick="pararLeituraLivro()" style="background:#dc2626; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">⏹️ Parar</button>
+    <button onclick="fecharLeitorLivros()" style="background:#6b7280; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; float:right;">✕ Fechar</button>
+  </div>
+</div>
+
+<!-- ELEMENTO DE ÁUDIO PARA MÚSICA DE FUNDO -->
+<audio id="audioRelax" loop>
+  <source src="https://actions.google.com/sounds/v1/weather/gentle_wind_and_birds.ogg" type="audio/ogg">
+</audio>
+
+<!-- SCRIPTS DE CONTROLE -->
 <script>
   let tamanhoAtual = 16;
   let sintetizador = window.speechSynthesis;
-  let audioContext = null;
-  let oscilador = null;
-  let ganhoNode = null;
-  let tocandoSom = false;
+  let modoCliqueAtivo = false;
 
   function toggleMenuAcessibilidade() {
     let menu = document.getElementById('menuAcessibilidade');
@@ -1814,84 +1886,91 @@
     }
   }
 
-  function toggleLeitura() {
-    if (sintetizador.speaking) {
+  function toggleModoLeituraPonto() {
+    modoCliqueAtivo = !modoCliqueAtivo;
+    alert(modoCliqueAtivo ? "Modo de clique ativado! Clique em qualquer texto para ouvi-lo." : "Modo desativado.");
+  }
+
+  document.addEventListener('click', function(e) {
+    if (modoCliqueAtivo && e.target.innerText) {
       sintetizador.cancel();
-      document.getElementById("btnLer").innerText = "🔊 Ouvir Página (Áudio)";
-      return;
-    }
-    let texto = document.body.innerText;
-    if (texto) {
-      let fala = new SpeechSynthesisUtterance(texto);
+      let fala = new SpeechSynthesisUtterance(e.target.innerText);
       fala.lang = 'pt-BR';
-      fala.onend = () => { document.getElementById("btnLer").innerText = "🔊 Ouvir Página (Áudio)"; };
       sintetizador.speak(fala);
-      document.getElementById("btnLer").innerText = "⏹️ Parar Áudio";
     }
+  });
+
+  function toggleLeituraTudo() {
+    sintetizador.cancel();
+    let fala = new SpeechSynthesisUtterance(document.body.innerText);
+    fala.lang = 'pt-BR';
+    sintetizador.speak(fala);
   }
 
-  function toggleModoAutismo() {
-    let body = document.body;
-    // Se já estiver no modo autismo, desliga. Se não, aplica cores suaves e fonte limpa
-    if (body.style.backgroundColor === 'rgb(244, 246, 248)') {
-      body.style.backgroundColor = '';
-      body.style.color = '';
-      body.style.letterSpacing = '';
-      alert("Modo padrão restaurado.");
-    } else {
-      body.style.backgroundColor = '#f4f6f8'; // Fundo cinza claro/pastel bem suave (evita telas brancas agressivas)
-      body.style.color = '#2d3748'; // Texto em tom escuro suave (não puro preto)
-      body.style.letterSpacing = '0.5px'; // Melhora a legibilidade para neurodivergentes
-      alert("Modo para Autismo/Sensorial ativado: cores suaves e espaçamento otimizados.");
-    }
+  function abrirBiblioteca() { document.getElementById('modalBiblioteca').style.display = 'flex'; }
+  function fecharBiblioteca() { document.getElementById('modalBiblioteca').style.display = 'none'; }
+
+  function abrirPersonalizacao() { document.getElementById('modalPersonalizacao').style.display = 'flex'; }
+  function fecharPersonalizacao() { document.getElementById('modalPersonalizacao').style.display = 'none'; }
+
+  function mudarCorFundo(cor) {
+    document.body.style.backgroundColor = cor;
+    document.body.style.color = (cor === '#1e293b') ? '#f8fafc' : '#2d3748';
   }
 
-  function toggleSomRelaxante() {
-    if (!tocandoSom) {
-      // Cria um som ambiente suave (ruído rosa/branco sintetizado via navegador para relaxar)
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Cria um buffer de ruído rosa suave para foco/calma
-      let bufferSize = audioContext.sampleRate * 2;
-      let buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-      let output = buffer.getChannelData(0);
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-      
-      for (let i = 0; i < bufferSize; i++) {
-        let white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        b3 = 0.86650 * b3 + white * 0.3104856;
-        b4 = 0.55000 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.0168980;
-        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-        output[i] *= 0.03; // volume bem baixo e relaxante
-        b6 = white * 0.115926;
-      }
-
-      let whiteNoise = audioContext.createBufferSource();
-      whiteNoise.buffer = buffer;
-      whiteNoise.loop = true;
-
-      ganhoNode = audioContext.createGain();
-      ganhoNode.gain.value = 0.5;
-
-      whiteNoise.connect(ganhoNode);
-      ganhoNode.connect(audioContext.destination);
-      whiteNoise.start();
-      
-      tocandoSom = true;
-      document.getElementById("btnSom").innerText = "🔇 Desligar Som";
-    } else {
-      if (audioContext) {
-        audioContext.close();
-      }
-      tocandoSom = false;
-      document.getElementById("btnSom").innerText = "🎧 Som Relaxante";
+  function ativarEfeito(simbolo) {
+    removerEfeitos();
+    let container = document.createElement('div');
+    container.id = 'efeitosFlutuantes';
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '9998';
+    
+    for (let i = 0; i < 15; i++) {
+      let span = document.createElement('span');
+      span.innerText = simbolo;
+      span.style.position = 'absolute';
+      span.style.left = Math.random() * window.innerWidth + 'px';
+      span.style.top = (Math.random() * window.innerHeight * -1) + 'px';
+      span.style.fontSize = (20 + Math.random() * 20) + 'px';
+      span.style.opacity = '0.6';
+      container.appendChild(span);
     }
+    document.body.appendChild(container);
+    alert("Efeito decorativo ativado!");
+  }
+
+  function removerEfeitos() {
+    let el = document.getElementById('efeitosFlutuantes');
+    if (el) el.remove();
+  }
+
+  function abrirLeitorLivros() { document.getElementById('modalLeitorLivros').style.display = 'flex'; }
+  function fecharLeitorLivros() { sintetizador.cancel(); document.getElementById('modalLeitorLivros').style.display = 'none'; }
+  function lerTextoDigitado() {
+    sintetizador.cancel();
+    let texto = document.getElementById('textoParaLerLivro').value;
+    if(texto) sintetizador.speak(new SpeechSynthesisUtterance(texto));
+  }
+  function pararLeituraLivro() { sintetizador.cancel(); }
+
+  function toggleModoCalmo() {
+    mudarCorFundo('#f4f6f8');
+    document.body.style.letterSpacing = '0.5px';
+    alert("Modo Calmo ativado.");
+  }
+
+  function toggleMusicaFundo() {
+    let audio = document.getElementById('audioRelax');
+    if (audio.paused) { audio.play(); alert("Música relaxante ligada."); }
+    else { audio.pause(); audio.currentTime = 0; alert("Música desligada."); }
   }
 </script>
+
 
 </body>
 </html>
