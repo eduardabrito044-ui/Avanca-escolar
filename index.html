@@ -1766,15 +1766,14 @@
             });
         };
     </script>
-<!-- BOTÃO FLUTUANTE DE ACESSIBILIDADE E MENU (MÃOZINHA) -->
+<!-- WIDGET DE ACESSIBILIDADE E CENTRAL INCLUSIVA -->
 <div id="widgetAcessibilidade" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-  <button onclick="toggleMenuAcessibilidade()" style="background-color: #4f46e5; color: white; border: none; border-radius: 50px; width: 60px; height: 60px; font-size: 26px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;" title="Menu e Recursos">
+  <button onclick="toggleMenuAcessibilidade()" aria-label="Abrir menu de acessibilidade" style="background-color: #4f46e5; color: white; border: none; border-radius: 50px; width: 60px; height: 60px; font-size: 26px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
     ✋
   </button>
   
-  <!-- MENU SUSPENSO EXPANDIDO -->
-  <div id="menuAcessibilidade" style="display: none; position: absolute; bottom: 70px; right: 0; background: white; width: 290px; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: sans-serif; text-align: left; max-height: 400px; overflow-y: auto;">
-    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Recursos & Central do Aluno</h4>
+  <div id="menuAcessibilidade" style="display: none; position: absolute; bottom: 70px; right: 0; background: white; width: 300px; padding: 15px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); font-family: sans-serif; text-align: left; max-height: 480px; overflow-y: auto;">
+    <h4 style="margin: 0 0 10px 0; font-size: 16px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">Central Inclusiva & Aluno</h4>
     
     <button onclick="aumentarFonte()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔠 Aumentar Fonte</button>
     <button onclick="diminuirFonte()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; text-align: left;">🔡 Diminuir Fonte</button>
@@ -1782,92 +1781,149 @@
     <button onclick="toggleModoLeituraPonto()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">👆 Ouvir texto clicado</button>
     <button onclick="toggleLeituraTudo()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e0e7ff; color: #3730a3; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🔊 Ouvir Página Inteira</button>
 
-    <button onclick="abrirBiblioteca()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #d1fae5; color: #065f46; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">📚 Biblioteca & Livros Recomendados</button>
+    <!-- BOTÃO DA BIBLIOTECA COMPLETA -->
+    <button onclick="abrirBiblioteca()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #d1fae5; color: #065f46; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">📚 Biblioteca Digital & Leituras</button>
 
-    <button onclick="abrirPersonalizacao()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #fce7f3; color: #9d174d; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎨 Personalizar Meu Perfil & Cores</button>
+    <button onclick="toggleAltoContraste()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #000000; color: #ffff00; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">👁️ Alto Contraste (Baixa Visão)</button>
 
-    <button onclick="abrirLeitorLivros()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #ede9fe; color: #6d28d9; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">📖 Leitor de Textos</button>
-    
     <button onclick="toggleModoCalmo()" style="width: 100%; margin-bottom: 6px; padding: 7px; background: #e6fffa; color: #00796b; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🍃 Modo Calmo (Sem Estímulos)</button>
+
+    <div style="margin-bottom: 8px; padding: 8px; background: #fdf2f8; border-radius: 6px;">
+      <label style="font-size: 13px; font-weight: bold; color: #9d174d; display: block; margin-bottom: 4px;">🎨 Cor de Fundo Personalizada:</label>
+      <input type="color" id="seletorCor" onchange="mudarCorFundo(this.value)" style="width: 100%; height: 35px; border: none; border-radius: 4px; cursor: pointer;">
+    </div>
+
+    <div style="margin-bottom: 8px; padding: 8px; background: #fef3c7; border-radius: 6px;">
+      <label style="font-size: 13px; font-weight: bold; color: #92400e; display: block; margin-bottom: 4px;">🎧 Escolher Som de Fundo:</label>
+      <select id="seletorMusica" onchange="trocarMusica(this.value)" style="width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="">Desligado</option>
+        <option value="https://actions.google.com/sounds/v1/weather/gentle_wind_and_birds.ogg">Vento e Pássaros</option>
+        <option value="https://actions.google.com/sounds/v1/weather/rain_heavy.ogg">Chuva Suave</option>
+        <option value="https://actions.google.com/sounds/v1/weather/ocean_waves.ogg">Ondas do Mar</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: BIBLIOTECA DIGITAL INTERATIVA -->
+<div id="modalBiblioteca" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; justify-content:center; align-items:center;">
+  <div style="background:white; width:92%; max-width:650px; max-height:85vh; overflow-y:auto; padding:25px; border-radius:14px; font-family:sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: left;">
     
-    <button onclick="toggleMusicaFundo()" style="width: 100%; padding: 7px; background: #fef3c7; color: #92400e; border: none; border-radius: 6px; cursor: pointer; text-align: left; font-weight: bold;">🎧 Música Relaxante</button>
+    <!-- TELA 1: ESTANTE / CATÁLOGO -->
+    <div id="estanteBiblioteca">
+      <h3 style="color: #065f46; margin-top:0; font-size: 20px;">📚 Biblioteca Digital Inclusiva</h3>
+      <p style="font-size: 13px; color: #555;">Escolha uma obra abaixo para ler e interagir. Todo o conteúdo possui suporte a leitura em voz alta.</p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+        <div onclick="abrirLivro(0)" style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #047857; font-size: 14px;">📖 Dom Casmurro</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Machado de Assis • Literatura</p>
+        </div>
+        
+        <div onclick="abrirLivro(1)" style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #047857; font-size: 14px;">👑 O Pequeno Príncipe</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Antoine de Saint-Exupéry • Fábula</p>
+        </div>
+
+        <div onclick="abrirLivro(2)" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #1d4ed8; font-size: 14px;">🔢 O Homem que Calculava</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Malba Tahan • Matemática</p>
+        </div>
+
+        <div onclick="abrirLivro(3)" style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #1d4ed8; font-size: 14px;">🌌 Cosmos (Resumo)</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Carl Sagan • Ciências</p>
+        </div>
+
+        <div onclick="abrirLivro(4)" style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #be185d; font-size: 14px;">📜 Direitos Humanos</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">ONU • Cidadania</p>
+        </div>
+
+        <div onclick="abrirLivro(5)" style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s;">
+          <strong style="color: #be185d; font-size: 14px;">💡 Filosofia e Razão</strong>
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Textos Clássicos • Reflexão</p>
+        </div>
+      </div>
+
+      <button onclick="fecharBiblioteca()" style="background:#6b7280; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; margin-top: 20px;">✕ Fechar Biblioteca</button>
+    </div>
+
+    <!-- TELA 2: LEITOR INTERNO DO LIVRO -->
+    <div id="leitorLivroModal" style="display: none;">
+      <button onclick="voltarEstante()" style="background: #e5e7eb; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px;">← Voltar à Estante</button>
+      
+      <h3 id="tituloLivroAtivo" style="color: #065f46; margin: 5px 0;">Título do Livro</h3>
+      <p id="autorLivroAtivo" style="font-size: 12px; color: #555; margin-bottom: 15px; font-style: italic;"></p>
+      
+      <div id="conteudoLivroAtivo" style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; font-size: 14px; line-height: 1.6; color: #333; max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
+        <!-- O texto do livro entra aqui dinamicamente -->
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button onclick="lerConteudoLivro()" style="background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;">▶️ Ouvir Livro em Voz Alta</button>
+        <button onclick="pararLeituraLivroModal()" style="background: #dc2626; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;">⏹️ Parar Leitura</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- MODAL: BIBLIOTECA DE CONTEÚDOS E LIVROS -->
-<div id="modalBiblioteca" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:550px; max-height:80vh; overflow-y:auto; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-    <h3 style="color: #065f46; margin-top:0;">📚 Biblioteca & Obras Recomendadas</h3>
-    <p style="font-size: 13px; color: #555;">Conteúdos curados por professores e indicações de livros fundamentais para o desenvolvimento dos estudantes:</p>
-    
-    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
-      <strong>1. Matemática Básica e Raciocínio</strong>
-      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"O Homem que Calculava"</em> (Malba Tahan) — Lógica aplicada e diversão matemática.<br>• Resumos interativos de Álgebra e Geometria criados pelos monitores.</p>
-    </div>
-
-    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
-      <strong>2. Língua Portuguesa e Redação</strong>
-      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"Minha Vida de Menina"</em> (Helena Morley) — Estudo de crônicas e literatura brasileira.<br>• Guias práticos de coesão, coerência e estrutura dissertativa.</p>
-    </div>
-
-    <div style="background: #f9fafb; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #10b981;">
-      <strong>3. Ciências da Natureza</strong>
-      <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">• <em>"Cosmos"</em> (Carl Sagan) — Divulgação científica inspiradora.<br>• Mapas mentais de Biologia Celular e Leis de Newton.</p>
-    </div>
-
-    <button onclick="fecharBiblioteca()" style="background:#6b7280; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-top: 10px;">✕ Fechar Biblioteca</button>
+<!-- WIDGET OFICIAL VLIBRAS (AVATAR EM LIBRAS) -->
+<div vw class="enabled">
+  <div vw-access-button class="active"></div>
+  <div vw-plugin-wrapper>
+    <div class="vw-plugin-top-wrapper"></div>
   </div>
 </div>
-
-<!-- MODAL: PERSONALIZAR MEU PERFIL E CORES -->
-<div id="modalPersonalizacao" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:450px; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-    <h3 style="color: #9d174d; margin-top:0;">🎨 Personalizar Meu Perfil</h3>
-    <p style="font-size: 13px; color: #555;">Deixe o seu espaço com a sua cara escolhendo suas cores e efeitos favoritos:</p>
-    
-    <label style="font-size: 14px; font-weight: bold; display: block; margin-top: 10px;">Cor do Tema / Fundo da Página:</label>
-    <div style="display: flex; gap: 10px; margin-top: 8px;">
-      <button onclick="mudarCorFundo('#ffffff')" style="width: 35px; height: 35px; background: #ffffff; border: 2px solid #ccc; border-radius: 50%; cursor: pointer;" title="Padrão Limpo"></button>
-      <button onclick="mudarCorFundo('#eff6ff')" style="width: 35px; height: 35px; background: #eff6ff; border: 2px solid #93c5fd; border-radius: 50%; cursor: pointer;" title="Azul Suave"></button>
-      <button onclick="mudarCorFundo('#fdf2f8')" style="width: 35px; height: 35px; background: #fdf2f8; border: 2px solid #f472b6; border-radius: 50%; cursor: pointer;" title="Rosa Delicado"></button>
-      <button onclick="mudarCorFundo('#f0fdf4')" style="width: 35px; height: 35px; background: #f0fdf4; border: 2px solid #86efac; border-radius: 50%; cursor: pointer;" title="Verde Calmo"></button>
-      <button onclick="mudarCorFundo('#1e293b')" style="width: 35px; height: 35px; background: #1e293b; border: 2px solid #475569; border-radius: 50%; cursor: pointer;" title="Modo Escuro"></button>
-    </div>
-
-    <label style="font-size: 14px; font-weight: bold; display: block; margin-top: 15px;">Efeitos e Decoração na Tela:</label>
-    <div style="display: flex; gap: 10px; margin-top: 8px;">
-      <button onclick="ativarEfeito('🌸')" style="padding: 8px 12px; background: #fce7f3; border: none; border-radius: 6px; cursor: pointer;">🌸 Flores</button>
-      <button onclick="ativarEfeito('⭐')" style="padding: 8px 12px; background: #fef9c3; border: none; border-radius: 6px; cursor: pointer;">⭐ Estrelas</button>
-      <button onclick="ativarEfeito('💖')" style="padding: 8px 12px; background: #fee2e2; border: none; border-radius: 6px; cursor: pointer;">💖 Corações</button>
-      <button onclick="removerEfeitos()" style="padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer;">Remover Efeitos</button>
-    </div>
-
-    <button onclick="fecharPersonalizacao()" style="background:#6b7280; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-top: 20px; float:right;">Salvar & Fechar</button>
-  </div>
-</div>
-
-<!-- MODAL: LEITOR DE TEXTOS -->
-<div id="modalLeitorLivros" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-  <div style="background:white; width:90%; max-width:500px; padding:20px; border-radius:12px; font-family:sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-    <h3>📖 Leitor de Textos em Voz Alta</h3>
-    <textarea id="textoParaLerLivro" rows="6" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom: 10px;" placeholder="Cole qualquer texto ou resumo aqui..."></textarea>
-    <br>
-    <button onclick="lerTextoDigitado()" style="background:#4f46e5; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">▶️ Ouvir</button>
-    <button onclick="pararLeituraLivro()" style="background:#dc2626; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">⏹️ Parar</button>
-    <button onclick="fecharLeitorLivros()" style="background:#6b7280; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; float:right;">✕ Fechar</button>
-  </div>
-</div>
-
-<!-- ELEMENTO DE ÁUDIO PARA MÚSICA DE FUNDO -->
-<audio id="audioRelax" loop>
-  <source src="https://actions.google.com/sounds/v1/weather/gentle_wind_and_birds.ogg" type="audio/ogg">
-</audio>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+  new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
 
 <!-- SCRIPTS DE CONTROLE -->
 <script>
   let tamanhoAtual = 16;
   let sintetizador = window.speechSynthesis;
   let modoCliqueAtivo = false;
+  let audioAtual = new Audio();
+  audioAtual.loop = true;
+  let altoContrasteAtivo = false;
+  let modoCalmoAtivo = false;
+
+  // BASE DE DADOS DOS LIVROS DA BIBLIOTECA
+  const acervoLivros = [
+    {
+      titulo: "Dom Casmurro (Resumo e Análise)",
+      autor: "Machado de Assis",
+      texto: "Dom Casmurro é um dos romances mais célebres da literatura brasileira. Narrado em primeira pessoa por Bento Santiago (o Bentinho), a história gira em torno da célebre dúvida: Capitu traiu ou não traiu Bentinho com seu melhor amigo, Escobar? A obra retrata o Rio de Janeiro do século XIX, abordando ciúme, memória, psicologia humana e as complexidades das relações sociais da época."
+    },
+    {
+      titulo: "O Pequeno Príncipe",
+      autor: "Antoine de Saint-Exupéry",
+      texto: "O livro conta a história de um pequeno príncipe que habita o asteroide B-612 e decide viajar pelo espaço, visitando vários planetas, incluindo a Terra. Em sua jornada, ele conhece diferentes personagens adultos e faz amizade com uma raposa, aprendendo lições valiosas sobre o amor, a amizade, a inocência e a essência da vida: 'O essencial é invisível aos olhos'."
+    },
+    {
+      titulo: "O Homem que Calculava",
+      autor: "Malba Tahan",
+      texto: "Esta obra narra as aventuras de Beremiz Samir, um homem com um talento extraordinário para resolver problemas matemáticos complexos de forma simples e poética. Através de histórias e enigmas passados no Oriente Médio antigo, o livro demonstra como a lógica matemática está presente em situações cotidianas, unindo a sabedoria popular com a ciência exata."
+    },
+    {
+      titulo: "Cosmos (Divulgação Científica)",
+      autor: "Carl Sagan",
+      texto: "Cosmos explora o universo de maneira inspiradora, conectando a astronomia, a biologia e a história da humanidade. A obra aborda a imensidão do cosmos, a origem da vida na Terra, a evolução das estrelas e o papel da ciência como ferramenta essencial para compreendermos o nosso lugar no universo sem perder o senso de maravilhamento."
+    },
+    {
+      titulo: "Declaração Universal dos Direitos Humanos",
+      autor: "Organização das Nações Unidas (ONU)",
+      texto: "Adoção histórica que estabelece os direitos fundamentais que devem ser garantidos a todos os seres humanos, sem distinção de raça, cor, sexo, idioma, religião, opinião política ou origem nacional. Seus artigos defendem a dignidade, a liberdade, a igualdade perante a lei e o direito à educação, à segurança e ao bem-estar social."
+    },
+    {
+      titulo: "Reflexões sobre a Filosofia e a Razão",
+      autor: "Pensadores Clássicos",
+      texto: "A filosofia nos convida a questionar o mundo e a nós mesmos. Desde a Grécia Antiga com Sócrates, Platão e Aristóteles, o estudo do pensamento crítico nos ensina a argumentar com clareza, a buscar a verdade através do diálogo e a construir uma sociedade mais justa através da ética e da reflexão coletiva."
+    }
+  ];
 
   function toggleMenuAcessibilidade() {
     let menu = document.getElementById('menuAcessibilidade');
@@ -1907,68 +1963,92 @@
     sintetizador.speak(fala);
   }
 
-  function abrirBiblioteca() { document.getElementById('modalBiblioteca').style.display = 'flex'; }
-  function fecharBiblioteca() { document.getElementById('modalBiblioteca').style.display = 'none'; }
+  // FUNÇÕES DA BIBLIOTECA
+  function abrirBiblioteca() {
+    document.getElementById('modalBiblioteca').style.display = 'flex';
+    voltarEstante(); // Garante que abre na estante principal
+  }
 
-  function abrirPersonalizacao() { document.getElementById('modalPersonalizacao').style.display = 'flex'; }
-  function fecharPersonalizacao() { document.getElementById('modalPersonalizacao').style.display = 'none'; }
+  function fecharBiblioteca() {
+    sintetizador.cancel();
+    document.getElementById('modalBiblioteca').style.display = 'none';
+  }
+
+  function abrirLivro(index) {
+    let livro = acervoLivros[index];
+    document.getElementById('tituloLivroAtivo').innerText = livro.titulo;
+    document.getElementById('autorLivroAtivo').innerText = "Autor: " + livro.autor;
+    document.getElementById('conteudoLivroAtivo').innerText = livro.texto;
+
+    document.getElementById('estanteBiblioteca').style.display = 'none';
+    document.getElementById('leitorLivroModal').style.display = 'block';
+  }
+
+  function voltarEstante() {
+    sintetizador.cancel();
+    document.getElementById('leitorLivroModal').style.display = 'none';
+    document.getElementById('estanteBiblioteca').style.display = 'block';
+  }
+
+  function lerConteudoLivro() {
+    sintetizador.cancel();
+    let texto = document.getElementById('conteudoLivroAtivo').innerText;
+    let fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = 'pt-BR';
+    sintetizador.speak(fala);
+  }
+
+  function pararLeituraLivroModal() {
+    sintetizador.cancel();
+  }
 
   function mudarCorFundo(cor) {
+    altoContrasteAtivo = false;
+    modoCalmoAtivo = false;
     document.body.style.backgroundColor = cor;
-    document.body.style.color = (cor === '#1e293b') ? '#f8fafc' : '#2d3748';
+    document.body.style.color = '';
   }
 
-  function ativarEfeito(simbolo) {
-    removerEfeitos();
-    let container = document.createElement('div');
-    container.id = 'efeitosFlutuantes';
-    container.style.position = 'fixed';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.pointerEvents = 'none';
-    container.style.zIndex = '9998';
-    
-    for (let i = 0; i < 15; i++) {
-      let span = document.createElement('span');
-      span.innerText = simbolo;
-      span.style.position = 'absolute';
-      span.style.left = Math.random() * window.innerWidth + 'px';
-      span.style.top = (Math.random() * window.innerHeight * -1) + 'px';
-      span.style.fontSize = (20 + Math.random() * 20) + 'px';
-      span.style.opacity = '0.6';
-      container.appendChild(span);
+  function toggleAltoContraste() {
+    altoContrasteAtivo = !altoContrasteAtivo;
+    if (altoContrasteAtivo) {
+      modoCalmoAtivo = false;
+      document.body.style.backgroundColor = '#000000';
+      document.body.style.color = '#FFFF00';
+      alert("Alto contraste ativado para baixa visão.");
+    } else {
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+      alert("Alto contraste desativado.");
     }
-    document.body.appendChild(container);
-    alert("Efeito decorativo ativado!");
   }
-
-  function removerEfeitos() {
-    let el = document.getElementById('efeitosFlutuantes');
-    if (el) el.remove();
-  }
-
-  function abrirLeitorLivros() { document.getElementById('modalLeitorLivros').style.display = 'flex'; }
-  function fecharLeitorLivros() { sintetizador.cancel(); document.getElementById('modalLeitorLivros').style.display = 'none'; }
-  function lerTextoDigitado() {
-    sintetizador.cancel();
-    let texto = document.getElementById('textoParaLerLivro').value;
-    if(texto) sintetizador.speak(new SpeechSynthesisUtterance(texto));
-  }
-  function pararLeituraLivro() { sintetizador.cancel(); }
 
   function toggleModoCalmo() {
-    mudarCorFundo('#f4f6f8');
-    document.body.style.letterSpacing = '0.5px';
-    alert("Modo Calmo ativado.");
+    modoCalmoAtivo = !modoCalmoAtivo;
+    if (modoCalmoAtivo) {
+      altoContrasteAtivo = false;
+      document.body.style.backgroundColor = '#f4f6f8';
+      document.body.style.color = '#2d3748';
+      document.body.style.letterSpacing = '0.5px';
+      document.body.style.lineHeight = '1.6';
+      alert("Modo Calmo ativado (estímulos reduzidos).");
+    } else {
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+      document.body.style.letterSpacing = '';
+      document.body.style.lineHeight = '';
+      alert("Modo Calmo desativado.");
+    }
   }
 
-  function toggleMusicaFundo() {
-    let audio = document.getElementById('audioRelax');
-    if (audio.paused) { audio.play(); alert("Música relaxante ligada."); }
-    else { audio.pause(); audio.currentTime = 0; alert("Música desligada."); }
+  function trocarMusica(url) {
+    audioAtual.pause();
+    if (url) {
+      audioAtual.src = url;
+      audioAtual.play().catch(e => console.log("Erro ao reproduzir áudio:", e));
+    }
   }
 </script>
+
 </body>
 </html>
